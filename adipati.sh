@@ -19,7 +19,7 @@ wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixy
 chmod +x /usr/local/sbin/addwsbot
 
 cd /etc/ssh
-wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/main/wabot/sshd_configbot"
+wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/main/wabot/sshd_config"
 chmod +x /etc/ssh/sshd_config
 systemctl restart sshd
 cd
