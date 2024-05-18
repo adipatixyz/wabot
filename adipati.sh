@@ -9,17 +9,17 @@
 # Gemilangkinasih࿐
 
 cd /usr/local/sbin
-wget -q -O /usr/local/sbin/trialbot "https://raw.githubusercontent.com/adipatixyz/main/wabot/trialbot"
+wget -q -O /usr/local/sbin/trialbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialbot"
 chmod +x /usr/local/sbin/trialbot
-wget -q -O /usr/local/sbin/addsshbot "https://raw.githubusercontent.com/adipatixyz/main/wabot/addsshbot"
+wget -q -O /usr/local/sbin/addsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addsshbot"
 chmod +x /usr/local/sbin/addsshbot
-wget -q -O /usr/local/sbin/trialwsbot "https://raw.githubusercontent.com/adipatixyz/main/wabot/trialwsbot"
+wget -q -O /usr/local/sbin/trialwsbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialwsbot"
 chmod +x /usr/local/sbin/trialwsbot
-wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixyz/main/wabot/addwsbot"
+wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addwsbot"
 chmod +x /usr/local/sbin/addwsbot
 
 cd /etc/ssh
-wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/main/wabot/sshd_config"
+wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/sshd_config"
 chmod +x /etc/ssh/sshd_config
 systemctl restart sshd
 cd
