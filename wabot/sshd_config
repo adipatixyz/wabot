@@ -1,0 +1,12 @@
+Port 6401
+Port 2222
+Port 2223
+
+PermitRootLogin yes
+ChallengeResponseAuthentication no
+UsePAM yes
+AllowTcpForwarding yes
+X11Forwarding yes
+PrintMotd no
+Subsystem	sftp	/usr/lib/openssh/sftp-server
+Banner /etc/kyt.txt
