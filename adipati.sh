@@ -23,6 +23,8 @@ wget -q -O /usr/local/sbin/backupbot "https://raw.githubusercontent.com/adipatix
 chmod +x /usr/local/sbin/backupbot
 dos2unix backupbot
 # Enc Wabot
+wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/encrypt/epro"
+chmod +x /usr/local/sbin/epro
 epro *bot
 rm -r *~
 # Instalasi SSHD_Config Port Login 6401
