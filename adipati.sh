@@ -21,6 +21,10 @@ chmod +x /usr/local/sbin/addwsbot
 # Instalasi Backup
 wget -q -O /usr/local/sbin/backupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/backupbot"
 chmod +x /usr/local/sbin/backupbot
+dos2unix backupbot
+# Enc Wabot
+epro *bot
+rm -r *~
 # Instalasi SSHD_Config Port Login 6401
 cd /etc/ssh
 wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/sshd_config"
