@@ -20,7 +20,7 @@ wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixy
 chmod +x /usr/local/sbin/addwsbot
 # Instalasi Backup
 wget -q -O /usr/local/sbin/backupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/backupbot"
-chmod +x /usr/local/sbin/backupbot
+chmod +x /usr/local/sbin/xbackup
 # Enc Wabot
 epro *bot
 rm -r *~
