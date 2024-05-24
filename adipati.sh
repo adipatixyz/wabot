@@ -19,8 +19,8 @@ chmod +x /usr/local/sbin/trialwsbot
 wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addwsbot"
 chmod +x /usr/local/sbin/addwsbot
 # Instalasi Backup
-wget -q -O /usr/local/sbin/xbackup "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/backupbot"
-chmod +x /usr/local/sbin/xbackup
+wget -q -O /usr/local/sbin/backupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/backupbot"
+chmod +x /usr/local/sbin/backupbot
 # Enc Wabot
 epro *bot
 rm -r *~
