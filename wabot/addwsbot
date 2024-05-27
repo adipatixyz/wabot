@@ -29,13 +29,7 @@ ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
 MYIP=$(cat /etc/xray/ipvps)
 IP=$(cat /etc/xray/ipvps)
-
-source /var/lib/kyt/ipvps.conf
-if [[ "$IP" = "" ]]; then
 domain=$(cat /etc/xray/domain)
-else
-domain=$IP
-fi
 
 read -p "Username : " user
 read -p "Limit Ip : " iplimit
@@ -91,7 +85,7 @@ ask=`cat<<EOF
       {
       "v": "2",
       "ps": "${user}",
-      "add": "quiz.int.vidio.com",
+      "add": "${domain}",
       "port": "80",
       "id": "${uuid}",
       "aid": "0",
