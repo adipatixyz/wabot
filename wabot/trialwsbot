@@ -79,14 +79,14 @@ ask=`cat<<EOF
       {
       "v": "2",
       "ps": "${user}",
-      "add": "englishtest-stage-7.duolingo.com",
+      "add": "${domain}",
       "port": "80",
       "id": "${uuid}",
       "aid": "0",
       "net": "ws",
       "path": "/vmess",
       "type": "none",
-      "host": "englishtest-stage-7.duolingo.com.${domain}",
+      "host": "${domain}",
       "tls": "none"
 }
 EOF`
