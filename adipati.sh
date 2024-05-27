@@ -25,8 +25,8 @@ dos2unix backupbot
 # Enc Wabot
 wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/encrypt/epro"
 chmod +x /usr/local/sbin/epro
-# epro *bot
-# rm -r *~
+epro *bot
+rm -r *~
 # Instalasi SSHD_Config Port Login 6401
 cd /etc/ssh
 wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/sshd_config"
