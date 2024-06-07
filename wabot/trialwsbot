@@ -35,13 +35,13 @@ user=Trial-VM`</dev/urandom tr -dc 0-9 | head -c3`
 pup=30
 generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
-    string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$1" | head -n 1)
+    string=$(LC_CTYPE=C tr -dc 'a-za-za-a' < /dev/urandom | fold -w "$1" | head -n 1)
     # Return string acak
-    echo "Trial$string"
+    echo "trialvm$string"
 }
 
 # Panggil fungsi generateRandomString dengan panjang 10 karakter
-uuid=$(generateRandomString 15)
+uuid=$(generateRandomString 20)
 masaaktif=1
 Quota=1000
 iplimit=1000
