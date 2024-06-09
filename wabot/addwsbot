@@ -29,7 +29,13 @@ ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
 MYIP=$(cat /etc/xray/ipvps)
 IP=$(cat /etc/xray/ipvps)
+
+source /var/lib/kyt/ipvps.conf
+if [[ "$IP" = "" ]]; then
 domain=$(cat /etc/xray/domain)
+else
+domain=$IP
+fi
 
 read -p "Username : " user
 read -p "Limit Ip : " iplimit
@@ -42,13 +48,13 @@ fi
 
 generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
-    string=$(LC_CTYPE=C tr -dc 'a-za-za-a' < /dev/urandom | fold -w "$1" | head -n 1)
+    string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$1" | head -n 1)
     # Return string acak
     echo "ponsel$string"
 }
 
-# Panggil fungsi generateRandomString dengan panjang 10 karakter
-uuid=$(generateRandomString 20)
+# Panggil fungsi generateRandomString dengan panjang 15 karakter
+uuid=$(generateRandomString 15)
 Quota=500
 
 tgl=$(date -d "$masaaktif days" +"%d")
@@ -111,6 +117,7 @@ grpc=`cat<<EOF
       "tls": "tls"
 }
 EOF`
+
 vmess_base641=$( base64 -w 0 <<< $vmess_json1)
 vmess_base642=$( base64 -w 0 <<< $vmess_json2)
 vmess_base643=$( base64 -w 0 <<< $vmess_json3)
@@ -118,7 +125,7 @@ vmesslink1="vmess://$(echo $asu | base64 -w 0)"
 vmesslink2="vmess://$(echo $ask | base64 -w 0)"
 vmesslink3="vmess://$(echo $grpc | base64 -w 0)"
 
-cat >/var/www/html/vmess-$user.txt <<-END
+cat > /var/www/html/vmess-$user.txt <<-END
 -----------------------------------
 Format V2RAY VMESS Account
 -----------------------------------
@@ -183,6 +190,7 @@ Link none TLS ${vmesslink2}
 Link GRPC ${vmesslink3}
 -----------------------------------
 END
+
 if [ ! -e /etc/vmess ]; then
   mkdir -p /etc/vmess
 fi
