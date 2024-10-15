@@ -10,12 +10,12 @@
 
 cd /usr/local/sbin
 # Instalasi Create Account
-wget -q -O /usr/local/sbin/trialbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialbot"
-chmod +x /usr/local/sbin/trialbot
+wget -q -O /usr/local/sbin/trialsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialbot"
+chmod +x /usr/local/sbin/trialsshbot
 wget -q -O /usr/local/sbin/addsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addsshbot"
 chmod +x /usr/local/sbin/addsshbot
-wget -q -O /usr/local/sbin/trialwsbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialwsbot"
-chmod +x /usr/local/sbin/trialwsbot
+wget -q -O /usr/local/sbin/trialvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialwsbot"
+chmod +x /usr/local/sbin/trialvmessbot
 wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addwsbot"
 chmod +x /usr/local/sbin/addwsbot
 # Instalasi Backup
