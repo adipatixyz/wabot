@@ -16,7 +16,7 @@ wget -q -O /usr/local/sbin/addsshbot "https://raw.githubusercontent.com/adipatix
 chmod +x /usr/local/sbin/addsshbot
 wget -q -O /usr/local/sbin/trialvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialwsbot"
 chmod +x /usr/local/sbin/trialvmessbot
-wget -q -O /usr/local/sbin/addwsbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addwsbot"
+wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addwsbot"
 chmod +x /usr/local/sbin/addvmessbot
 # Instalasi Backup
 wget -q -O /usr/local/sbin/backupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/backupbot"
