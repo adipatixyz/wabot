@@ -9,17 +9,19 @@
 # Gemilangkinasih࿐
 
 function send_log(){
+domain=$(cat /etc/xray/domain)
 CHATID=-1002347990415
 KEY=7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-Notifikasi Multilogin Vmess
+🚫 Notifikasi Multilogin VMESS
 ──────────────────────
-<code>Username :</code> <code>$user</code>
-<code>Limit IP :</code> <code>$iplimit</code>
-<code>Login IP :</code> <code>$cekcek</code>
+<code>User  :</code> <code>$user</code>
+<code>Limit :</code> <code>$iplimit</code>
+<code>Login :</code> <code>$cekcek</code>
+<code>Domen :</code> <code>$domain</code>
 ────────────────────── 
 <code>Unlock User Otomatis 30 Menit</code>
 ────────────────────── "
@@ -53,6 +55,7 @@ echo "sed -i '/#vmessgrpc\$/a\\\### $user $exp\\
 sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
 systemctl restart xray
 send_log
+echo "/usr/local/sbin/unlockxray &> /dev/null" | at now + 30 minutes
             else
             sleep 5
         fi
