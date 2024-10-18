@@ -9,17 +9,19 @@
 # Gemilangkinasih࿐
 
 function send-log(){
+domain=$(cat /etc/xray/domain)
 CHATID=-1002347990415
 KEY=7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-<code>🚫 Notifikasi Multilogin SSH!</code>
+🚫 Notifikasi Multilogin SSH!
 ──────────────────────
-<code>Username :</code> <code>$1</code>
-<code>Limit IP :</code> <code>$2</code>
-<code>Login IP :</code> <code>$3</code>
+<code>User  :</code> <code>$1</code>
+<code>Limit :</code> <code>$2</code>
+<code>Login :</code> <code>$3</code>
+<code>Domen :</code> <code>$domain</code>
 ────────────────────── 
 <code>Unlock User Otomatis 30 Menit</code>
 ────────────────────── "
@@ -106,6 +108,7 @@ do
         passwd -l ${username[$i]};
         echo "### ${username[$i]}" >> /usr/local/sbin/limitssh
         send-log "${username[$i]}" "$MAX" "${jumlah[$i]}"
+        echo "/usr/local/sbin/unlockssh &> /dev/null" | at now + 30 minutes
 
         if [ $OS -eq 1 ]; then
             systemctl restart ssh > /dev/null 2>&1;
