@@ -16,7 +16,7 @@ TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Limit Quota Vmess
+🚫 Notifikasi Limit Quota VMESS
 ──────────────────────
 <code>User  :</code> <code>$user</code>
 <code>Limit :</code> <code>$total2</code>
