@@ -21,12 +21,16 @@ wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipat
 chmod +x /usr/local/sbin/addvmessbot
 
 # Instalasi Limit
-wget -q -O /usr/local/sbin/limitsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
-chmod +x /usr/local/sbin/limitsshbot # limit ip ssh
-wget -q -O /usr/local/sbin/limitvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbot"
-chmod +x /usr/local/sbin/limitvmessbot # limit ip vmess
-wget -q -O /usr/local/sbin/limitvmessbotx "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbotx"
-chmod +x /usr/local/sbin/limitvmessbotx # limit quota vmess
+wget -q -O /usr/bin/tendang2 "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
+chmod +x /usr/bin/tendang2 # limit ip ssh
+wget -q -O /usr/bin/vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbot"
+chmod +x /usr/bin/vmess # limit ip vmess
+wget -q -O /etc/xray/limit.vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbotx"
+chmod +x /etc/xray/limit.vmess # limit quota vmess
+
+systemctl restart vsip
+systemctl restart vmip
+systemctl restart limitvmess
 
 # Instalasi Backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
@@ -35,12 +39,7 @@ dos2unix autobackupbot
 
 # Instalasi Cornjob
 echo "5 0 * * * /usr/local/sbin/autobackupbot" >> /etc/crontab # autobackup bot
-echo "*/30 * * * * /usr/local/sbin/limitsshbot" >> /etc/crontab # limit ip ssh
-echo "*/30 * * * * /usr/local/sbin/limitvmessbot" >> /etc/crontab # limit ip vmess
-echo "*/30 * * * * /usr/local/sbin/limitvmessbotx" >> /etc/crontab # limit quota vmess
-echo "*/30 * * * * /usr/local/sbin/limitvmessbotx" >> /etc/crontab # limit quota vmess
-echo "*/30 * * * * /usr/local/sbin/unlockssh" >> /etc/crontab # unlock akun xray
-echo "*/30 * * * * /usr/local/sbin/unlockxray" >> /etc/crontab # unlock akun xray
+systemctl restart cron
 
 # Enc Wabot
 wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/encrypt/epro"
