@@ -107,6 +107,7 @@ do
         # Mengunci pengguna multilogin
         passwd -l ${username[$i]};
         echo "### ${username[$i]}" >> /usr/local/sbin/limitssh
+        echo "passwd -u ${username[$i]}" >> /usr/local/sbin/limitssh
         send-log "${username[$i]}" "$MAX" "${jumlah[$i]}"
         echo "/usr/local/sbin/unlockssh &> /dev/null" | at now + 30 minutes
 
