@@ -23,7 +23,7 @@ TEXT="
 <code>Usage :</code> <code>$total</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
-<code>Buy Tambah Quota Untuk Unlock</code>
+Buy Tambah Quota Untuk Unlock
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
