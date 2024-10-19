@@ -39,6 +39,10 @@ dos2unix autobackupbot
 
 # Instalasi Cornjob
 echo "5 0 * * * root autobackupbot" >> /etc/crontab # autobackup bot
+echo "0 0 * * * root systemctl stop vsip" >> /etc/crontab
+echo "0 0 * * * root systemctl stop vmip" >> /etc/crontab
+echo "0 7 * * * root systemctl restart vsip" >> /etc/crontab
+echo "0 7 * * * root systemctl restart vmip" >> /etc/crontab
 systemctl restart cron
 
 # Enc Wabot
