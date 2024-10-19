@@ -20,8 +20,8 @@ GREEN='\033[0;32m'
 ORANGE='\033[0;33m'
 YELL='\033[0;33m'
 
-CHATID=$(grep -E "^#bot# " "/etc/bot/.bot.db" | cut -d ' ' -f 3)
-KEY=$(grep -E "^#bot# " "/etc/bot/.bot.db" | cut -d ' ' -f 2)
+CHATID=6348824977
+KEY=7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU
 export TIME="10"
 export URL="https://api.telegram.org/bot$KEY/sendMessage"
 ISP=$(cat /etc/xray/isp)
@@ -114,68 +114,29 @@ vmesslink3="vmess://$(echo $grpc | base64 -w 0)"
 
 cat >/var/www/html/vmess-$user.txt <<-END
 -----------------------------------
-Format V2RAY VMESS Account
------------------------------------
-# Format Vmess WS TLS
-
-- name: Vmess-$user-WS TLS
-  type: vmess
-  server: ${domain}
-  port: 443
-  uuid: ${uuid}
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ${domain}
-  network: ws
-  ws-opts:
-    path: /vmess
-    headers:
-      Host: ${domain}
-
-# Format Vmess WS Non TLS
-
-- name: Vmess-$user-WS Non TLS
-  type: vmess
-  server: ${domain}
-  port: 80
-  uuid: ${uuid}
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  skip-cert-verify: false
-  servername: ${domain}
-  network: ws
-  ws-opts:
-    path: /vmess
-    headers:
-      Host: ${domain}
-
-# Format Vmess gRPC
-
-- name: Vmess-$user-gRPC (SNI)
-  server: ${domain}
-  port: 443
-  type: vmess
-  uuid: ${uuid}
-  alterId: 0
-  cipher: auto
-  network: grpc
-  tls: true
-  servername: ${domain}
-  skip-cert-verify: true
-  grpc-opts:
-    grpc-service-name: vmess-grpc                
------------------------------------
-Link TLS ${vmesslink1}
------------------------------------
-Link none TLS ${vmesslink2}
------------------------------------
-Link GRPC ${vmesslink3}
------------------------------------
+----------------------
+Status Trial VMESS Success
+----------------------
+ISP   : $ISP
+City  : $CITY
+----------------------
+Host  : $domain
+IP    : $MYIP
+User  : $user
+UUID  : $uuid
+Max   : $iplimit IP
+Quota : $Quota
+Port  : 443, 80
+Path  : /vmess
+----------------------
+Tls   : $vmesslink1
+----------------------
+nTls  : $vmesslink2
+----------------------
+Grpc  : $vmesslink3
+----------------------
+Exp   : $pup Menit
+----------------------
 END
 if [ ! -e /etc/vmess ]; then
   mkdir -p /etc/vmess
@@ -208,38 +169,37 @@ CHATID="$CHATID"
 KEY="$KEY"
 TIME="$TIME"
 URL="$URL"
-
 TEXT="
-☉────────────────────────☉
-🧿Create Trial VMESS Account Success🧿
-☉────────────────────────☉
-<code>ISP          :</code> <code>$ISP</code>
-<code>CITY         :</code> <code>$CITY</code>
-☉────────────────────────☉
-<code>Hostname     :</code> <code>$domain</code>
-<code>Username     :</code> <code>$user</code>
-<code>UUID         :</code> <code>$uuid</code>
-<code>IP Server    :</code> <code>$IP</code>
-<code>Limit Quota  :</code> <code>$Quota GB</code>
-<code>Port TLS     :</code> <code>400-900</code>
-<code>Port nTLS    :</code> <code>80, 8080, 8081-9999</code>
-<code>Path         :</code> <code>/Multi-Path</code>
-<code>Path WS      :</code> <code>/vmess</code>
-<code>Path GRCP    :</code> <code>vmess-grpc</code>
-☉────────────────────────☉
-🧿<code>Expired $pup Menit</code>🧿
-☉────────────────────────☉
-TLS 🧿<code>${vmesslink1}</code>🧿
-☉────────────────────────☉
-nTLS 🧿<code>${vmesslink2}</code>🧿
-☉────────────────────────☉
-GRCP 🧿<code>${vmesslink3}</code>🧿
-☉────────────────────────☉
-🧿<code>https://${domain}:81/vmess-$user.txt</code>🧿
-☉────────────────────────☉"
+──────────────────────
+Status Trial VMESS Success
+──────────────────────
+<code>✧ ISP   :</code> <code>$ISP</code>
+<code>✧ City  :</code> <code>$CITY</code>
+──────────────────────
+<code>✧ Host  :</code> <code>$domain</code>
+<code>✧ IP    :</code> <code>$MYIP</code>
+<code>✧ User  :</code> <code>$user</code>
+<code>✧ UUID  :</code> <code>$uuid</code>
+<code>✧ Max   :</code> <code>$iplimit IP</code>
+<code>✧ Quota :</code> <code>$Quota</code>
+<code>✧ Port  :</code> <code>443, 80</code>
+<code>✧ Path  :</code> <code>/vmess</code>
+──────────────────────
+<code>✧ Tls   :</code> <code>$vmesslink1</code>
+──────────────────────
+<code>✧ nTls  :</code> <code>$vmesslink2</code>
+──────────────────────
+<code>✧ Grpc  :</code> <code>$vmesslink3</code>
+──────────────────────
+<code>✧ Doc   :</code> https://${domain}:81/vmess-$user.txt
+──────────────────────
+<code>✧ Exp   :</code> <code>$pup Menit</code>
+────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+
 echo "tunnel vmess ${user}" | at now + $pup minutes &> /dev/null
+echo "rm -r /var/www/html/vmess-$user.txt" | at now + $pup minutes &> /dev/null
 
 systemctl restart xray > /dev/null 2>&1
 service cron restart > /dev/null 2>&1
