@@ -36,7 +36,7 @@ read -p "Password : " Pass
 read -p "Limit Ip : " iplimit
 read -p "Expireed : " masaaktif
 
-if grep -qw "$Login" /etc/passwd; then
+if grep -qiw "$Login" /etc/passwd; then
     echo -e "Username sudah terpakai."
     exit 0
 fi
