@@ -99,7 +99,7 @@ done
 j="0";
 for i in ${!username[*]}
 do
-    MAX=5;
+    MAX=6;
     if [ ${jumlah[$i]} -gt $MAX ]; then
         date=$(date +"%Y-%m-%d %X");
         echo "$date - ${username[$i]} - ${jumlah[$i]}";
