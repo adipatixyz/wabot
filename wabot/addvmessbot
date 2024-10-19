@@ -38,13 +38,14 @@ domain=$IP
 fi
 
 read -p "Username : " user
-read -p "Limit Ip : " iplimit
-read -p "Expireed : " masaaktif
 
-if grep -qw "$user" /etc/xray/config.json; then
+if grep -qiw "$user" /etc/xray/config.json; then
     echo -e "Username sudah terpakai."
     exit 0
 fi
+
+read -p "Limit Ip : " iplimit
+read -p "Expireed : " masaaktif
 
 generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
