@@ -37,6 +37,9 @@ wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adip
 chmod +x /usr/local/sbin/autobackupbot
 dos2unix autobackupbot
 
+# Instalasi 
+wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
+
 # Instalasi Cornjob
 echo "5 0 * * * root autobackupbot" >> /etc/crontab # autobackup bot
 echo "0 0 * * * root systemctl stop vsip" >> /etc/crontab
