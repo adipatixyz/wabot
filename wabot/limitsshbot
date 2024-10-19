@@ -19,7 +19,7 @@ TEXT="
 🚫 Notifikasi Multilogin SSH!
 ──────────────────────
 <code>User  :</code> <code>$1</code>
-<code>Limit :</code> <code>$2</code>
+<code>Limit :</code> <code>2</code>
 <code>Login :</code> <code>$3</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
@@ -99,7 +99,7 @@ done
 j="0";
 for i in ${!username[*]}
 do
-    MAX=2;
+    MAX=5;
     if [ ${jumlah[$i]} -gt $MAX ]; then
         date=$(date +"%Y-%m-%d %X");
         echo "$date - ${username[$i]} - ${jumlah[$i]}";
