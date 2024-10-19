@@ -8,7 +8,7 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
-cd /root
+cd /usr/local/sbin
 
 # Instalasi Create Account
 wget -q -O /usr/local/sbin/trialsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialsshbot"
@@ -19,6 +19,9 @@ wget -q -O /usr/local/sbin/trialvmessbot "https://raw.githubusercontent.com/adip
 chmod +x /usr/local/sbin/trialvmessbot
 wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvmessbot"
 chmod +x /usr/local/sbin/addvmessbot
+
+wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/tunnel"
+chmod +x /usr/local/sbin/tunnel
 
 # Instalasi Limit
 wget -q -O /usr/bin/tendang2 "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
@@ -37,15 +40,8 @@ wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adip
 chmod +x /usr/local/sbin/autobackupbot
 dos2unix autobackupbot
 
-# Instalasi 
-wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
-
 # Instalasi Cornjob
-echo "5 0 * * * root autobackupbot" >> /etc/crontab # autobackup bot
-echo "0 22 * * * root systemctl stop vsip" >> /etc/crontab
-echo "0 22 * * * root systemctl stop vmip" >> /etc/crontab
-echo "0 7 * * * root systemctl restart vsip" >> /etc/crontab
-echo "0 7 * * * root systemctl restart vmip" >> /etc/crontab
+echo "5 0 * * * /usr/local/sbin/autobackupbot" >> /etc/crontab # autobackup bot
 systemctl restart cron
 
 # Enc Wabot
