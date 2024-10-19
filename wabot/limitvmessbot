@@ -19,11 +19,11 @@ TEXT="
 🚫 Notifikasi Multilogin VMESS
 ──────────────────────
 <code>User  :</code> <code>$user</code>
-<code>Limit :</code> <code>$iplimit</code>
+<code>Limit :</code> <code>2</code>
 <code>Login :</code> <code>$cekcek</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
-<code>Unlock User Otomatis 30 Menit</code>
+Unlock User Otomatis 30 Menit
 ────────────────────── "
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
@@ -35,7 +35,7 @@ data=( `ls /etc/kyt/limit/vmess/ip`);
 #Decrypted By YADDY D PHREAKER
     for user in "${data[@]}"
     do
-        iplimit=2
+        iplimit=5
         ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq);
         cekcek=$(echo -e "$ehh" | wc -l);
         if [[ $cekcek -gt $iplimit ]]; then
