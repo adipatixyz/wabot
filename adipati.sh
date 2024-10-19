@@ -38,7 +38,7 @@ chmod +x /usr/local/sbin/autobackupbot
 dos2unix autobackupbot
 
 # Instalasi Cornjob
-echo "5 0 * * * /usr/local/sbin/autobackupbot" >> /etc/crontab # autobackup bot
+echo "5 0 * * * root autobackupbot" >> /etc/crontab # autobackup bot
 systemctl restart cron
 
 # Enc Wabot
