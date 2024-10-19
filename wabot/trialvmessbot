@@ -203,12 +203,12 @@ echo "rm -r /var/www/html/vmess-$user.txt" | at now + $pup minutes &> /dev/null
 
 systemctl restart xray > /dev/null 2>&1
 service cron restart > /dev/null 2>&1
-clear
 
 echo "$ISP"
 echo "$CITY"
 echo "$domain"
 echo "$user"
+echo "$uuid"
 echo "$vmesslink1"
 echo "$vmesslink2"
 echo "$vmesslink3"
