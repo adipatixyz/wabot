@@ -19,11 +19,11 @@ TEXT="
 🚫 Notifikasi Multilogin SSH!
 ──────────────────────
 <code>User  :</code> <code>$1</code>
-<code>Limit :</code> <code>2</code>
+<code>Limit :</code> <code>$2</code>
 <code>Login :</code> <code>$3</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
-Unlock User Otomatis 30 Menit
+<code>Unlock User Otomatis 30 Menit</code>
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
@@ -99,7 +99,7 @@ done
 j="0";
 for i in ${!username[*]}
 do
-    MAX=6;
+    MAX=2;
     if [ ${jumlah[$i]} -gt $MAX ]; then
         date=$(date +"%Y-%m-%d %X");
         echo "$date - ${username[$i]} - ${jumlah[$i]}";
