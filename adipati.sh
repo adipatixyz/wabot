@@ -20,6 +20,7 @@ chmod +x /usr/local/sbin/trialvmessbot
 wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvmessbot"
 chmod +x /usr/local/sbin/addvmessbot
 
+# Instalasi Detele Trial
 wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/tunnel"
 chmod +x /usr/local/sbin/tunnel
 
@@ -31,21 +32,21 @@ chmod +x /usr/bin/vmess # limit ip vmess
 wget -q -O /etc/xray/limit.vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbotx"
 chmod +x /etc/xray/limit.vmess # limit quota vmess
 
-systemctl restart vsip
-systemctl restart vmip
-systemctl restart limitvmess
-
 # Instalasi Backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
 chmod +x /usr/local/sbin/autobackupbot
 dos2unix autobackupbot
 
 # Instalasi Cornjob
-echo "5 0 * * * /usr/local/sbin/autobackupbot" >> /etc/crontab # autobackup bot
+echo "5 0 * * * root autobackupbot" >> /etc/crontab # autobackup bot
+echo "0 22 * * * root systemctl stop vsip" >> /etc/crontab # stop limit ip ssh jam 22
+echo "0 22 * * * root systemctl stop vmip" >> /etc/crontab # stop limit ip vmess jam 22
+echo "0 7 * * * root systemctl restart vsip" >> /etc/crontab # restart limit ip ssh jam 7
+echo "0 7 * * * root systemctl restart vmip" >> /etc/crontab # restart limit ip vmess jam 7
 systemctl restart cron
 
 # Enc Wabot
-wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/encrypt/epro"
+wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
 chmod +x /usr/local/sbin/epro
 epro *bot
 rm -r *~
