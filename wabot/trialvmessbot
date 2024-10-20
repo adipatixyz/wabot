@@ -124,8 +124,8 @@ Host  : $domain
 IP    : $MYIP
 User  : $user
 UUID  : $uuid
-Max   : $iplimit IP
-Quota : $Quota
+Max   : Unlimited
+Quota : Unlimited
 Port  : 443, 80
 Path  : /vmess
 ----------------------
@@ -180,8 +180,8 @@ Status Trial VMESS Success
 <code>✧ IP    :</code> <code>$MYIP</code>
 <code>✧ User  :</code> <code>$user</code>
 <code>✧ UUID  :</code> <code>$uuid</code>
-<code>✧ Max   :</code> <code>$iplimit IP</code>
-<code>✧ Quota :</code> <code>$Quota</code>
+<code>✧ Max   :</code> <code>Unlimited</code>
+<code>✧ Quota :</code> <code>Unlimited</code>
 <code>✧ Port  :</code> <code>443, 80</code>
 <code>✧ Path  :</code> <code>/vmess</code>
 ──────────────────────
