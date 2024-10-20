@@ -23,6 +23,7 @@ chmod +x /usr/local/sbin/addvmessbot
 # Instalasi Detele Trial
 wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/tunnel"
 chmod +x /usr/local/sbin/tunnel
+dos2unix /usr/local/sbin/tunnel
 
 # Instalasi Limit
 wget -q -O /usr/bin/tendang2 "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
