@@ -64,7 +64,7 @@ Host  : $domain
 IP    : $IP
 User  : $Login
 pw    : $Pass
-Max   : Unlimited IP
+Max   : Unlimited
 Port  : 443, 80, 1-66535
 ----------------------
 SSL   : $domain:443@$Login:$Pass
@@ -93,7 +93,7 @@ Status Trial SSHWS Success
 <code>✧ IP    :</code> <code>$IP</code>
 <code>✧ User  :</code> <code>$Login</code>
 <code>✧ pw    :</code> <code>$Pass</code>
-<code>✧ Max   :</code> <code>Unlimited IP</code>
+<code>✧ Max   :</code> <code>Unlimited</code>
 <code>✧ Port  :</code> <code>443, 80, 1-66535</code>
 ──────────────────────
 <code>✧ SSL   :</code> <code>$domain:443@$Login:$Pass</code>
