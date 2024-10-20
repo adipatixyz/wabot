@@ -33,6 +33,9 @@ chmod +x /usr/bin/vmess # limit ip vmess
 wget -q -O /etc/xray/limit.vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbotx"
 chmod +x /etc/xray/limit.vmess # limit quota vmess
 
+# Instalasi Rclone
+wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
+
 # Instalasi Backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
 chmod +x /usr/local/sbin/autobackupbot
