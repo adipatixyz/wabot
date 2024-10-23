@@ -79,17 +79,13 @@ clear
 
 # Instalasi token bot notif
 cd
-mkdir telebotvpn
-touch /telebotvpn/tokentelebot
-touch /telebotvpn/idteleowner
-touch /telebotvpn/idtelegrub
-echo "$tokentelebot" > /telebotvpn/tokentelebot
-echo "$idteleowner" > /telebotvpn/idteleowner
-echo "$idtelegrub" > /telebotvpn/idtelegrub
+mkdir /root/telebotvpn
+echo "$tokentelebot" > /root/telebotvpn/tokentelebot
+echo "$idteleowner" > /root/telebotvpn/idteleowner
+echo "$idtelegrub" > /root/telebotvpn/idtelegrub
 
 # Instalasi Keamanan
 wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
-rm -r keamananx
 
 # Instalasi SSHD_Config Port Login 6401
 cd /etc/ssh
@@ -99,6 +95,7 @@ systemctl restart sshd
 
 cd
 rm -r adipati.sh
+rm -r wabot.sh
 echo "Fitur Wabot Success! Back In 10 Seconds.. [ Port Login 6401 ]"
 sleep 10
 menu
