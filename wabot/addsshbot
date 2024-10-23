@@ -1,0 +1,135 @@
+#!/bin/bash
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# System Request : Debian 9+/Ubuntu 18.04+/20+
+# Develovers » Gemilangkinasih࿐
+# Email      » gemilangkinasih@gmail.com
+# telegram   » https://t.me/gemilangkinasih
+# whatsapp   » wa.me/+628984880039
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Gemilangkinasih࿐
+
+BICyan='\033[1;96m'       # Cyan
+BIWhite='\033[1;97m'      # White
+UWhite='\033[4;37m'       # White
+BIYellow='\033[1;93m'     # Yellow
+BGWHITE='\E[40;1;37m'     # Bgwhite
+
+RED="\033[31m"
+NC='\e[0m'
+GREEN='\033[0;32m'
+ORANGE='\033[0;33m'
+YELL='\033[0;33m'
+
+CHATID=$(cat /telebotvpn/idteleowner)
+KEY=$(cat /telebotvpn/tokentelebot)
+export TIME="10"
+export URL="https://api.telegram.org/bot$KEY/sendMessage"
+IP=$(cat /etc/xray/ipvps)
+ISP=$(cat /etc/xray/isp)
+CITY=$(cat /etc/xray/city)
+domain=$(cat /etc/xray/domain)
+
+clear
+read -p "Username : " Login
+read -p "Password : " Pass
+read -p "Limit Ip : " iplimit
+read -p "Expireed : " masaaktif
+
+if grep -qiw "$Login" /etc/passwd; then
+    echo -e "Username sudah terpakai."
+    exit 0
+fi
+
+# limitip
+if [[ $iplimit -gt 0 ]]; then
+mkdir -p /etc/kyt/limit/ssh/ip
+echo -e "$iplimit" > /etc/kyt/limit/ssh/ip/$Login
+else
+echo > /dev/null
+fi
+clear
+
+tgl=$(date -d "$masaaktif days" +"%d")
+bln=$(date -d "$masaaktif days" +"%b")
+thn=$(date -d "$masaaktif days" +"%Y")
+expe="$tgl $bln, $thn"
+tgl2=$(date +"%d")
+bln2=$(date +"%b")
+thn2=$(date +"%Y")
+tnggl="$tgl2 $bln2, $thn2"
+useradd -e `date -d "$masaaktif days" +"%Y-%m-%d"` -s /bin/false -M $Login
+expi="$(chage -l $Login | grep "Account expires" | awk -F": " '{print $2}')"
+echo -e "$Pass\n$Pass\n"| passwd $Login &> /dev/null
+hariini=`date -d "0 days" +"%Y-%m-%d"`
+expi=`date -d "$masaaktif days" +"%Y-%m-%d"`
+
+DATADB=$(cat /etc/ssh/.ssh.db | grep "^###" | grep -w "${Login}" | awk '{print $2}')
+if [[ "${DATADB}" != '' ]]; then
+  sed -i "/\b${Login}\b/d" /etc/ssh/.ssh.db
+fi
+echo "### ${Login} ${expi} ${Pass} ${iplimit}" >>/etc/ssh/.ssh.db
+
+clear
+cat > /var/www/html/ssh-$Login.txt <<-END
+----------------------
+Status Create SSHWS Success
+----------------------
+ISP   : $ISP
+City  : $CITY
+----------------------
+Host  : $domain
+IP    : $IP
+User  : $Login
+pw    : $Pass
+Max   : $iplimit
+Port  : 443, 80, 1-66535
+----------------------
+SSL   : $domain:443@$Login:$Pass
+----------------------
+WS    : $domain:80@$Login:$Pass
+----------------------
+UDP   : $domain:1-66535@$Login:$Pass
+----------------------
+Exp   : $exp
+----------------------
+END
+
+CHATID="$CHATID"
+KEY="$KEY"
+TIME="$TIME"
+URL="$URL"
+TEXT="
+──────────────────────
+Status Create SSHWS Success
+──────────────────────
+<code>✧ ISP   :</code> <code>$ISP</code>
+<code>✧ City  :</code> <code>$CITY</code>
+──────────────────────
+<code>✧ Host  :</code> <code>$domain</code>
+<code>✧ IP    :</code> <code>$IP</code>
+<code>✧ User  :</code> <code>$Login</code>
+<code>✧ pw    :</code> <code>$Pass</code>
+<code>✧ Max   :</code> <code>$iplimit</code>
+<code>✧ Port  :</code> <code>443, 80, 1-66535</code>
+──────────────────────
+<code>✧ SSL   :</code> <code>$domain:443@$Login:$Pass</code>
+──────────────────────
+<code>✧ WS    :</code> <code>$domain:80@$Login:$Pass</code>
+──────────────────────
+<code>✧ UDP   :</code> <code>$domain:1-66535@$Login:$Pass</code>
+──────────────────────
+<code>✧ Doc   :</code> https://${domain}:81/ssh-$Login.txt
+──────────────────────
+<code>✧ Exp   :</code> <code>$exp</code>
+────────────────────── "
+
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+
+clear
+
+echo "$ISP"
+echo "$CITY"
+echo "$domain"
+echo "$Login"
+echo "$Pass"
+echo "$expe"
