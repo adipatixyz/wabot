@@ -137,7 +137,7 @@ IP    : $MYIP
 User  : $user
 UUID  : $uuid
 Max   : $iplimit IP
-Quota : $Quota
+Quota : $Quota GB
 Port  : 443, 80
 Path  : /vmess
 ----------------------
@@ -195,7 +195,7 @@ Status Create VMESS Success
 <code>✧ User  :</code> <code>$user</code>
 <code>✧ UUID  :</code> <code>$uuid</code>
 <code>✧ Max   :</code> <code>$iplimit IP</code>
-<code>✧ Quota :</code> <code>$Quota</code>
+<code>✧ Quota :</code> <code>$Quota GB</code>
 <code>✧ Port  :</code> <code>443, 80</code>
 <code>✧ Path  :</code> <code>/vmess</code>
 ──────────────────────
@@ -214,7 +214,9 @@ curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TE
 
 systemctl restart xray > /dev/null 2>&1
 service cron restart > /dev/null 2>&1
+
 clear
+
 echo "$ISP"
 echo "$CITY"
 echo "$domain"
