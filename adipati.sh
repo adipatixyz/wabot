@@ -8,6 +8,9 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
+# tokentelebot=7504114515:AAEpo6Ce_6W936_2nKj5EkstQUUdmUdidik
+# idteleowner=6348824977
+# idtelegrub=-1002464101294
 cd /usr/local/sbin
 
 # Instalasi Create Account
@@ -19,6 +22,18 @@ wget -q -O /usr/local/sbin/trialvmessbot "https://raw.githubusercontent.com/adip
 chmod +x /usr/local/sbin/trialvmessbot
 wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvmessbot"
 chmod +x /usr/local/sbin/addvmessbot
+
+# Instalasi Backup
+wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
+chmod +x /usr/local/sbin/autobackupbot
+dos2unix autobackupbot
+
+# Enc Wabot
+wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
+chmod +x /usr/local/sbin/epro
+dos2unix epro
+epro *bot
+rm -r *~
 
 # Instalasi Detele Trial
 wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/tunnel"
@@ -36,24 +51,38 @@ chmod +x /etc/xray/limit.vmess # limit quota vmess
 # Instalasi Rclone
 wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
 
-# Instalasi Backup
-wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
-chmod +x /usr/local/sbin/autobackupbot
-dos2unix autobackupbot
-
 # Instalasi Cornjob
-echo "5 0 * * * root autobackupbot" >> /etc/crontab # autobackup bot
-echo "0 22 * * * root systemctl stop vsip" >> /etc/crontab # stop limit ip ssh jam 22
-echo "0 22 * * * root systemctl stop vmip" >> /etc/crontab # stop limit ip vmess jam 22
-echo "0 7 * * * root systemctl restart vsip" >> /etc/crontab # restart limit ip ssh jam 7
-echo "0 7 * * * root systemctl restart vmip" >> /etc/crontab # restart limit ip vmess jam 7
-systemctl restart cron
+cat > /etc/cron.d/telebotvpn <<-END
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+5 0 * * * root autobackupbot
+0 22 * * * root systemctl stop vsip
+0 22 * * * root systemctl stop vmip
+0 7 * * * root systemctl restart vsip
+0 7 * * * root systemctl restart vmip
+END
 
-# Enc Wabot
-wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
-chmod +x /usr/local/sbin/epro
-epro *bot
-rm -r *~
+clear
+echo -e ""
+echo -e "▀▀█▀▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▒█▀▀▀█ ▀▀█▀▀\033[0m" 
+echo -e "░▒█░░ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀▄ ▒█░░▒█ ░▒█░░\033[0m" 
+echo -e "░▒█░░ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄█ ░▒█░░\033[0m"
+echo -e "\e[33m──────────────────────────────────────────\033[0m"
+echo "Pergi ke @BotFather dan type /newbot untuk membuat bot baru"
+echo "Pergi ke @MissRose_bot dan type /id untuk mendapatkan ID telegram"
+echo -e "\e[33m──────────────────────────────────────────\033[0m"
+read -p "Input bot Token : " tokentelebot
+read -p "Input admin ID  : " idteleowner
+read -p "Input grubb ID  : " idtelegrub
+echo -e "\e[33m──────────────────────────────────────────\033[0m"
+clear
+
+# Instalasi token bot notif
+cd
+mkdir telebotvpn
+echo "$tokentelebot" > /telebotvpn/tokentelebot
+echo "$idteleowner" > /telebotvpn/idteleowner
+echo "$idtelegrub" > /telebotvpn/idtelegrub
 
 # Instalasi Keamanan
 wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
