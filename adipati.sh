@@ -73,13 +73,16 @@ echo "Pergi ke @MissRose_bot dan type /id untuk mendapatkan ID telegram"
 echo -e "\e[33m──────────────────────────────────────────\033[0m"
 read -p "Input bot Token : " tokentelebot
 read -p "Input admin ID  : " idteleowner
-read -p "Input grubb ID  : " idtelegrub
+read -p "Input grub  ID  : " idtelegrub
 echo -e "\e[33m──────────────────────────────────────────\033[0m"
 clear
 
 # Instalasi token bot notif
 cd
 mkdir telebotvpn
+touch /telebotvpn/tokentelebot
+touch /telebotvpn/idteleowner
+touch /telebotvpn/idtelegrub
 echo "$tokentelebot" > /telebotvpn/tokentelebot
 echo "$idteleowner" > /telebotvpn/idteleowner
 echo "$idtelegrub" > /telebotvpn/idtelegrub
