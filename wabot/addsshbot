@@ -29,7 +29,6 @@ ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
 domain=$(cat /etc/xray/domain)
 
-clear
 read -p "Username : " Login
 read -p "Password : " Pass
 read -p "Limit Ip : " iplimit
@@ -47,7 +46,6 @@ echo -e "$iplimit" > /etc/kyt/limit/ssh/ip/$Login
 else
 echo > /dev/null
 fi
-clear
 
 tgl=$(date -d "$masaaktif days" +"%d")
 bln=$(date -d "$masaaktif days" +"%b")
@@ -68,6 +66,7 @@ if [[ "${DATADB}" != '' ]]; then
   sed -i "/\b${Login}\b/d" /etc/ssh/.ssh.db
 fi
 echo "### ${Login} ${expi} ${Pass} ${iplimit}" >>/etc/ssh/.ssh.db
+clear
 
 clear
 cat > /var/www/html/ssh-$Login.txt <<-END
@@ -120,8 +119,6 @@ Status Create SSHWS Success
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-
-clear
 
 echo "$ISP"
 echo "$CITY"

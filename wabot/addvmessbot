@@ -24,7 +24,6 @@ CHATID=$(cat /root/telebotvpn/idteleowner)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
-clear
 ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
 MYIP=$(cat /etc/xray/ipvps)
@@ -178,6 +177,7 @@ if [[ "${DATADB}" != '' ]]; then
 fi
 
 echo "### ${user} ${exp} ${uuid} ${Quota} ${iplimit}" >>/etc/vmess/.vmess.db
+clear
 
 TEXT="
 ──────────────────────
@@ -209,9 +209,6 @@ Status Create VMESS Success
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 
 systemctl restart xray > /dev/null 2>&1
-service cron restart > /dev/null 2>&1
-
-clear
 
 echo "$ISP"
 echo "$CITY"

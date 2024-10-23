@@ -199,7 +199,6 @@ echo "tunnel vmess ${user}" | at now + $pup minutes &> /dev/null
 echo "rm -r /var/www/html/vmess-$user.txt" | at now + $pup minutes &> /dev/null
 
 systemctl restart xray > /dev/null 2>&1
-service cron restart > /dev/null 2>&1
 
 echo "$ISP"
 echo "$CITY"
