@@ -20,8 +20,8 @@ GREEN='\033[0;32m'
 ORANGE='\033[0;33m'
 YELL='\033[0;33m'
 
-CHATID=$(cat /telebotvpn/idteleowner)
-KEY=$(cat /telebotvpn/tokentelebot)
+CHATID=$(cat /root/telebotvpn/idteleowner)
+KEY=$(cat /root/telebotvpn/tokentelebot)
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 clear

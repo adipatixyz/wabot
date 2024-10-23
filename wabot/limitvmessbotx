@@ -10,8 +10,8 @@
 
 function send-log(){
 domain=$(cat /etc/xray/domain)
-CHATID=$(cat /telebotvpn/idtelegrub)
-KEY=$(cat /telebotvpn/tokentelebot)
+CHATID=$(cat /root/telebotvpn/idtelegrub)
+KEY=$(cat /root/telebotvpn/tokentelebot)
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="

@@ -8,8 +8,8 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
-CHATID=$(cat /telebotvpn/idteleowner)
-KEY=$(cat /telebotvpn/tokentelebot)
+CHATID=$(cat /root/telebotvpn/idteleowner)
+KEY=$(cat /root/telebotvpn/tokentelebot)
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 IP=$(cat /etc/xray/ipvps)
