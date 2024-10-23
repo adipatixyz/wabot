@@ -90,7 +90,7 @@ WS    : $domain:80@$Login:$Pass
 ----------------------
 UDP   : $domain:1-66535@$Login:$Pass
 ----------------------
-Exp   : $exp
+Exp   : $expe
 ----------------------
 END
 
@@ -120,7 +120,7 @@ Status Create SSHWS Success
 ──────────────────────
 <code>✧ Doc   :</code> https://${domain}:81/ssh-$Login.txt
 ──────────────────────
-<code>✧ Exp   :</code> <code>$exp</code>
+<code>✧ Exp   :</code> <code>$expe</code>
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
