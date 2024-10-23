@@ -22,8 +22,8 @@ YELL='\033[0;33m'
 
 CHATID=$(cat /telebotvpn/idteleowner)
 KEY=$(cat /telebotvpn/tokentelebot)
-export TIME="10"
-export URL="https://api.telegram.org/bot$KEY/sendMessage"
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
 clear
 ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
@@ -179,10 +179,6 @@ fi
 
 echo "### ${user} ${exp} ${uuid} ${Quota} ${iplimit}" >>/etc/vmess/.vmess.db
 
-CHATID="$CHATID"
-KEY="$KEY"
-TIME="$TIME"
-URL="$URL"
 TEXT="
 ──────────────────────
 Status Create VMESS Success

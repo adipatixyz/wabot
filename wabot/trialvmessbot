@@ -22,8 +22,8 @@ YELL='\033[0;33m'
 
 CHATID=$(cat /telebotvpn/idteleowner)
 KEY=$(cat /telebotvpn/tokentelebot)
-export TIME="10"
-export URL="https://api.telegram.org/bot$KEY/sendMessage"
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
 ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
 IP=$(cat /etc/xray/ipvps)
@@ -112,8 +112,7 @@ vmesslink1="vmess://$(echo $asu | base64 -w 0)"
 vmesslink2="vmess://$(echo $ask | base64 -w 0)"
 vmesslink3="vmess://$(echo $grpc | base64 -w 0)"
 
-cat >/var/www/html/vmess-$user.txt <<-END
------------------------------------
+cat > /var/www/html/vmess-$user.txt  <<-END
 ----------------------
 Status Trial VMESS Success
 ----------------------
@@ -138,6 +137,7 @@ Grpc  : $vmesslink3
 Exp   : $pup Menit
 ----------------------
 END
+
 if [ ! -e /etc/vmess ]; then
   mkdir -p /etc/vmess
 fi
@@ -165,10 +165,7 @@ if [[ "${DATADB}" != '' ]]; then
 fi
 echo "#&# ${user} ${pup} ${uuid} ${Quota}" >>/etc/vmess/.vmess.db
 clear
-CHATID="$CHATID"
-KEY="$KEY"
-TIME="$TIME"
-URL="$URL"
+
 TEXT="
 ──────────────────────
 Status Trial VMESS Success

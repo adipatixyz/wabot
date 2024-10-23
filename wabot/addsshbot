@@ -22,8 +22,8 @@ YELL='\033[0;33m'
 
 CHATID=$(cat /telebotvpn/idteleowner)
 KEY=$(cat /telebotvpn/tokentelebot)
-export TIME="10"
-export URL="https://api.telegram.org/bot$KEY/sendMessage"
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
 IP=$(cat /etc/xray/ipvps)
 ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
@@ -81,7 +81,7 @@ Host  : $domain
 IP    : $IP
 User  : $Login
 pw    : $Pass
-Max   : $iplimit
+Max   : $iplimit IP
 Port  : 443, 80, 1-66535
 ----------------------
 SSL   : $domain:443@$Login:$Pass
@@ -94,10 +94,6 @@ Exp   : $expe
 ----------------------
 END
 
-CHATID="$CHATID"
-KEY="$KEY"
-TIME="$TIME"
-URL="$URL"
 TEXT="
 ──────────────────────
 Status Create SSHWS Success
@@ -109,7 +105,7 @@ Status Create SSHWS Success
 <code>✧ IP    :</code> <code>$IP</code>
 <code>✧ User  :</code> <code>$Login</code>
 <code>✧ pw    :</code> <code>$Pass</code>
-<code>✧ Max   :</code> <code>$iplimit</code>
+<code>✧ Max   :</code> <code>$iplimit IP</code>
 <code>✧ Port  :</code> <code>443, 80, 1-66535</code>
 ──────────────────────
 <code>✧ SSL   :</code> <code>$domain:443@$Login:$Pass</code>

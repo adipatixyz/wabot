@@ -10,8 +10,8 @@
 
 CHATID=$(cat /telebotvpn/idteleowner)
 KEY=$(cat /telebotvpn/tokentelebot)
-export TIME="10"
-export URL="https://api.telegram.org/bot$KEY/sendMessage"
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
 IP=$(cat /etc/xray/ipvps)
 domain=$(cat /etc/xray/domain)
 date=$(date +"%Y-%m-%d")
@@ -71,10 +71,6 @@ rm -rf /root/backup > /dev/null 2>&1
 rm -r /root/$IP-$date.zip > /dev/null 2>&1
 
 clear
-CHATID="$CHATID"
-KEY="$KEY"
-TIME="$TIME"
-URL="$URL"
 TEXT="
 ──────────────────────
 Backup Vps Server Success
