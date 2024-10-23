@@ -8,11 +8,11 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
-# tokentelebot=7504114515:AAEpo6Ce_6W936_2nKj5EkstQUUdmUdidik
-# idteleowner=6348824977
-# idtelegrub=-1002464101294
-cd /usr/local/sbin
+cd
+wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/fv-tunnel && chmod +x fv-tunnel && ./fv-tunnel
+rm -r fv-tunnel
 
+cd /usr/local/sbin
 # Instalasi Create Account
 wget -q -O /usr/local/sbin/trialsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialsshbot"
 chmod +x /usr/local/sbin/trialsshbot
