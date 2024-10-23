@@ -86,6 +86,7 @@ echo "$idtelegrub" > /telebotvpn/idtelegrub
 
 # Instalasi Keamanan
 wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
+rm -r keamananx
 
 # Instalasi SSHD_Config Port Login 6401
 cd /etc/ssh
