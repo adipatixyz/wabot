@@ -8,7 +8,7 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
-function send-log(){
+function send_log(){
 domain=$(cat /etc/xray/domain)
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
@@ -95,21 +95,35 @@ for PID in $(ps aux | grep "\[priv\]" | awk '{print $2}'); do
     fi
 done
 
-# Mengunci pengguna yang melampaui batas jumlah login
-j="0";
+# Fungsi untuk memeriksa apakah pengguna sudah unlock
+function is_unlocked() {
+    user_status=$(passwd -S $1 | awk '{print $2}')
+    if [ "$user_status" == "P" ]; then
+        # Status "P" artinya password aktif (akun unlock)
+        return 0
+    else
+        # Akun locked
+        return 1
+    fi
+}
+
 for i in ${!username[*]}
 do
-    MAX=6;
+    MAX=4;
+    # Cek apakah pengguna sudah unlock
+    if is_unlocked "${username[$i]}"; then
+        echo "Pengguna ${username[$i]} sudah unlock, lewati."
+        continue
+    fi
+    
     if [ ${jumlah[$i]} -gt $MAX ]; then
         date=$(date +"%Y-%m-%d %X");
         echo "$date - ${username[$i]} - ${jumlah[$i]}";
         
         # Mengunci pengguna multilogin
         passwd -l ${username[$i]};
-        echo "### ${username[$i]}" >> /usr/local/sbin/limitssh
-        echo "passwd -u ${username[$i]}" >> /usr/local/sbin/limitssh
-        send-log "${username[$i]}" "$MAX" "${jumlah[$i]}"
-        echo "/usr/local/sbin/unlockssh &> /dev/null" | at now + 30 minutes
+        send_log "${username[$i]}" "$MAX" "${jumlah[$i]}"
+        echo "unlocklimitipbot ssh ${username[$i]}" | at now + 30 minutes &> /dev/null
 
         if [ $OS -eq 1 ]; then
             systemctl restart ssh > /dev/null 2>&1;
@@ -120,14 +134,6 @@ do
         # Membersihkan variabel yang digunakan
         jumlah[$i]=0;
         pid[$i]="";
-        j=$((j + 1));
     fi
-    sleep 60
+    sleep 30
 done
-
-# Jika ada pengguna yang lock, lakukan tindakan tambahan
-if [ $j -gt 0 ]; then
-    # Tindakan tambahan setelah semua pengguna dilock
-    service dropbear restart > /dev/null 2>&1;
-fi
-sleep 60

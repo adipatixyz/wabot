@@ -18,9 +18,9 @@ TEXT="
 ──────────────────────
 🚫 Notifikasi Multilogin VMESS
 ──────────────────────
-<code>User  :</code> <code>$user</code>
+<code>User  :</code> <code>$1</code>
 <code>Limit :</code> <code>2</code>
-<code>Login :</code> <code>$cekcek</code>
+<code>Login :</code> <code>$3</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 30 Menit
@@ -28,14 +28,13 @@ Unlock User Otomatis 30 Menit
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
-#LIMITVMESSIP
 echo -n > /var/log/xray/access.log
 sleep 5
 data=( `ls /etc/kyt/limit/vmess/ip`);
-#Decrypted By YADDY D PHREAKER
     for user in "${data[@]}"
     do
-        iplimit=6
+        # iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
+        iplimit=4
         ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq);
         cekcek=$(echo -e "$ehh" | wc -l);
         if [[ $cekcek -gt $iplimit ]]; then
@@ -47,18 +46,13 @@ systemctl restart xray
 sleep 5
 continue
 fi
-echo "### $user $exp" >> /usr/local/sbin/limitxray
-echo "sed -i '/#vmess\$/a\\\### $user $exp\\
-},{\"id\": \"$uuid\",\"alterId\": 0,\"email\": \"$user\"' /etc/xray/config.json" >> /usr/local/sbin/limitxray
-echo "sed -i '/#vmessgrpc\$/a\\\### $user $exp\\
-},{\"id\": \"$uuid\",\"alterId\": 0,\"email\": \"$user\"' /etc/xray/config.json" >> /usr/local/sbin/limitxray
+echo "unlocklimitipbot vmess $user $exp $uuid" | at now + 30 minutes &> /dev/null
 sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
 systemctl restart xray
-send_log
-echo "/usr/local/sbin/unlockxray &> /dev/null" | at now + 30 minutes
+send_log "$user" "$iplimit" "$cekcek"
             else
             sleep 5
         fi
         sleep 5
     done
-sleep 60
+sleep 30

@@ -72,7 +72,6 @@ function con() {
       echo ""
    fi
 done
-# Check ur Account
 for user in ${data[@]}
   do
     if [ -e /etc/vmess/${user} ]; then
@@ -116,4 +115,4 @@ sleep 15
     fi
   done
 done
-sleep 60
+sleep 30
