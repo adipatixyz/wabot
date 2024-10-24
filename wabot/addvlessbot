@@ -2,9 +2,9 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # System Request : Debian 9+/Ubuntu 18.04+/20+
 # Develovers » Gemilangkinasih࿐
-# Email      » gemilangkinasih@gmail.com
+# Email      » gemilangpremium@gmail.com
 # telegram   » https://t.me/gemilangkinasih
-# whatsapp   » wa.me/+628984880039
+# whatsapp   » wa.me/+6287782718065
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
@@ -58,99 +58,22 @@ tgl2=$(date +"%d")
 bln2=$(date +"%b")
 thn2=$(date +"%Y")
 tnggl="$tgl2 $bln2, $thn2"
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-sed -i '/#vmess$/a\### '"$user $exp"'\
-},{"id": "'""$uuid""'","alterId": '"0"',"email": "'""$user""'"' /etc/xray/config.json
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-sed -i '/#vmessgrpc$/a\### '"$user $exp"'\
-},{"id": "'""$uuid""'","alterId": '"0"',"email": "'""$user""'"' /etc/xray/config.json
+exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
+sed -i '/#vless$/a\#& '"$user $exp"'\
+},{"id": "'""$uuid""'","email" : "'""$user""'"' /etc/xray/config.json
+sed -i '/#vlessgrpc$/a\#& '"$user $exp"'\
+},{"id": "'""$uuid""'","email" : "'""$user""'"' /etc/xray/config.json
+vlesslink1="vless://${uuid}@${domain}:443?path=/vless&security=tls&encryption=none&host=${domain}&type=ws&sni=${domain}#${user}"
+vlesslink2="vless://${uuid}@${domain}:80?path=/vless&encryption=none&type=ws&host=${domain}#${user}"
+vlesslink3="vless://${uuid}@${domain}:443?mode=gun&security=tls&encryption=none&authority=${domain}&type=grpc&serviceName=vless-grpc&sni=${domain}#${user}"
 
-asu=`cat<<EOF
-      {
-      "v": "2",
-      "ps": "${user}",
-      "add": "${domain}",
-      "port": "443",
-      "id": "${uuid}",
-      "aid": "0",
-      "net": "ws",
-      "path": "/vmess",
-      "type": "none",
-      "host": "${domain}",
-      "tls": "tls"
-}
-EOF`
-ask=`cat<<EOF
-      {
-      "v": "2",
-      "ps": "${user}",
-      "add": "${domain}",
-      "port": "80",
-      "id": "${uuid}",
-      "aid": "0",
-      "net": "ws",
-      "path": "/vmess",
-      "type": "none",
-      "host": "${domain}",
-      "tls": "none"
-}
-EOF`
-grpc=`cat<<EOF
-      {
-      "v": "2",
-      "ps": "${user}",
-      "add": "${domain}",
-      "port": "443",
-      "id": "${uuid}",
-      "aid": "0",
-      "net": "grpc",
-      "path": "vmess-grpc",
-      "type": "none",
-      "host": "${domain}",
-      "tls": "tls"
-}
-EOF`
-
-vmess_base641=$( base64 -w 0 <<< $vmess_json1)
-vmess_base642=$( base64 -w 0 <<< $vmess_json2)
-vmess_base643=$( base64 -w 0 <<< $vmess_json3)
-vmesslink1="vmess://$(echo $asu | base64 -w 0)"
-vmesslink2="vmess://$(echo $ask | base64 -w 0)"
-vmesslink3="vmess://$(echo $grpc | base64 -w 0)"
-
-cat > /var/www/html/vmess-$user.txt <<-END
-----------------------
-Status Create VMESS Success
-----------------------
-ISP   : $ISP
-City  : $CITY
-----------------------
-Host  : $domain
-IP    : $MYIP
-User  : $user
-UUID  : $uuid
-Max   : $iplimit IP
-Quota : $Quota GB
-Port  : 443, 80
-Path  : /vmess
-----------------------
-Tls   : $vmesslink1
-----------------------
-nTls  : $vmesslink2
-----------------------
-Grpc  : $vmesslink3
-----------------------
-Exp   : $expe
-----------------------
-END
-
-if [ ! -e /etc/vmess ]; then
-  mkdir -p /etc/vmess
+if [ ! -e /etc/vless ]; then
+  mkdir -p /etc/vless
 fi
 
 if [[ $iplimit -gt 0 ]]; then
-mkdir -p /etc/kyt/limit/vmess/ip
-echo -e "$iplimit" > /etc/kyt/limit/vmess/ip/$user
+mkdir -p /etc/kyt/limit/vless/ip
+echo -e "$iplimit" > /etc/kyt/limit/vless/ip/$user
 else
 echo > /dev/null
 fi
@@ -163,19 +86,44 @@ c=$(echo "${Quota}" | sed 's/[^0-9]*//g')
 d=$((${c} * 1024 * 1024 * 1024))
 
 if [[ ${c} != "0" ]]; then
-  echo "${d}" >/etc/vmess/${user}
+  echo "${d}" >/etc/vless/${user}
 fi
-DATADB=$(cat /etc/vmess/.vmess.db | grep "^###" | grep -w "${user}" | awk '{print $2}')
+DATADB=$(cat /etc/vless/.vless.db | grep "^###" | grep -w "${user}" | awk '{print $2}')
 if [[ "${DATADB}" != '' ]]; then
-  sed -i "/\b${user}\b/d" /etc/vmess/.vmess.db
+  sed -i "/\b${user}\b/d" /etc/vless/.vless.db
 fi
-
-echo "### ${user} ${exp} ${uuid} ${Quota} ${iplimit}" >>/etc/vmess/.vmess.db
+echo "### ${user} ${exp} ${uuid} ${Quota} ${iplimit}" >> /etc/vless/.vless.db
 clear
+
+cat >/var/www/html/vless-$user.txt <<-END
+----------------------
+Status Create VLESS Success
+----------------------
+ISP   : $ISP
+City  : $CITY
+----------------------
+Host  : $domain
+IP    : $MYIP
+User  : $user
+UUID  : $uuid
+Max   : $iplimit IP
+Quota : $Quota GB
+Port  : 443, 80
+Path  : /vless
+----------------------
+Tls   : $vlesslink1
+----------------------
+nTls  : $vlesslink2
+----------------------
+Grpc  : $vlesslink3
+----------------------
+Exp   : $expe
+----------------------
+END
 
 TEXT="
 ──────────────────────
-Status Create VMESS Success
+Status Create VLESS Success
 ──────────────────────
 <code>✧ ISP   :</code> <code>$ISP</code>
 <code>✧ City  :</code> <code>$CITY</code>
@@ -187,15 +135,11 @@ Status Create VMESS Success
 <code>✧ Max   :</code> <code>$iplimit IP</code>
 <code>✧ Quota :</code> <code>$Quota GB</code>
 <code>✧ Port  :</code> <code>443, 80</code>
-<code>✧ Path  :</code> <code>/vmess</code>
+<code>✧ Path  :</code> <code>/vless</code>
 ──────────────────────
-<code>✧ Tls   :</code> <code>$vmesslink1</code>
+<code>TLS, nTLS, GRPC Check Link ↴</code>
 ──────────────────────
-<code>✧ nTls  :</code> <code>$vmesslink2</code>
-──────────────────────
-<code>✧ Grpc  :</code> <code>$vmesslink3</code>
-──────────────────────
-<code>✧ Doc   :</code> https://${domain}:81/vmess-$user.txt
+<code>✧ Doc   :</code> https://${domain}:81/vless-$user.txt
 ──────────────────────
 <code>✧ Exp   :</code> <code>$expe</code>
 ────────────────────── "
@@ -209,7 +153,7 @@ echo "$CITY"
 echo "$domain"
 echo "$user"
 echo "$uuid"
-echo "$vmesslink1"
-echo "$vmesslink2"
-echo "$vmesslink3"
+echo "$vlesslink1"
+echo "$vlesslink2"
+echo "$vlesslink3"
 echo "$expe"

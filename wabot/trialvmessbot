@@ -30,7 +30,6 @@ IP=$(cat /etc/xray/ipvps)
 MYIP=$(cat /etc/xray/ipvps)
 domain=$(cat /etc/xray/domain)
 
-clear
 user=Trial-VM`< /dev/urandom tr -dc 0-9 | head -c3`
 pup=30
 generateRandomString() {

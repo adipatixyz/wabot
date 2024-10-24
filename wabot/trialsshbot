@@ -26,13 +26,15 @@ TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
-domain=$(cat /etc/xray/domain)
 IP=$(cat /etc/xray/ipvps)
+MYIP=$(cat /etc/xray/ipvps)
+domain=$(cat /etc/xray/domain)
+
 Login=Trial-`</dev/urandom tr -dc X-Z0-9 | head -c4`
 pup=30
 hari="1"
 Pass=1
-clear
+
 tgl=$(date -d "$masaaktif days" +"%d")
 bln=$(date -d "$masaaktif days" +"%b")
 thn=$(date -d "$masaaktif days" +"%Y")
