@@ -22,6 +22,14 @@ wget -q -O /usr/local/sbin/trialvmessbot "https://raw.githubusercontent.com/adip
 chmod +x /usr/local/sbin/trialvmessbot
 wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvmessbot"
 chmod +x /usr/local/sbin/addvmessbot
+wget -q -O /usr/local/sbin/trialvlessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialvlessbot"
+chmod +x /usr/local/sbin/trialvlessbot
+wget -q -O /usr/local/sbin/addvlessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvlessbot"
+chmod +x /usr/local/sbin/addvlessbot
+wget -q -O /usr/local/sbin/trialtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialtrojanbot"
+chmod +x /usr/local/sbin/trialtrojanbot
+wget -q -O /usr/local/sbin/addtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addtrojanbot"
+chmod +x /usr/local/sbin/addtrojanbot
 
 # Instalasi Backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
@@ -40,13 +48,20 @@ wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/
 chmod +x /usr/local/sbin/tunnel
 dos2unix /usr/local/sbin/tunnel
 
+# Instlasi Unlock Limit Ip
+wget -q -O /usr/local/sbin/unlocklimitipbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlocklimitipbot"
+chmod +x /usr/local/sbin/unlocklimitipbot
+dos2unix /usr/local/sbin/unlocklimitipbot
+
 # Instalasi Limit
 wget -q -O /usr/bin/tendang2 "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
 chmod +x /usr/bin/tendang2 # limit ip ssh
 wget -q -O /usr/bin/vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbot"
 chmod +x /usr/bin/vmess # limit ip vmess
-wget -q -O /etc/xray/limit.vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbotx"
-chmod +x /etc/xray/limit.vmess # limit quota vmess
+wget -q -O /usr/bin/vless "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvlessbot"
+chmod +x /usr/bin/vless # limit ip vless
+wget -q -O /usr/bin/trojan "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limittrojanbot"
+chmod +x /usr/bin/trojan # limit ip trojan
 
 # Instalasi Rclone
 wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
@@ -58,8 +73,12 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 5 0 * * * root autobackupbot
 0 22 * * * root systemctl stop vsip
 0 22 * * * root systemctl stop vmip
+0 22 * * * root systemctl stop vlip
+0 22 * * * root systemctl stop vtrip
 0 7 * * * root systemctl restart vsip
 0 7 * * * root systemctl restart vmip
+0 7 * * * root systemctl restart vlip
+0 7 * * * root systemctl restart vtrip
 END
 
 clear
