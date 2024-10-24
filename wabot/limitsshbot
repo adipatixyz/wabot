@@ -109,6 +109,7 @@ function is_unlocked() {
 
 for i in ${!username[*]}
 do
+    # MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]});
     MAX=4;
     # Cek apakah pengguna sudah unlock
     if is_unlocked "${username[$i]}"; then

@@ -18,9 +18,9 @@ TEXT="
 ──────────────────────
 🚫 Notifikasi Multilogin TROJAN
 ──────────────────────
-<code>User  :</code> <code>$1</code>
+<code>User  :</code> <code>$user</code>
 <code>Limit :</code> <code>2</code>
-<code>Login :</code> <code>$3</code>
+<code>Login :</code> <code>$cekcek</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 30 Menit
@@ -49,7 +49,7 @@ fi
 echo "unlocklimitipbot trojan $user $exp $uuid" | at now + 30 minutes &> /dev/null
 sed -i "/^#! $user $exp/,/^},{/d" /etc/xray/config.json
 systemctl restart xray
-send_log "$user" "$iplimit" "$cekcek"
+send_log
             else
             sleep 1
         fi
