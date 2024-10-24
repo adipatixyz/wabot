@@ -37,11 +37,11 @@ chmod +x /usr/local/sbin/autobackupbot
 dos2unix autobackupbot
 
 # Enc Wabot
-wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
-chmod +x /usr/local/sbin/epro
-dos2unix epro
-epro *bot
-rm -r *~
+# wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
+# chmod +x /usr/local/sbin/epro
+# dos2unix epro
+# epro *bot
+# rm -r *~
 
 # Instalasi Detele Trial
 wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/tunnel"
