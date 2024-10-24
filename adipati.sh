@@ -16,20 +16,28 @@ cd /usr/local/sbin
 # Instalasi Create Account
 wget -q -O /usr/local/sbin/trialsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialsshbot"
 chmod +x /usr/local/sbin/trialsshbot
+dos2unix /usr/local/sbin/trialsshbot
 wget -q -O /usr/local/sbin/addsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addsshbot"
 chmod +x /usr/local/sbin/addsshbot
+dos2unix /usr/local/sbin/addsshbot
 wget -q -O /usr/local/sbin/trialvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialvmessbot"
 chmod +x /usr/local/sbin/trialvmessbot
+dos2unix /usr/local/sbin/trialvmessbot
 wget -q -O /usr/local/sbin/addvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvmessbot"
 chmod +x /usr/local/sbin/addvmessbot
+dos2unix /usr/local/sbin/addvmessbot
 wget -q -O /usr/local/sbin/trialvlessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialvlessbot"
 chmod +x /usr/local/sbin/trialvlessbot
+dos2unix /usr/local/sbin/trialvlessbot
 wget -q -O /usr/local/sbin/addvlessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addvlessbot"
 chmod +x /usr/local/sbin/addvlessbot
+dos2unix /usr/local/sbin/addvlessbot
 wget -q -O /usr/local/sbin/trialtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialtrojanbot"
 chmod +x /usr/local/sbin/trialtrojanbot
+dos2unix /usr/local/sbin/trialtrojanbot
 wget -q -O /usr/local/sbin/addtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addtrojanbot"
 chmod +x /usr/local/sbin/addtrojanbot
+dos2unix /usr/local/sbin/addtrojanbot
 
 # Instalasi Backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
