@@ -9,7 +9,7 @@
 # Gemilangkinasih࿐
 
 cd
-wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/fv-tunnel && chmod +x fv-tunnel && ./fv-tunnel
+wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/fv-tunnel && chmod +x fv-tunnel && dos2unix fv-tunnel && ./fv-tunnel
 rm -r fv-tunnel
 
 cd /usr/local/sbin
@@ -70,6 +70,11 @@ wget -q -O /usr/bin/vless "https://raw.githubusercontent.com/adipatixyz/wabot/ma
 chmod +x /usr/bin/vless # limit ip vless
 wget -q -O /usr/bin/trojan "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limittrojanbot"
 chmod +x /usr/bin/trojan # limit ip trojan
+systemctl restart vsip
+systemctl restart vmip
+systemctl restart vlip
+systemctl restart vtrip
+
 
 # Instalasi Rclone
 wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
