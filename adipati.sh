@@ -64,12 +64,17 @@ dos2unix /usr/local/sbin/unlocklimitipbot
 # Instalasi Limit
 wget -q -O /usr/bin/tendang2 "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
 chmod +x /usr/bin/tendang2 # limit ip ssh
+dos2unix /usr/bin/tendang2 # limit ip ssh
 wget -q -O /usr/bin/vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbot"
 chmod +x /usr/bin/vmess # limit ip vmess
+dos2unix /usr/bin/vmess # limit ip vmess
 wget -q -O /usr/bin/vless "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvlessbot"
 chmod +x /usr/bin/vless # limit ip vless
+dos2unix /usr/bin/vless # limit ip vless
 wget -q -O /usr/bin/trojan "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limittrojanbot"
 chmod +x /usr/bin/trojan # limit ip trojan
+dos2unix /usr/bin/trojan # limit ip trojan
+systemctl daemon-reload
 systemctl restart vsip
 systemctl restart vmip
 systemctl restart vlip
