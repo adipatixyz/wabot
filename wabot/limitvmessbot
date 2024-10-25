@@ -23,7 +23,7 @@ TEXT="
 <code>Login :</code> <code>$cekcek</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
-Unlock User Otomatis 30 Menit
+Unlock User Otomatis 15 Menit
 ────────────────────── "
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
@@ -34,22 +34,22 @@ data=( `ls /etc/kyt/limit/vmess/ip`);
     for user in "${data[@]}"
     do
         # iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
-        iplimit=4
+        iplimit=3
         ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq);
         cekcek=$(echo -e "$ehh" | wc -l);
         if [[ $cekcek -gt $iplimit ]]; then
 exp=$(grep -w "^### $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
 uuid=$(grep -w "^### $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
 if [[ -z $exp || -z $uuid ]]; then
-echo "User $user has an empty expiration or UUID. Restarting the system."
-systemctl restart xray
+echo "User $user has an empty expiration or UUID."
 sleep 5
 continue
 fi
-echo "unlocklimitipbot vmess $user $exp $uuid" | at now + 30 minutes &> /dev/null
+echo "unlocklimitipbot vmess $user $exp $uuid" | at now + 15 minutes &> /dev/null
 sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
 systemctl restart xray
 send_log "$user" "$iplimit" "$cekcek"
+echo "Locked $user and Send Notif Telebot Success."
             else
             sleep 5
         fi

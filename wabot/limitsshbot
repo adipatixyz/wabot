@@ -23,7 +23,7 @@ TEXT="
 <code>Login :</code> <code>$3</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
-Unlock User Otomatis 30 Menit
+Unlock User Otomatis 15 Menit
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
@@ -95,28 +95,18 @@ for PID in $(ps aux | grep "\[priv\]" | awk '{print $2}'); do
     fi
 done
 
-# Fungsi untuk memeriksa apakah pengguna sudah unlock
-function is_unlocked() {
-    user_status=$(passwd -S $1 | awk '{print $2}')
-    if [ "$user_status" == "P" ]; then
-        # Status "P" artinya password aktif (akun unlock)
-        return 0
-    else
-        # Akun locked
-        return 1
-    fi
-}
-
 for i in ${!username[*]}
 do
     # MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]});
-    MAX=4;
-    # Cek apakah pengguna sudah unlock
-    if is_unlocked "${username[$i]}"; then
-        echo "Pengguna ${username[$i]} sudah unlock, lewati."
+    MAX=3;
+
+    # Mengecek apakah username terkunci
+    STATUS=$(passwd -S ${username[$i]} | awk '{print $2}')
+    if [ "$STATUS" == "L" ]; then
+        echo "User ${username[$i]} terkunci, melewati proses."
         continue
     fi
-    
+
     if [ ${jumlah[$i]} -gt $MAX ]; then
         date=$(date +"%Y-%m-%d %X");
         echo "$date - ${username[$i]} - ${jumlah[$i]}";
@@ -124,7 +114,8 @@ do
         # Mengunci pengguna multilogin
         passwd -l ${username[$i]};
         send_log "${username[$i]}" "$MAX" "${jumlah[$i]}"
-        echo "unlocklimitipbot ssh ${username[$i]}" | at now + 30 minutes &> /dev/null
+        echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
+        echo "Locked ${username[$i]} and Send Notif Telebot Success."
 
         if [ $OS -eq 1 ]; then
             systemctl restart ssh > /dev/null 2>&1;
@@ -136,5 +127,6 @@ do
         jumlah[$i]=0;
         pid[$i]="";
     fi
-    sleep 30
+    sleep 20
 done
+sleep 30
