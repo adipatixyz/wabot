@@ -133,7 +133,6 @@ Status Create TROJAN Success
 <code>✧ IP    :</code> <code>$MYIP</code>
 <code>✧ User  :</code> <code>$user</code>
 <code>✧ UUID  :</code> <code>$uuid</code>
-<code>✧ UUID  :</code> <code>$uuid</code>
 <code>✧ Max   :</code> <code>$iplimit IP</code>
 <code>✧ Quota :</code> <code>$Quota GB</code>
 <code>✧ Port  :</code> <code>443, 80</code>
