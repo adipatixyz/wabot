@@ -38,6 +38,18 @@ dos2unix /usr/local/sbin/trialtrojanbot
 wget -q -O /usr/local/sbin/addtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/addtrojanbot"
 chmod +x /usr/local/sbin/addtrojanbot
 dos2unix /usr/local/sbin/addtrojanbot
+wget -q -O /usr/local/sbin/renewsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/renewsshbot"
+chmod +x /usr/local/sbin/renewsshbot
+dos2unix /usr/local/sbin/renewsshbot
+wget -q -O /usr/local/sbin/renewvmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/renewvmessbot"
+chmod +x /usr/local/sbin/renewvmessbot
+dos2unix /usr/local/sbin/renewvmessbot
+wget -q -O /usr/local/sbin/renewvlessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/renewvlessbot"
+chmod +x /usr/local/sbin/renewvlessbot
+dos2unix /usr/local/sbin/renewvlessbot
+wget -q -O /usr/local/sbin/renewtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/renewtrojanbot"
+chmod +x /usr/local/sbin/renewtrojanbot
+dos2unix /usr/local/sbin/renewtrojanbot
 
 # Instalasi Backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
