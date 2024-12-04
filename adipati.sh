@@ -121,14 +121,6 @@ cat > /etc/cron.d/telebotvpn <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 5 0 * * * root autobackupbot
-0 22 * * * root systemctl stop vsip
-0 22 * * * root systemctl stop vmip
-0 22 * * * root systemctl stop vlip
-0 22 * * * root systemctl stop vtrip
-0 7 * * * root systemctl restart vsip
-0 7 * * * root systemctl restart vmip
-0 7 * * * root systemctl restart vlip
-0 7 * * * root systemctl restart vtrip
 END
 
 cat > /etc/cron.d/allxp <<-END
