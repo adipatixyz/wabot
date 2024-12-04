@@ -77,7 +77,6 @@ ISP   : $ISP
 City  : $CITY
 ----------------------
 Host  : $domain
-IP    : $IP
 User  : $Login
 pw    : $Pass
 Max   : $iplimit IP

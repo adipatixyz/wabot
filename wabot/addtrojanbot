@@ -32,6 +32,7 @@ domain=$(cat /etc/xray/domain)
 
 read -p "Username : " user
 read -p "Limit Ip : " iplimit
+read -p "Mx Quota : " Quota
 read -p "Expireed : " masaaktif
 
 if grep -qiw "$user" /etc/xray/config.json; then
@@ -48,7 +49,6 @@ generateRandomString() {
 
 # Panggil fungsi generateRandomString dengan panjang 15 karakter
 uuid=$(generateRandomString 15)
-Quota=500
 
 tgl=$(date -d "$masaaktif days" +"%d")
 bln=$(date -d "$masaaktif days" +"%b")
@@ -75,7 +75,6 @@ ISP   : $ISP
 City  : $CITY
 ----------------------
 Host  : $domain
-IP    : $MYIP
 User  : $user
 UUID  : $uuid
 Max   : $iplimit IP
