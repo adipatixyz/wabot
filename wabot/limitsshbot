@@ -19,7 +19,7 @@ TEXT="
 🚫 Notifikasi Multilogin SSH!
 ──────────────────────
 <code>User  :</code> <code>$1</code>
-<code>Limit :</code> <code>2</code>
+<code>Limit :</code> <code>$2</code>
 <code>Login :</code> <code>$3</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
@@ -116,6 +116,13 @@ do
         send_log "${username[$i]}" "$MAX" "${jumlah[$i]}"
         echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
         echo "Locked ${username[$i]} and Send Notif Telebot Success."
+
+        if [ ${jumlah[$i]} -gt 5 ]; then
+        truncate -s 0 /var/log/auth.log
+        systemctl restart ssh
+        systemctl restart sshd
+        systemctl restart ws
+        fi
 
         if [ $OS -eq 1 ]; then
             systemctl restart ssh > /dev/null 2>&1;
