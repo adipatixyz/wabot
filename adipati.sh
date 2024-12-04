@@ -92,7 +92,6 @@ systemctl restart vmip
 systemctl restart vlip
 systemctl restart vtrip
 
-
 # Instalasi Rclone
 wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
 
@@ -110,6 +109,20 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 0 7 * * * root systemctl restart vlip
 0 7 * * * root systemctl restart vtrip
 END
+
+cat > /etc/cron.d/allxp <<-END
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+23 30 * * * root /usr/local/sbin/xp
+END
+	
+cat > /etc/cron.d/dailyreboot <<-END
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 3 * * * root /sbin/reboot
+END
+
+systemctl restart cron
 
 clear
 echo -e ""
