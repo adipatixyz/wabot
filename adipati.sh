@@ -71,6 +71,11 @@ wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/
 chmod +x /usr/local/sbin/tunnel
 dos2unix /usr/local/sbin/tunnel
 
+# Instalasi Detele User Exp
+wget -q -O /usr/local/sbin/xp "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/xp"
+chmod +x /usr/local/sbin/xp
+dos2unix /usr/local/sbin/xp
+
 # Instlasi Unlock Limit Ip
 wget -q -O /usr/local/sbin/unlocklimitipbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlocklimitipbot"
 chmod +x /usr/local/sbin/unlocklimitipbot
