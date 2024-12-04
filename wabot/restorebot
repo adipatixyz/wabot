@@ -56,6 +56,9 @@ cp -r /root/backup/limit/trojan/ip/* /etc/kyt/limit/trojan/ip > /dev/null 2>&1
 cp -r /root/backup/quota/vmess/* /etc/vmess/ > /dev/null 2>&1
 cp -r /root/backup/quota/vless/* /etc/vless/ > /dev/null 2>&1
 cp -r /root/backup/quota/trojan/* /etc/trojan/ > /dev/null 2>&1
+cp -r /root/backup/quotx/vmess/* /etc/limit/vmess/ > /dev/null 2>&1
+cp -r /root/backup/quotx/vless/* /etc/limit/vless/ > /dev/null 2>&1
+cp -r /root/backup/quotx/trojan/* /etc/limit/trojan/ > /dev/null 2>&1
 cp /root/backup/xray/* /etc/xray/
 cp /root/backup/html/* /var/www/html/ > /dev/null 2>&1
 cp /root/backup/.ssh.db /etc/ssh/ > /dev/null 2>&1
@@ -63,6 +66,7 @@ cp /root/backup/.vmess.db /etc/vmess/ > /dev/null 2>&1
 cp /root/backup/.vless.db /etc/vless/ > /dev/null 2>&1
 cp /root/backup/.trojan.db /etc/trojan/ > /dev/null 2>&1
 systemctl restart xray
+systemctl restart ssh
 
 notif_restore
 rm -r /root/backup

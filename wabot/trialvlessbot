@@ -71,7 +71,6 @@ ISP   : $ISP
 City  : $CITY
 ----------------------
 Host  : $domain
-IP    : $MYIP
 User  : $user
 UUID  : $uuid
 Max   : Unlimited

@@ -16,7 +16,7 @@ TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Limit Quota Vmess
+🚫 Notifikasi Limit Quota VMESS
 ──────────────────────
 <code>User  :</code> <code>$user</code>
 <code>Limit :</code> <code>$total2</code>
@@ -96,8 +96,7 @@ echo "sed -i '/#vmess\$/a\\\### $user $exp\\
 echo "sed -i '/#vmessgrpc\$/a\\\### $user $exp\\
 },{\"id\": \"$uuid\",\"alterId\": 0,\"email\": \"$user\"' /etc/xray/config.json" >> /usr/local/sbin/limitxray
 sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
-pluss=$((checkLimit + checkLimit))
-echo "$pluss" > "/etc/vmess/${user}"
+echo "0" > "/etc/limit/vmess/${user}"
 send-log
 systemctl restart xray
 sleep 15

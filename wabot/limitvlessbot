@@ -19,7 +19,7 @@ TEXT="
 🚫 Notifikasi Multilogin VLESS
 ──────────────────────
 <code>User  :</code> <code>$user</code>
-<code>Limit :</code> <code>2</code>
+<code>Limit :</code> <code>$iplimit</code>
 <code>Login :</code> <code>$cekcek</code>
 <code>Domen :</code> <code>$domain</code>
 ────────────────────── 
@@ -33,8 +33,8 @@ sleep 5
 data=( `ls /etc/kyt/limit/vless/ip`);
     for user in "${data[@]}"
     do
-        # iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
-        iplimit=3
+        iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
+        # iplimit=3
         ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq);
         cekcek=$(echo -e "$ehh" | wc -l);
         if [[ $cekcek -gt $iplimit ]]; then

@@ -10,7 +10,7 @@
 
 # Getting
 MYIP=$(wget -qO- ipinfo.io/ip);
-iplim=2
+
 read -p "Input Username Account : " User
 read -p "Day Extend : " Days
 if ! grep -qiw "$User" /etc/passwd; then
@@ -33,8 +33,6 @@ passwd -u $User >/dev/null
 usermod -e  $Expiration $User >/dev/null
 egrep "^$User" /etc/passwd >/dev/null
 echo -e "$Pass\n$Pass\n"|passwd $User &> /dev/null
-mkdir -p /etc/kyt/limit/ssh/ip
-echo "${iplim}" > /etc/kyt/limit/ssh/ip/${User}
 
 echo "$User"
 echo "$Days Days"
