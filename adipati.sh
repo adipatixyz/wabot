@@ -51,10 +51,13 @@ wget -q -O /usr/local/sbin/renewtrojanbot "https://raw.githubusercontent.com/adi
 chmod +x /usr/local/sbin/renewtrojanbot
 dos2unix /usr/local/sbin/renewtrojanbot
 
-# Instalasi Backup
+# Instalasi Backup & backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
 chmod +x /usr/local/sbin/autobackupbot
 dos2unix autobackupbot
+wget -q -O /usr/local/sbin/restorebot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/restorebot"
+chmod +x /usr/local/sbin/restorebot
+dos2unix restorebot
 
 # Enc Wabot
 # wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
