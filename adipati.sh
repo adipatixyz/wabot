@@ -89,11 +89,24 @@ dos2unix /usr/bin/vless # limit ip vless
 wget -q -O /usr/bin/trojan "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limittrojanbot"
 chmod +x /usr/bin/trojan # limit ip trojan
 dos2unix /usr/bin/trojan # limit ip trojan
+wget -q -O /etc/xray/limit.vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbotx"
+chmod +x /etc/xray/limit.vmess # limit quota vmess
+dos2unix /etc/xray/limit.vmess # limit quota vmess
+wget -q -O /etc/xray/limit.vless "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvlessbotx"
+chmod +x /etc/xray/limit.vless # limit quota vless
+dos2unix /etc/xray/limit.vless # limit quota vless
+wget -q -O /etc/xray/limit.trojan "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limittrojanbotx"
+chmod +x /etc/xray/limit.trojan # limit quota trojan
+dos2unix /etc/xray/limit.trojan # limit quota trojan
+
 systemctl daemon-reload
 systemctl restart vsip
 systemctl restart vmip
 systemctl restart vlip
 systemctl restart vtrip
+systemctl restart limitvmess
+systemctl restart limitvless
+systemctl restart limittrojan
 
 # Instalasi Rclone
 wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
