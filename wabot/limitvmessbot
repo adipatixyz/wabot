@@ -1,14 +1,14 @@
 #!/bin/bash
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # System Request : Debian 9+/Ubuntu 18.04+/20+
-# Develovers » Gemilangkinasih࿐
+# Developers » Gemilangkinasih࿐
 # Email      » gemilangpremium@gmail.com
-# telegram   » https://t.me/gemilangkinasih
-# whatsapp   » wa.me/+6287782718065
+# Telegram   » https://t.me/gemilangkinasih
+# WhatsApp   » wa.me/+6287782718065
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Gemilangkinasih࿐
 
-function send_log(){
+function send_log() {
 domain=$(cat /etc/xray/domain)
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
@@ -18,51 +18,55 @@ TEXT="
 ──────────────────────
 🚫 Notifikasi Multilogin VMESS
 ──────────────────────
-<code>User  :</code> <code>$user</code>
-<code>Limit :</code> <code>$iplimit</code>
-<code>Login :</code> <code>$cekcek</code>
-<code>Domen :</code> <code>$domain</code>
+<code>User   :</code> <code>$user</code>
+<code>Limit  :</code> <code>$iplimit</code>
+<code>Login  :</code> <code>$cekcek</code>
+<code>Domain :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
 ────────────────────── "
+
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 echo -n > /var/log/xray/access.log
 sleep 5
-data=( `ls /etc/kyt/limit/vmess/ip`);
-    for user in "${data[@]}"
-    do
-        if [ -e "/etc/kyt/limit/vmess/ip/$user" ]; then
-            iplimit=$(cat /etc/kyt/limit/vmess/ip/$user)
-        else
-            iplimit=2
-            echo "2" > /etc/kyt/limit/vmess/ip/$user
-        fi
+data=( $(cat /etc/xray/config.json | grep '^###' | cut -d ' ' -f 2 | sort | uniq) )
+for user in "${data[@]}"
+do
+    echo "Proses menjalankan username: $user ..."
+    if [ -e "/etc/kyt/limit/vmess/ip/$user" ]; then
+        iplimit=$(cat /etc/kyt/limit/vmess/ip/$user)
+    else
+        iplimit=2
+        echo "2" > /etc/kyt/limit/vmess/ip/$user
+    fi
 
-        if [ "$iplimit" -eq 0 ]; then
-            iplimit=2
-            echo "2" > /etc/kyt/limit/vmess/ip/$user
-        fi
+    if [ "$iplimit" -eq 0 ]; then
+        iplimit=2
+        echo "2" > /etc/kyt/limit/vmess/ip/$user
+    fi
 
-        ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq);
-        cekcek=$(echo -e "$ehh" | wc -l);
-        if [[ $cekcek -gt $iplimit ]]; then
-exp=$(grep -w "^### $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-uuid=$(grep -w "^### $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
-if [[ -z $exp || -z $uuid ]]; then
-echo "User $user has an empty expiration or UUID."
-sleep 5
-continue
-fi
-echo "unlocklimitipbot vmess $user $exp $uuid" | at now + 15 minutes &> /dev/null
-sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
-systemctl restart xray
-send_log "$user" "$iplimit" "$cekcek"
-echo "Locked $user and Send Notif Telebot Success."
-            else
+    ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq)
+    cekcek=$(echo -e "$ehh" | wc -l)
+    if [[ $cekcek -gt $iplimit ]]; then
+        exp=$(grep -w "^### $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+        uuid=$(grep -w "^### $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+        if [[ -z $exp || -z $uuid ]]; then
+            echo "User $user memiliki exp atau UUID kosong. Melewati..."
             sleep 5
+            continue
         fi
-        sleep 5
-    done
+        echo "Unlock user $user dalam 15 menit."
+        echo "unlocklimitipbot vmess $user $exp $uuid" | at now + 15 minutes &> /dev/null
+        sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
+        systemctl restart xray
+        send_log "$user" "$iplimit" "$cekcek"
+        echo "User $user terkunci dan notifikasi berhasil dikirim."
+    else
+        echo "User $user masih dalam batas limit."
+    fi
+    echo "Lanjut..."
+    sleep 5
+done
 sleep 30
