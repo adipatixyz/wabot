@@ -33,7 +33,7 @@ sleep 5
 data=( `ls /etc/kyt/limit/trojan/ip`);
     for user in "${data[@]}"
     do
-        if [ -f "/etc/kyt/limit/trojan/ip/$user" ]; then
+        if [ -e "/etc/kyt/limit/trojan/ip/$user" ]; then
             iplimit=$(cat /etc/kyt/limit/trojan/ip/$user)
         else
             iplimit=2

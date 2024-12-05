@@ -74,7 +74,7 @@ function con() {
 done
 for user in ${data[@]}
   do
-    if [[ -f /etc/trojan/${user} ]]; then
+    if [[ -e /etc/trojan/${user} ]]; then
         checkLimit=$(cat /etc/trojan/${user})
     else
         checkLimit=536870912000

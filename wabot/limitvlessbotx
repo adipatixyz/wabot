@@ -74,7 +74,7 @@ function con() {
 done
 for user in ${data[@]}
   do
-    if [[ -f /etc/vless/${user} ]]; then
+    if [[ -e /etc/vless/${user} ]]; then
         checkLimit=$(cat /etc/vless/${user})
     else
         checkLimit=536870912000

@@ -33,7 +33,7 @@ sleep 5
 data=( `ls /etc/kyt/limit/vless/ip`);
     for user in "${data[@]}"
     do
-        if [ -f "/etc/kyt/limit/vless/ip/$user" ]; then
+        if [ -e "/etc/kyt/limit/vless/ip/$user" ]; then
             iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
         else
             iplimit=2

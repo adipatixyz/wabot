@@ -74,7 +74,7 @@ function con() {
 done
 for user in ${data[@]}
   do
-    if [[ -f /etc/vmess/${user} ]]; then
+    if [[ -e /etc/vmess/${user} ]]; then
         checkLimit=$(cat /etc/vmess/${user})
     else
         checkLimit=536870912000

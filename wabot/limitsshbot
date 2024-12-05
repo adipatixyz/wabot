@@ -97,7 +97,7 @@ done
 
 for i in ${!username[*]}
 do
-    if [ -f "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
+    if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
         MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
     else
         MAX=2
