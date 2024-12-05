@@ -76,6 +76,13 @@ wget -q -O /usr/local/sbin/xp "https://raw.githubusercontent.com/adipatixyz/wabo
 chmod +x /usr/local/sbin/xp
 dos2unix /usr/local/sbin/xp
 
+wget -q -O /usr/local/sbin/recoveryxraybot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/recoveryxraybot"
+chmod +x /usr/local/sbin/recoveryxraybot
+dos2unix /usr/local/sbin/recoveryxraybot
+wget -q -O /usr/local/sbin/unlockxraybot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlockxraybot"
+chmod +x /usr/local/sbin/unlockxraybot
+dos2unix /usr/local/sbin/unlockxraybot
+
 # Instlasi Unlock Limit Ip
 wget -q -O /usr/local/sbin/unlocklimitipbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlocklimitipbot"
 chmod +x /usr/local/sbin/unlocklimitipbot
