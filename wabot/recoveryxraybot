@@ -1,0 +1,54 @@
+#!/bin/bash
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# System Request : Debian 9+/Ubuntu 18.04+/20+
+# Develovers » Gemilangkinasih࿐
+# Email      » gemilangpremium@gmail.com
+# Telegram   » https://t.me/gemilangkinasih
+# WhatsApp   » wa.me/+6287782718065
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Gemilangkinasih࿐
+
+echo "Pilih Jenis Protokol:"
+echo "1. VMESS"
+echo "2. VLESS"
+echo "3. TROJAN"
+read -p "Masukkan pilihan [1-3]: " protocol_choice
+
+# Tentukan tipe protokol berdasarkan pilihan
+case $protocol_choice in
+    1)
+        protocol="vmess"
+        ;;
+    2)
+        protocol="vless"
+        ;;
+    3)
+        protocol="trojan"
+        ;;
+    *)
+        echo "Pilihan tidak valid. Keluar."
+        exit 1
+        ;;
+esac
+
+# Meminta input pengguna
+read -p "Masukkan Username: " username
+read -p "Masukkan Expired Date (format: YYYY-MM-DD): " expired
+read -p "Masukkan UUID: " uuid
+
+# Validasi input
+if [[ -z "$username" || -z "$expired" || -z "$uuid" ]]; then
+    echo "Input tidak lengkap. Pastikan semua data terisi."
+    exit 1
+fi
+
+# Eksekusi perintah
+command="unlocklimitipbot $protocol $username $expired $uuid"
+echo "$command" | at now + 0 minutes &> /dev/null
+
+# Konfirmasi eksekusi
+if [[ $? -eq 0 ]]; then
+    echo "Perintah berhasil dijadwalkan: $command"
+else
+    echo "Gagal menjadwalkan perintah."
+fi

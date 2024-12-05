@@ -74,6 +74,18 @@ function con() {
 done
 for user in ${data[@]}
   do
+    if [[ -f /etc/vless/${user} ]]; then
+        checkLimit=$(cat /etc/vless/${user})
+    else
+        checkLimit=536870912000
+        echo "536870912000" > /etc/vless/${user}
+    fi
+
+    if [[ "$checkLimit" -eq 0 ]]; then
+        checkLimit=536870912000
+        echo "536870912000" > /etc/vless/${user}
+    fi
+
     if [ -e /etc/vless/${user} ]; then
       checkLimit=$(cat /etc/vless/${user});
       if [[ ${#checkLimit} -gt 1 ]]; then
@@ -90,11 +102,7 @@ systemctl restart xray
 sleep 5
 continue
 fi
-echo "### $user $exp" >> /usr/local/sbin/limitxray
-echo "sed -i '/#vless\$/a\\\#& $user $exp\\
-},{\"id\": \"$uuid\",\"alterId\": 0,\"email\": \"$user\"' /etc/xray/config.json" >> /usr/local/sbin/limitxray
-echo "sed -i '/#vlessgrpc\$/a\\\#& $user $exp\\
-},{\"id\": \"$uuid\",\"alterId\": 0,\"email\": \"$user\"' /etc/xray/config.json" >> /usr/local/sbin/limitxray
+echo "#& $user $exp $uuid" >> /usr/local/sbin/limitxray
 sed -i "/^#& $user $exp/,/^},{/d" /etc/xray/config.json
 echo "0" > "/etc/limit/vless/${user}"
 send-log

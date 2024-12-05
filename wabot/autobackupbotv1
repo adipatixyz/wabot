@@ -56,16 +56,25 @@ sed -i '/^#&/d' /root/backup/.vmess.db > /dev/null 2>&1
 sed -i '/^#&/d' /root/backup/.vless.db > /dev/null 2>&1
 sed -i '/^#&/d' /root/backup/.trojan.db > /dev/null 2>&1
 cd /root
-zip -r $IP-$date.zip backup >/dev/null 2>&1
+zip -r $IP-$date.zip backup > /dev/null 2>&1
+rclone copy /root/$IP-$date.zip dr:backup/
+url=$(rclone link dr:backup/$IP-$date.zip)
+id=(`echo $url | grep '^https' | cut -d'=' -f2`)
+link="https://drive.google.com/u/4/uc?id=${id}&export=download"
+
+rm -rf /root/backup > /dev/null 2>&1
+rm -r /root/$IP-$date.zip > /dev/null 2>&1
+
+clear
 TEXT="
 ──────────────────────
-Backup VPS Server Berhasil
+Backup Vps Server Success
 ──────────────────────
-<code>Subdomain VPS :</code> <code>$domain</code>
-<code>IP Server VPS :</code> <code>$IP</code>
+<code>Subdomain vps :</code> <code>$domain</code>
+<code>IP Server vps :</code> <code>$IP</code>
 <code>Date ToBackup :</code> <code>$date</code>
+──────────────────────
+Link Backup $link
 ────────────────────── "
+
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-curl -F chat_id="$CHATID" -F document=@"$IP-$date.zip" "https://api.telegram.org/bot$KEY/sendDocument"
-rm -r backup
-rm -r $IP-$date.zip

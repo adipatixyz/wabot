@@ -33,8 +33,18 @@ sleep 5
 data=( `ls /etc/kyt/limit/vmess/ip`);
     for user in "${data[@]}"
     do
-        iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
-        # iplimit=3
+        if [ -f "/etc/kyt/limit/vmess/ip/$user" ]; then
+            iplimit=$(cat /etc/kyt/limit/vmess/ip/$user)
+        else
+            iplimit=2
+            echo "2" > /etc/kyt/limit/vmess/ip/$user
+        fi
+
+        if [ "$iplimit" -eq 0 ]; then
+            iplimit=2
+            echo "2" > /etc/kyt/limit/vmess/ip/$user
+        fi
+
         ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq);
         cekcek=$(echo -e "$ehh" | wc -l);
         if [[ $cekcek -gt $iplimit ]]; then
