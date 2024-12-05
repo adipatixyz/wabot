@@ -16,12 +16,12 @@ TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Multilogin SSH!
+🚫 Notifikasi Multilogin SSH
 ──────────────────────
-<code>User  :</code> <code>$1</code>
-<code>Limit :</code> <code>$2</code>
-<code>Login :</code> <code>$3</code>
-<code>Domen :</code> <code>$domain</code>
+<code>User   :</code> <code>$1</code>
+<code>Limit  :</code> <code>$2</code>
+<code>Login  :</code> <code>$3</code>
+<code>Domain :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
 ────────────────────── "
@@ -41,108 +41,107 @@ else
     exit 1;
 fi
 
-# Mendapatkan daftar pengguna yang akan dihapus
-cat /etc/passwd | grep "/home/" | cut -d":" -f1 > /root/user.txt
-username1=( `cat "/root/user.txt" `);
-i="0";
-for user in "${username1[@]}"
-do
-    username[$i]=`echo $user | sed 's/'\''//g'`;
-    jumlah[$i]=0;
-    i=$i+1;
-done
+while true; do
+    echo "Memulai proses monitoring pengguna SSH..."
+    # Mendapatkan daftar pengguna
+    cat /etc/passwd | grep "/home/" | cut -d":" -f1 > /root/user.txt
+    username1=( `cat "/root/user.txt" `);
+    i="0";
+    for user in "${username1[@]}"
+    do
+        username[$i]=`echo $user | sed 's/'\''//g'`;
+        jumlah[$i]=0;
+        i=$i+1;
+    done
 
-# Array untuk menyimpan kombinasi unik user dan IP
-declare -A login_session
+    # Array untuk menyimpan kombinasi unik user dan IP
+    declare -A login_session
 
-# Mengambil informasi pengguna dari file log dropbear
-grep -i "Password auth succeeded" "$LOG" | grep -i dropbear > /tmp/log-db.txt
-for PID in $(ps aux | grep -i dropbear | awk '{print $2}'); do
-    if grep -q "dropbear\[$PID\]" /tmp/log-db.txt; then
-        USER=$(grep "dropbear\[$PID\]" /tmp/log-db.txt | awk '{print $10}' | sed 's/'\''//g')
-        IP=$(grep "dropbear\[$PID\]" /tmp/log-db.txt | awk '{print $12}')
+    # Memproses pengguna dari file log Dropbear
+    grep -i "Password auth succeeded" "$LOG" | grep -i dropbear > /tmp/log-db.txt
+    for PID in $(ps aux | grep -i dropbear | awk '{print $2}'); do
+        if grep -q "dropbear\[$PID\]" /tmp/log-db.txt; then
+            USER=$(grep "dropbear\[$PID\]" /tmp/log-db.txt | awk '{print $10}' | sed 's/'\''//g')
+            IP=$(grep "dropbear\[$PID\]" /tmp/log-db.txt | awk '{print $12}')
 
-        # Mengecek apakah kombinasi USER dan IP sudah ada di login_session
-        if [[ -z "${login_session[$USER-$IP]}" ]]; then
-            for i in "${!username[@]}"; do
-                if [[ "${username[$i]}" == "$USER" ]]; then
-                    jumlah[$i]=$((jumlah[$i] + 1))
-                    pid[$i]+="$PID "
-                fi
-            done
-            login_session["$USER-$IP"]=1 # Simpan kombinasi unik USER dan IP
+            if [[ -z "${login_session[$USER-$IP]}" ]]; then
+                for i in "${!username[@]}"; do
+                    if [[ "${username[$i]}" == "$USER" ]]; then
+                        jumlah[$i]=$((jumlah[$i] + 1))
+                        pid[$i]+="$PID "
+                    fi
+                done
+                login_session["$USER-$IP"]=1
+            fi
         fi
-    fi
-done
+    done
 
-# Mengambil informasi pengguna dari file log sshd
-grep -i "Accepted password for" "$LOG" | grep -i sshd > /tmp/log-db.txt
-for PID in $(ps aux | grep "\[priv\]" | awk '{print $2}'); do
-    if grep -q "sshd\[$PID\]" /tmp/log-db.txt; then
-        USER=$(grep "sshd\[$PID\]" /tmp/log-db.txt | awk '{print $9}')
-        IP=$(grep "sshd\[$PID\]" /tmp/log-db.txt | awk '{print $11}')
+    # Memproses pengguna dari file log SSHD
+    grep -i "Accepted password for" "$LOG" | grep -i sshd > /tmp/log-db.txt
+    for PID in $(ps aux | grep "\[priv\]" | awk '{print $2}'); do
+        if grep -q "sshd\[$PID\]" /tmp/log-db.txt; then
+            USER=$(grep "sshd\[$PID\]" /tmp/log-db.txt | awk '{print $9}')
+            IP=$(grep "sshd\[$PID\]" /tmp/log-db.txt | awk '{print $11}')
 
-        # Mengecek apakah kombinasi USER dan IP sudah ada di login_session
-        if [[ -z "${login_session[$USER-$IP]}" ]]; then
-            for i in "${!username[@]}"; do
-                if [[ "${username[$i]}" == "$USER" ]]; then
-                    jumlah[$i]=$((jumlah[$i] + 1))
-                    pid[$i]+="$PID "
-                fi
-            done
-            login_session["$USER-$IP"]=1 # Simpan kombinasi unik USER dan IP
+            if [[ -z "${login_session[$USER-$IP]}" ]]; then
+                for i in "${!username[@]}"; do
+                    if [[ "${username[$i]}" == "$USER" ]]; then
+                        jumlah[$i]=$((jumlah[$i] + 1))
+                        pid[$i]+="$PID "
+                    fi
+                done
+                login_session["$USER-$IP"]=1
+            fi
         fi
-    fi
-done
+    done
 
-for i in ${!username[*]}
-do
-    if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
-        MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-    else
-        MAX=2
-        echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
-    fi
+    for i in ${!username[*]}
+    do
+        if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
+            MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
+        else
+            MAX=2
+            echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
+        fi
 
-    if [ "$MAX" -eq 0 ]; then
-        MAX=2
-        echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
-    fi
+        if [ "$MAX" -eq 0 ]; then
+            MAX=2
+            echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
+        fi
 
-    # Mengecek apakah username terkunci
-    STATUS=$(passwd -S ${username[$i]} | awk '{print $2}')
-    if [ "$STATUS" == "L" ]; then
+        STATUS=$(passwd -S ${username[$i]} | awk '{print $2}')
+        if [ "$STATUS" == "L" ]; then
         echo "User ${username[$i]} terkunci, melewati proses."
         continue
-    fi
-
-    if [ ${jumlah[$i]} -gt $MAX ]; then
-        date=$(date +"%Y-%m-%d %X");
-        echo "$date - ${username[$i]} - ${jumlah[$i]}";
-        
-        # Mengunci pengguna multilogin
-        passwd -l ${username[$i]};
-        send_log "${username[$i]}" "$MAX" "${jumlah[$i]}"
-        echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
-        echo "Locked ${username[$i]} and Send Notif Telebot Success."
-
-        if [ ${jumlah[$i]} -gt 5 ]; then
-        truncate -s 0 /var/log/auth.log
-        systemctl restart ssh
-        systemctl restart sshd
-        systemctl restart ws
         fi
 
-        if [ $OS -eq 1 ]; then
-            systemctl restart ssh > /dev/null 2>&1;
-        elif [ $OS -eq 2 ]; then
-            systemctl restart sshd > /dev/null 2>&1;
-        fi
+        echo "Memproses user: ${username[$i]} (Limit: $MAX, Login: ${jumlah[$i]})"
+        if [ ${jumlah[$i]} -gt $MAX ]; then
+            echo "User ${username[$i]} melebihi batas login, mengunci akun..."
+            passwd -l ${username[$i]};
+            echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
+            send_log "${username[$i]}" "$MAX" "${jumlah[$i]}"
+            echo "Notifikasi terkirim ke Telegram."
 
-        # Membersihkan variabel yang digunakan
-        jumlah[$i]=0;
-        pid[$i]="";
-    fi
-    sleep 20
+            if [ ${jumlah[$i]} -gt 5 ]; then
+            truncate -s 0 /var/log/auth.log
+            systemctl restart ssh
+            systemctl restart sshd
+            systemctl restart ws
+            fi
+
+            if [ $OS -eq 1 ]; then
+                systemctl restart ssh > /dev/null 2>&1;
+            elif [ $OS -eq 2 ]; then
+                systemctl restart sshd > /dev/null 2>&1;
+            fi
+
+            jumlah[$i]=0;
+            pid[$i]="";
+        fi
+        sleep 2
+    done
+
+    echo "Siklus monitoring selesai. Menunggu 30 detik sebelum memulai ulang."
+    sleep 30
 done
-sleep 30
