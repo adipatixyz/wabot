@@ -65,7 +65,7 @@ Backup VPS Server Berhasil
 <code>IP Server VPS :</code> <code>$IP</code>
 <code>Date ToBackup :</code> <code>$date</code>
 ────────────────────── "
-curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-curl -F chat_id="$CHATID" -F document=@"$IP-$date.zip" "https://api.telegram.org/bot$KEY/sendDocument"
+curl -s --http1.1 --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+curl --http1.1 -F chat_id="$CHATID" -F document=@"$IP-$date.zip" "https://api.telegram.org/bot$KEY/sendDocument"
 rm -r backup
 rm -r $IP-$date.zip
