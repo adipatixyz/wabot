@@ -141,11 +141,116 @@ for ((i = 1; i <= $totalaccounts; i++)); do
         userdel $username > /dev/null 2>&1
         sed -i "/^### $username/d" /etc/ssh/.ssh.db
         rm -r /var/www/html/ssh-$username.txt > /dev/null 2>&1
-
         rm -r /etc/kyt/limit/ssh/ip/Trial-*  > /dev/null 2>&1
     fi
 done
 systemctl restart ssh
+
+# Langkah 1: Ambil daftar nama yang valid dari /etc/xray/config.json
+cat /etc/xray/config.json | grep '^###' | cut -d ' ' -f 2 | sort | uniq > /tmp/valid_vmess.txt
+cat /etc/xray/config.json | grep '^#&' | cut -d ' ' -f 2 | sort | uniq > /tmp/valid_vless.txt
+cat /etc/xray/config.json | grep '^#!' | cut -d ' ' -f 2 | sort | uniq > /tmp/valid_trojan.txt
+
+# Langkah 2: Ambil daftar nama pengguna dari /etc/shadow
+cat /etc/shadow | cut -d: -f1 | sed '/^$/d' > /tmp/valid_ssh.txt  # Ganti nama file valid menjadi valid_ssh.txt
+
+# Langkah 3: Bandingkan dan hapus file yang tidak ada di daftar valid_names.txt
+# Aturan 1: Menghapus file dari /etc/vmess/*, /etc/kyt/limit/vmess/ip/*, dan /etc/limit/vmess/*
+for file in /etc/vmess/* /etc/kyt/limit/vmess/ip/* /etc/limit/vmess/*; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi .txt
+    if ! grep -qx "$filename" /tmp/valid_vmess.txt; then
+        echo "Menghapus $file karena tidak ada di daftar valid vmess."
+        rm -r "$file"  # Menghapus file yang tidak ada di daftar valid
+    fi
+done
+
+# Aturan 2: Menghapus file dengan nama awalan "vmess-*.txt" di /var/www/html/
+for file in /var/www/html/vmess-*.txt; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi
+    base_filename="${filename#vmess-}"  # Menghapus awalan "vmess-"
+    
+    # Cek jika nama file tidak ada di dalam daftar valid_vmess.txt
+    if ! grep -qx "$base_filename" /tmp/valid_vmess.txt; then
+        echo "Menghapus $file karena tidak ada di daftar valid vmess."
+        
+        # Periksa apakah file ada sebelum mencoba menghapusnya
+        if [ -e "$file" ]; then
+            rm -r "$file"  # Menghapus file yang tidak ada di daftar valid
+        else
+            echo "File $file tidak ditemukan, melewati."
+        fi
+    fi
+done
+
+# Aturan 3: Menghapus file dari /etc/vless/*, /etc/kyt/limit/vless/ip/*, dan /etc/limit/vless/*
+for file in /etc/vless/* /etc/kyt/limit/vless/ip/* /etc/limit/vless/*; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi .txt
+    if ! grep -qx "$filename" /tmp/valid_vless.txt; then
+        echo "Menghapus $file karena tidak ada di daftar valid vless."
+        rm -r "$file"  # Menghapus file yang tidak ada di daftar valid
+    fi
+done
+
+# Aturan 4: Menghapus file dengan nama awalan "vless-*.txt" di /var/www/html/
+for file in /var/www/html/vless-*.txt; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi
+    base_filename="${filename#vless-}"  # Menghapus awalan "vless-"
+    
+    # Cek jika nama file tidak ada di dalam daftar valid_vless.txt
+    if ! grep -qx "$base_filename" /tmp/valid_vless.txt; then
+        echo "Menghapus $file karena tidak ada di daftar valid vless."
+        
+        # Periksa apakah file ada sebelum mencoba menghapusnya
+        if [ -e "$file" ]; then
+            rm -r "$file"  # Menghapus file yang tidak ada di daftar valid
+        else
+            echo "File $file tidak ditemukan, melewati."
+        fi
+    fi
+done
+
+# Aturan 5: Menghapus file dari /etc/trojan/*, /etc/kyt/limit/trojan/ip/*, dan /etc/limit/trojan/*
+for file in /etc/trojan/* /etc/kyt/limit/trojan/ip/* /etc/limit/trojan/*; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi .txt
+    if ! grep -qx "$filename" /tmp/valid_trojan.txt; then
+        echo "Menghapus $file karena tidak ada di daftar valid trojan."
+        rm -r "$file"  # Menghapus file yang tidak ada di daftar valid
+    fi
+done
+
+# Aturan 6: Menghapus file dengan nama awalan "trojan-*.txt" di /var/www/html/
+for file in /var/www/html/trojan-*.txt; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi
+    base_filename="${filename#trojan-}"  # Menghapus awalan "trojan-"
+    
+    # Cek jika nama file tidak ada di dalam daftar valid_trojan.txt
+    if ! grep -qx "$base_filename" /tmp/valid_trojan.txt; then
+        echo "Menghapus $file karena tidak ada di daftar valid trojan."
+        
+        # Periksa apakah file ada sebelum mencoba menghapusnya
+        if [ -e "$file" ]; then
+            rm -r "$file"  # Menghapus file yang tidak ada di daftar valid
+        else
+            echo "File $file tidak ditemukan, melewati."
+        fi
+    fi
+done
+
+# Langkah 7: Menghapus file SSH yang tidak ada dalam daftar valid_ssh.txt
+for file in /var/www/html/ssh-*.txt; do
+    filename=$(basename "$file" .txt)  # Mengambil nama file tanpa ekstensi
+    base_filename="${filename#ssh-}"  # Menghapus awalan "ssh-"
+    if ! grep -qx "$base_filename" /tmp/valid_ssh.txt; then
+        echo "Menghapus $file karena tidak ada di daftar pengguna valid."
+        rm -r "$file"  # Menghapus file yang tidak ada dalam daftar pengguna valid
+    fi
+done
+
+# Opsional: Menghapus file sementara
+rm -f /tmp/valid_vmess.txt
+rm -f /tmp/valid_vless.txt
+rm -f /tmp/valid_trojan.txt
+rm -f /tmp/valid_ssh.txt
 
 loading
 
