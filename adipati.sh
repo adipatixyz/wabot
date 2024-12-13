@@ -123,19 +123,21 @@ systemctl restart limittrojan
 # Instalasi Rclone
 wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
 
-# Instalasi Cornjob
+# cronjob autobackup 00:05
 cat > /etc/cron.d/telebotvpn <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 5 0 * * * root autobackupbot
 END
 
+# cronjob jam 23:30
 cat > /etc/cron.d/allxp <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 30 23 * * * root /usr/local/sbin/xp
 END
 	
+# cronjob jam 03:00
 cat > /etc/cron.d/dailyreboot <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
