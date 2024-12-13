@@ -133,7 +133,7 @@ END
 cat > /etc/cron.d/allxp <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-23 30 * * * root /usr/local/sbin/xp
+30 23 * * * root /usr/local/sbin/xp
 END
 	
 cat > /etc/cron.d/dailyreboot <<-END
