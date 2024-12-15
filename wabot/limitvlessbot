@@ -18,10 +18,10 @@ TEXT="
 ──────────────────────
 🚫 Notifikasi Multilogin VLESS
 ──────────────────────
-<code>User   :</code> <code>$user</code>
-<code>Limit  :</code> <code>$iplimit</code>
-<code>Login  :</code> <code>$cekcek</code>
-<code>Domain :</code> <code>$domain</code>
+<code>User  :</code> <code>$user</code>
+<code>Login :</code> <code>$cekcek</code>
+<code>Limit :</code> <code>$iplimit</code>
+<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
 ────────────────────── "
@@ -34,7 +34,6 @@ sleep 5
 data=( $(cat /etc/xray/config.json | grep '^#&' | cut -d ' ' -f 2 | sort | uniq) )
 for user in "${data[@]}"
 do
-    echo "Proses menjalankan username: $user ..."
     if [ -e "/etc/kyt/limit/vless/ip/$user" ]; then
         iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
     else
@@ -49,11 +48,13 @@ do
 
     ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq)
     cekcek=$(echo -e "$ehh" | wc -l)
+
+    echo "Memproses User : [Login: $cekcek, Limit: $iplimit] $user"
     if [[ $cekcek -gt $iplimit ]]; then
         exp=$(grep -w "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
         uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
         if [[ -z $exp || -z $uuid ]]; then
-            echo "User $user memiliki exp atau UUID kosong. Melewati..."
+            echo "User $user memiliki exp atau UUID kosong. Melewati."
             sleep 5
             continue
         fi
@@ -61,12 +62,12 @@ do
         echo "unlocklimitipbot vless $user $exp $uuid" | at now + 15 minutes &> /dev/null
         sed -i "/^#& $user $exp/,/^},{/d" /etc/xray/config.json
         systemctl restart xray
-        send_log "$user" "$iplimit" "$cekcek"
+        send_log "$user" "$cekcek" "$iplimit"
         echo "User $user terkunci dan notifikasi berhasil dikirim."
     else
         echo "User $user masih dalam batas limit."
     fi
-    echo "Lanjut..."
+    echo "Lanjut."
     sleep 5
 done
 sleep 30

@@ -18,10 +18,10 @@ TEXT="
 ──────────────────────
 🚫 Notifikasi Multilogin SSH
 ──────────────────────
-<code>User   :</code> <code>$1</code>
-<code>Limit  :</code> <code>$2</code>
-<code>Login  :</code> <code>$3</code>
-<code>Domain :</code> <code>$domain</code>
+<code>User  :</code> <code>$1</code>
+<code>Login :</code> <code>$2 IP</code>
+<code>Limit :</code> <code>$3 IP</code>
+<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
 ────────────────────── "
@@ -42,7 +42,7 @@ else
 fi
 
 while true; do
-    echo "Memulai proses monitoring pengguna SSH..."
+    echo "Memulai proses monitoring pengguna SSH."
     # Mendapatkan daftar pengguna
     cat /etc/passwd | grep "/home/" | cut -d":" -f1 > /root/user.txt
     username1=( `cat "/root/user.txt" `);
@@ -115,13 +115,13 @@ while true; do
         continue
         fi
 
-        echo "Memproses user: ${username[$i]} (Limit: $MAX, Login: ${jumlah[$i]})"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $MAX] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
-            echo "User ${username[$i]} melebihi batas login, mengunci akun..."
+            echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
             echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
-            send_log "${username[$i]}" "$MAX" "${jumlah[$i]}"
-            echo "Notifikasi terkirim ke Telegram."
+            send_log "${username[$i]}" "${jumlah[$i]}" "$MAX"
+            echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
             truncate -s 0 /var/log/auth.log

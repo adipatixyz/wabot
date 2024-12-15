@@ -18,12 +18,12 @@ TEXT="
 ──────────────────────
 🚫 Notifikasi Limit Quota VLESS
 ──────────────────────
-<code>User   :</code> <code>$user</code>
-<code>Limit  :</code> <code>$total2</code>
-<code>Usage  :</code> <code>$total</code>
-<code>Domain :</code> <code>$domain</code>
+<code>User  :</code> <code>$user</code>
+<code>Usage :</code> <code>$total</code>
+<code>Limit :</code> <code>$total2</code>
+<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
-Buy Add Quota To Unlock
+Buy Add Quota / Extend To Unlock
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
@@ -43,7 +43,7 @@ function con() {
 }
 
 while true; do
-    echo "Memulai proses monitoring pengguna..."
+    echo "Memulai proses monitoring pengguna."
     sleep 30
 
     data=($(cat /etc/xray/config.json | grep '^#&' | cut -d ' ' -f 2 | sort | uniq))
@@ -52,7 +52,7 @@ while true; do
     fi
 
     for user in "${data[@]}"; do
-        echo "Proses menjalankan username: $user ..."
+        echo "Proses menjalankan username: $user."
         xray api stats --server=127.0.0.1:10000 -name "user>>>${user}>>>traffic>>>downlink" >& /tmp/${user}
         getThis=$(cat /tmp/${user} | awk '{print $1}')
 
@@ -71,12 +71,11 @@ while true; do
             echo "Gagal mendapatkan data untuk user: $user"
         fi
 
-        echo "Lanjut..."
+        echo "Lanjut."
         sleep 2
     done
 
     for user in "${data[@]}"; do
-        echo "Memeriksa batas penggunaan untuk user: $user ..."
         if [[ -e /etc/vless/${user} ]]; then
             checkLimit=$(cat /etc/vless/${user})
         else
@@ -93,11 +92,13 @@ while true; do
             Usage=$(cat /etc/limit/vless/${user})
             total=$(con ${Usage})
             total2=$(con ${checkLimit})
+
+            echo "Memproses User : [Usage: $total, Limit: $total2] $user"
             if [[ ${Usage} -gt ${checkLimit} ]]; then
                 exp=$(grep -w "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
                 uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
                 if [[ -z $exp || -z $uuid ]]; then
-                    echo "User $user memiliki exp atau UUID kosong. Merestart sistem..."
+                    echo "User $user memiliki exp atau UUID kosong. Merestart sistem."
                     systemctl restart xray
                     sleep 5
                     continue
@@ -115,7 +116,7 @@ while true; do
         else
             echo "Data penggunaan tidak ditemukan untuk user: $user"
         fi
-        echo "Lanjut..."
+        echo "Lanjut."
         sleep 2
     done
 done
