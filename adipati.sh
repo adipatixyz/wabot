@@ -51,6 +51,13 @@ wget -q -O /usr/local/sbin/renewtrojanbot "https://raw.githubusercontent.com/adi
 chmod +x /usr/local/sbin/renewtrojanbot
 dos2unix /usr/local/sbin/renewtrojanbot
 
+wget -q -O /usr/local/sbin/cekssh "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/cekssh"
+chmod +x /usr/local/sbin/cekssh
+dos2unix /usr/local/sbin/cekssh
+wget -q -O /usr/local/sbin/mulogssh "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/mulogssh"
+chmod +x /usr/local/sbin/mulogssh
+dos2unix /usr/local/sbin/mulogssh
+
 # Instalasi Backup & backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
 chmod +x /usr/local/sbin/autobackupbot
