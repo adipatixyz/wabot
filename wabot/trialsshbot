@@ -34,6 +34,15 @@ Login=Trial-`</dev/urandom tr -dc X-Z0-9 | head -c4`
 pup=30
 hari="1"
 Pass=1
+iplimit=1000
+
+# limitip
+if [[ $iplimit -gt 0 ]]; then
+mkdir -p /etc/kyt/limit/ssh/ip
+echo -e "$iplimit" > /etc/kyt/limit/ssh/ip/$Login
+else
+echo > /dev/null
+fi
 
 tgl=$(date -d "$masaaktif days" +"%d")
 bln=$(date -d "$masaaktif days" +"%b")
@@ -66,13 +75,13 @@ Host  : $domain
 User  : $Login
 pw    : $Pass
 Max   : Unlimited
-Port  : 443, 80, 1-66535
+Port  : 443, 80, 1-65535
 ----------------------
 SSL   : $domain:443@$Login:$Pass
 ----------------------
 WS    : $domain:80@$Login:$Pass
 ----------------------
-UDP   : $domain:1-66535@$Login:$Pass
+UDP   : $domain:1-65535@$Login:$Pass
 ----------------------
 Exp   : $pup Menit
 ----------------------
@@ -90,13 +99,13 @@ Status Trial SSHWS Success
 <code>✧ User  :</code> <code>$Login</code>
 <code>✧ pw    :</code> <code>$Pass</code>
 <code>✧ Max   :</code> <code>Unlimited</code>
-<code>✧ Port  :</code> <code>443, 80, 1-66535</code>
+<code>✧ Port  :</code> <code>443, 80, 1-65535</code>
 ──────────────────────
 <code>✧ SSL   :</code> <code>$domain:443@$Login:$Pass</code>
 ──────────────────────
 <code>✧ WS    :</code> <code>$domain:80@$Login:$Pass</code>
 ──────────────────────
-<code>✧ UDP   :</code> <code>$domain:1-66535@$Login:$Pass</code>
+<code>✧ UDP   :</code> <code>$domain:1-65535@$Login:$Pass</code>
 ──────────────────────
 <code>✧ Doc   :</code> https://${domain}:81/ssh-$Login.txt
 ──────────────────────
