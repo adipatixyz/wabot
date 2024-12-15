@@ -185,6 +185,7 @@ chmod +x /etc/ssh/sshd_config
 systemctl restart sshd
 
 cd
+rm -r keamananx
 rm -r adipati.sh
 rm -r wabot.sh
 echo "Fitur Wabot Success! Back In 10 Seconds.. [ Port Login 6401 ]"
