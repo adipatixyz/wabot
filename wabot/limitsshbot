@@ -125,9 +125,9 @@ while true; do
 
             if [ ${jumlah[$i]} -gt 5 ]; then
             truncate -s 0 /var/log/auth.log
-            systemctl restart ssh
-            systemctl restart sshd
-            systemctl restart ws
+            systemctl restart ssh > /dev/null 2>&1;
+            systemctl restart sshd > /dev/null 2>&1;
+            # systemctl restart ws > /dev/null 2>&1;
             fi
 
             if [ $OS -eq 1 ]; then

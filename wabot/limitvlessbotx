@@ -98,8 +98,7 @@ while true; do
                 exp=$(grep -w "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
                 uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
                 if [[ -z $exp || -z $uuid ]]; then
-                    echo "User $user memiliki exp atau UUID kosong. Merestart sistem."
-                    systemctl restart xray
+                    echo "User $user memiliki exp atau UUID kosong. Melewati."
                     sleep 5
                     continue
                 fi
