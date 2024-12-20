@@ -98,7 +98,8 @@ while true; do
     for i in ${!username[*]}
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
-            MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
+            LIMIT=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
+            MAX=$((LIMIT + 1))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -120,7 +121,7 @@ while true; do
             echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
             echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
-            send_log "${username[$i]}" "${jumlah[$i]}" "$MAX"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
