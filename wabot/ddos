@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd
+apt install fail2ban -y
+mkdir /usr/local/ddos
+rm -r /usr/local/ddos
+wget https://github.com/jgmdev/ddos-deflate/archive/master.zip -O ddos.zip
+unzip ddos.zip
+cd ddos-deflate-master
+chmod +x install.sh
+./install.sh
+rm -r /root/ddos-deflate-master

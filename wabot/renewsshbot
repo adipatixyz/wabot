@@ -1,0 +1,40 @@
+#!/bin/bash
+# ──────────────────────────────────────────━━━━━━━━━━
+# System Request : Debian 9+/Ubuntu 18.04+/20+
+# Develovers » Gemilangkinasih࿐
+# Email      » gemilangpremium@gmail.com
+# telegram   » https://t.me/gemilangkinasih
+# whatsapp   » wa.me/+6287782718065
+# ──────────────────────────────────────────━━━━━━━━━━
+# Gemilangkinasih࿐
+
+# Getting
+MYIP=$(wget -qO- ipinfo.io/ip);
+
+read -p "Input Username Account : " User
+read -p "Day Extend : " Days
+if ! grep -qiw "$User" /etc/passwd; then
+    echo -e "Username tidak ada."
+    exit 0
+fi
+current_exp=$(chage -l $User | grep "Account expires" | awk -F": " '{print $2}')
+formatted_date=$(date -d "$current_exp" +"%Y-%m-%d")
+if [[ "$current_exp" == "never" ]]; then
+  Today=$(date +%s)
+else
+  Today=$(date -d "$current_exp" +%s)
+fi
+Days_Detailed=$(( ($Days+1) * 86400 ))
+Expire_On=$(($Today + $Days_Detailed))
+Expiration=$(date -u --date="1970-01-01 $Expire_On sec GMT" +%Y/%m/%d)
+Expirationx=$(date -u --date="1970-01-01 $Expire_On sec GMT" +%Y-%m-%d)
+Expiration_Display=$(date -u --date="1970-01-01 $Expire_On sec GMT" '+%d %b %Y')
+passwd -u $User >/dev/null
+usermod -e  $Expiration $User >/dev/null
+egrep "^$User" /etc/passwd >/dev/null
+echo -e "$Pass\n$Pass\n"|passwd $User &> /dev/null
+
+echo "$User"
+echo "$Days Days"
+echo "$formatted_date"
+echo "$Expirationx"
