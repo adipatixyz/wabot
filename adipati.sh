@@ -1,16 +1,5 @@
 #!/bin/bash
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# System Request : Debian 9+/Ubuntu 18.04+/20+
-# Develovers » Gemilangkinasih࿐
-# Email      » gemilangkinasih@gmail.com
-# telegram   » https://t.me/gemilangkinasih
-# whatsapp   » wa.me/+628984880039
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Gemilangkinasih࿐
-
-cd
-wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/fv-tunnel && chmod +x fv-tunnel && dos2unix fv-tunnel && ./fv-tunnel
-rm -r fv-tunnel
+# https://t.me/gemilangkinasih
 
 cd /usr/local/sbin
 # Instalasi Create Account
@@ -66,29 +55,9 @@ wget -q -O /usr/local/sbin/restorebot "https://raw.githubusercontent.com/adipati
 chmod +x /usr/local/sbin/restorebot
 dos2unix restorebot
 
-# Enc Wabot
-# wget -q -O /usr/local/sbin/epro "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/epro"
-# chmod +x /usr/local/sbin/epro
-# dos2unix epro
-# epro *bot
-# rm -r *~
-
-# Instalasi Detele Trial
-wget -q -O /usr/local/sbin/tunnel "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/tunnel"
-chmod +x /usr/local/sbin/tunnel
-dos2unix /usr/local/sbin/tunnel
-
-# Instalasi Detele User Exp
-wget -q -O /usr/local/sbin/xp "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/xp"
-chmod +x /usr/local/sbin/xp
-dos2unix /usr/local/sbin/xp
-
 wget -q -O /usr/local/sbin/recoveryxraybot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/recoveryxraybot"
 chmod +x /usr/local/sbin/recoveryxraybot
 dos2unix /usr/local/sbin/recoveryxraybot
-wget -q -O /usr/local/sbin/unlockxraybot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlockxraybot"
-chmod +x /usr/local/sbin/unlockxraybot
-dos2unix /usr/local/sbin/unlockxraybot
 
 # Instlasi Unlock Limit Ip
 wget -q -O /usr/local/sbin/unlocklimitipbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlocklimitipbot"
@@ -153,41 +122,33 @@ END
 
 systemctl restart cron
 
-clear
-echo -e ""
-echo -e "▀▀█▀▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▒█▀▀▀█ ▀▀█▀▀\033[0m" 
-echo -e "░▒█░░ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀▄ ▒█░░▒█ ░▒█░░\033[0m" 
-echo -e "░▒█░░ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄█ ░▒█░░\033[0m"
-echo -e "\e[33m──────────────────────────────────────────\033[0m"
-echo "Pergi ke @BotFather dan type /newbot untuk membuat bot baru"
-echo "Pergi ke @MissRose_bot dan type /id untuk mendapatkan ID telegram"
-echo -e "\e[33m──────────────────────────────────────────\033[0m"
-read -p "Input bot Token : " tokentelebot
-read -p "Input admin ID  : " idteleowner
-read -p "Input grub  ID  : " idtelegrub
-echo -e "\e[33m──────────────────────────────────────────\033[0m"
-clear
+tokentelebot="7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU"
+idteleowner="6348824977"
+idtelegrub="6348824977"
+
+# echo -e ""
+# echo -e "▀▀█▀▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▒█▀▀▀█ ▀▀█▀▀\033[0m" 
+# echo -e "░▒█░░ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀▄ ▒█░░▒█ ░▒█░░\033[0m" 
+# echo -e "░▒█░░ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄█ ░▒█░░\033[0m"
+# echo -e "\e[33m──────────────────────────────────────────\033[0m"
+# echo "Pergi ke @BotFather dan type /newbot untuk membuat bot baru"
+# echo "Pergi ke @MissRose_bot dan type /id untuk mendapatkan ID telegram"
+# echo -e "\e[33m──────────────────────────────────────────\033[0m"
+# read -p "Input bot Token : " tokentelebot
+# read -p "Input admin ID  : " idteleowner
+# read -p "Input grub  ID  : " idtelegrub
+# echo -e "\e[33m──────────────────────────────────────────\033[0m"
+# clear
 
 # Instalasi token bot notif
-cd
-mkdir /root/telebotvpn
-echo "$tokentelebot" > /root/telebotvpn/tokentelebot
-echo "$idteleowner" > /root/telebotvpn/idteleowner
-echo "$idtelegrub" > /root/telebotvpn/idtelegrub
-
-# Instalasi Keamanan
-wget -q https://raw.githubusercontent.com/adipatixyz/sogokpetek/main/config/keamananx && chmod +x keamananx && ./keamananx
-
-# Instalasi SSHD_Config Port Login 6401
-cd /etc/ssh
-wget -q -O /etc/ssh/sshd_config "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/sshd_config"
-chmod +x /etc/ssh/sshd_config
-systemctl restart sshd
+# cd
+# mkdir /root/telebotvpn
+# echo "$tokentelebot" > /root/telebotvpn/tokentelebot
+# echo "$idteleowner" > /root/telebotvpn/idteleowner
+# echo "$idtelegrub" > /root/telebotvpn/idtelegrub
 
 cd
-rm -r keamananx
 rm -r adipati.sh
-rm -r wabot.sh
 echo "Fitur Wabot Success! Back In 10 Seconds.. [ Port Login 6401 ]"
 sleep 10
 menu
