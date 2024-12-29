@@ -141,11 +141,11 @@ idtelegrub="6348824977"
 # clear
 
 # Instalasi token bot notif
-# cd
-# mkdir /root/telebotvpn
-# echo "$tokentelebot" > /root/telebotvpn/tokentelebot
-# echo "$idteleowner" > /root/telebotvpn/idteleowner
-# echo "$idtelegrub" > /root/telebotvpn/idtelegrub
+cd
+mkdir /root/telebotvpn
+echo "$tokentelebot" > /root/telebotvpn/tokentelebot
+echo "$idteleowner" > /root/telebotvpn/idteleowner
+echo "$idtelegrub" > /root/telebotvpn/idtelegrub
 
 cd
 rm -r adipati.sh
