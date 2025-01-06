@@ -33,7 +33,7 @@ generateRandomString() {
 }
 
 # Panggil fungsi generateRandomString dengan panjang 15 karakter
-uuid=$(generateRandomString 15)
+uuid=$(generateRandomString 20)
 masaaktif=1
 Quota=1000
 iplimit=1000
