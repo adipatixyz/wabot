@@ -29,11 +29,11 @@ generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
     string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$1" | head -n 1)
     # Return string acak
-    echo "trial$string"
+    echo "trialvpn$string"
 }
 
 # Panggil fungsi generateRandomString dengan panjang 15 karakter
-uuid=$(generateRandomString 20)
+uuid=$(generateRandomString 15)
 masaaktif=1
 Quota=1000
 iplimit=1000
