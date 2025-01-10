@@ -22,27 +22,6 @@ Unlock User Otomatis 15 Menit
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
-function send-logx() {
-domain=$(cat /etc/xray/domain)
-CHATID=$(cat /root/telebotvpn/idtelegrub)
-KEY=$(cat /root/telebotvpn/tokentelebot)
-TIME="10"
-URL="https://api.telegram.org/bot$KEY/sendMessage"
-TEXT="
-──────────────────────
-🚫 Notifikasi Multilogin SSH
-──────────────────────
-<code>User  :</code> <code>$1</code>
-<code>Login :</code> <code>$2 IP</code>
-<code>Limit :</code> <code>$3 IP</code>
-<code>Host  :</code> <code>$domain</code>
-────────────────────── 
-Delete User 10X Multilogin
-────────────────────── "
-
-curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-}
-
 # Menentukan file log berdasarkan OS yang digunakan
 if [ -e "/var/log/auth.log" ]; then
     OS=1;
@@ -132,19 +111,9 @@ while true; do
 
         echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
-
-            if [[ $(grep -c "${username[$i]}" /root/userlock.txt) -ge 10 ]]; then
-                echo "Menghapus pengguna ${username[$i]} karena sudah terlock lebih dari 10 kali."
-                userdel "${username[$i]}"
-                sed -i "/${username[$i]}/d" /root/userlock.txt
-                send-logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
-                echo "Notifikasi terkirim ke Telegram."
-            fi
-
             echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
             echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
-            echo "${username[$i]}   " >> /root/userlock.txt
             send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
             echo "Notifikasi terkirim ke telegram."
 
