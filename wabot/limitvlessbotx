@@ -1,17 +1,10 @@
 #!/bin/bash
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# System Request : Debian 9+/Ubuntu 18.04+/20+
-# Developers » Gemilangkinasih࿐
-# Email      » gemilangpremium@gmail.com
-# Telegram   » https://t.me/gemilangkinasih
-# WhatsApp   » wa.me/+6287782718065
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Gemilangkinasih࿐
+# https://t.me/gemilangkinasih
 
 function send-log() {
-domain=$(cat /etc/xray/domain)
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
+domain=$(cat /etc/xray/domain)
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="

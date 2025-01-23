@@ -1,17 +1,10 @@
 #!/bin/bash
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# System Request : Debian 9+/Ubuntu 18.04+/20+
-# Developers » Gemilangkinasih࿐
-# Email      » gemilangpremium@gmail.com
-# Telegram   » https://t.me/gemilangkinasih
-# WhatsApp   » wa.me/+6287782718065
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Gemilangkinasih࿐
+# https://t.me/gemilangkinasih
 
 function send_log() {
-domain=$(cat /etc/xray/domain)
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
+domain=$(cat /etc/xray/domain)
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
@@ -20,9 +13,9 @@ TEXT="
 ──────────────────────
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2</code>
-<code>Limit :</code> <code>$iplimit</code>
+<code>Limit :</code> <code>$((MAX - 1))</code>
 <code>Host  :</code> <code>$domain</code>
-────────────────────── 
+──────────────────────  
 Unlock User Otomatis 15 Menit
 ────────────────────── "
 
@@ -32,24 +25,35 @@ curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TE
 data=(`cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
 # Loop through each user
 for akun in "${data[@]}"; do
-    echo -n > /tmp/ipvless.txt
-    data2=(`cat /var/log/xray/access.log | tail -n 500 | awk -F "from " '{print $2}' | grep email | grep "accepted tcp" | cut -d: -f1| cut -d[ -f2 | sort | uniq`)
+    echo -n > /tmp/ipvlessx.txt
+    data2=(`cat /var/log/xray/access.log | tail -n 500 | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq`)
     
     # Loop through each IP address and check for usage
     for ip in "${data2[@]}"; do
-        jum=$(cat /var/log/xray/access.log | grep -wE "$akun" | tail -n 500 | awk -F "from " '{print $2}'| sed 's/tcp://g' | cut -d ":" -f 1 | grep -w "$ip" | sort | uniq)
+        jum=$(cat /var/log/xray/access.log | grep -w "$akun" | grep -w "$ip" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | sort | uniq)
         if [[ "$jum" == "$ip" ]]; then
-            echo "$jum" >> /tmp/ipvless.txt
+            echo "$jum" >> /tmp/ipvlessx.txt
         fi
     done
     
-    jum=$(cat /tmp/ipvless.txt)
+    jum=$(cat /tmp/ipvlessx.txt)
     if [[ -n "$jum" ]]; then
-        iplimit=$(cat /etc/kyt/limit/vless/ip/${akun})
-        jum2=$(sort /tmp/ipvless.txt | uniq | wc -l)
-        echo "Memproses User : [Login: $jum2, Limit: $iplimit] $akun"
+        if [ -e "/etc/kyt/limit/vless/ip/${akun}" ]; then
+            iplimit=$(cat /etc/kyt/limit/vless/ip/${akun})
+            MAX=$((iplimit + 1))
+        else
+            MAX=2
+            echo "2" > /etc/kyt/limit/vless/ip/${akun}
+        fi
+
+        if [ "$MAX" -eq 0 ]; then
+            MAX=2
+            echo "2" > /etc/kyt/limit/vless/ip/${akun}
+        fi
+        jum2=$(sort /tmp/ipvlessx.txt | uniq | wc -l)
+        echo "Memproses User : [Login: $jum2, Limit: $((MAX - 1))] $akun"
         # Check if the number of logged-in IPs exceeds the limit
-        if [ "$jum2" -gt "$iplimit" ]; then
+        if [ "$jum2" -gt "$MAX" ]; then
             exp=$(grep -w "^#& $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
             uuid=$(grep -w "^#& $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
             if [[ -z $exp || -z $uuid ]]; then
@@ -59,13 +63,13 @@ for akun in "${data[@]}"; do
             echo "unlocklimitip vless $akun $exp $uuid" | at now + 15 minutes &> /dev/null
             sed -i "/^#& $akun $exp/,/^},{/d" /etc/xray/config.json
             systemctl restart xray
-            send_log "$akun" "$jum2" "$iplimit"  # Kirim log jika ada
+            send_log "$akun" "$jum2" "$((MAX - 1))"  # Kirim log jika ada
         fi
     fi 
-    rm -rf /tmp/ipvless.txt
+    rm -rf /tmp/ipvlessx.txt
     sleep 5
 done
 sleep 10
 
 # Cleanup
-rm -rf /tmp/ipvless.txt
+rm -rf /tmp/ipvlessx.txt
