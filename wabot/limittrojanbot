@@ -61,7 +61,12 @@ for akun in "${data[@]}"; do
             fi
             echo "Unlock user $akun dalam 15 menit."
             echo "unlocklimitip trojan $akun $exp $uuid" | at now + 15 minutes &> /dev/null
-            sed -i "/^#! $akun $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^#! $akun $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $akun/d" /etc/trojan/.trojan.db
+sed -i '/#trojanws$/a\#! '"$akun $exp"'\
+},{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
+sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
+},{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
             systemctl restart xray
             send_log "$akun" "$jum2" "$((MAX - 1)),"  # Kirim log jika ada
         fi

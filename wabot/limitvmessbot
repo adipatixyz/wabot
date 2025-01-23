@@ -61,7 +61,12 @@ for akun in "${data[@]}"; do
             fi
             echo "Unlock user $akun dalam 15 menit."
             echo "unlocklimitip vmess $akun $exp $uuid" | at now + 15 minutes &> /dev/null
-            sed -i "/^### $akun $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $akun $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $akun/d" /etc/vmess/.vmess.db
+sed -i '/#vmess$/a\### '"$akun $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
+sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
             systemctl restart xray
             send_log "$akun" "$jum2" "$((MAX - 1))"  # Kirim log jika ada
         fi
