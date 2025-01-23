@@ -29,45 +29,43 @@ Unlock User Otomatis 15 Menit
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
-echo -n > /var/log/xray/access.log
-sleep 5
-data=( $(cat /etc/xray/config.json | grep '^#&' | cut -d ' ' -f 2 | sort | uniq) )
-for user in "${data[@]}"
-do
-    if [ -e "/etc/kyt/limit/vless/ip/$user" ]; then
-        iplimit=$(cat /etc/kyt/limit/vless/ip/$user)
-    else
-        iplimit=2
-        echo "2" > /etc/kyt/limit/vless/ip/$user
-    fi
-
-    if [ "$iplimit" -eq 0 ]; then
-        iplimit=2
-        echo "2" > /etc/kyt/limit/vless/ip/$user
-    fi
-
-    ehh=$(cat /var/log/xray/access.log | grep "$user" | cut -d " " -f 3 | sed 's/tcp://g' | cut -d ":" -f 1 | sort | uniq)
-    cekcek=$(echo -e "$ehh" | wc -l)
-
-    echo "Memproses User : [Login: $cekcek, Limit: $iplimit] $user"
-    if [[ $cekcek -gt $iplimit ]]; then
-        exp=$(grep -w "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-        uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
-        if [[ -z $exp || -z $uuid ]]; then
-            echo "User $user memiliki exp atau UUID kosong. Melewati."
-            sleep 5
-            continue
+data=(`cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
+# Loop through each user
+for akun in "${data[@]}"; do
+    echo -n > /tmp/ipvless.txt
+    data2=(`cat /var/log/xray/access.log | tail -n 500 | awk -F "from " '{print $2}' | grep email | grep "accepted tcp" | cut -d: -f1| cut -d[ -f2 | sort | uniq`)
+    
+    # Loop through each IP address and check for usage
+    for ip in "${data2[@]}"; do
+        jum=$(cat /var/log/xray/access.log | grep -wE "$akun" | tail -n 500 | awk -F "from " '{print $2}'| sed 's/tcp://g' | cut -d ":" -f 1 | grep -w "$ip" | sort | uniq)
+        if [[ "$jum" == "$ip" ]]; then
+            echo "$jum" >> /tmp/ipvless.txt
         fi
-        echo "Unlock user $user dalam 15 menit."
-        echo "unlocklimitipbot vless $user $exp $uuid" | at now + 15 minutes &> /dev/null
-        sed -i "/^#& $user $exp/,/^},{/d" /etc/xray/config.json
-        systemctl restart xray
-        send_log "$user" "$cekcek" "$iplimit"
-        echo "User $user terkunci dan notifikasi berhasil dikirim."
-    else
-        echo "User $user masih dalam batas limit."
-    fi
-    echo "Lanjut."
+    done
+    
+    jum=$(cat /tmp/ipvless.txt)
+    if [[ -n "$jum" ]]; then
+        iplimit=$(cat /etc/kyt/limit/vless/ip/${akun})
+        jum2=$(sort /tmp/ipvless.txt | uniq | wc -l)
+        echo "Memproses User : [Login: $jum2, Limit: $iplimit] $akun"
+        # Check if the number of logged-in IPs exceeds the limit
+        if [ "$jum2" -gt "$iplimit" ]; then
+            exp=$(grep -w "^#& $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+            uuid=$(grep -w "^#& $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+            if [[ -z $exp || -z $uuid ]]; then
+                continue  # Skip if exp or uuid is empty
+            fi
+            echo "Unlock user $akun dalam 15 menit."
+            echo "unlocklimitip vless $akun $exp $uuid" | at now + 15 minutes &> /dev/null
+            sed -i "/^#& $akun $exp/,/^},{/d" /etc/xray/config.json
+            systemctl restart xray
+            send_log "$akun" "$jum2" "$iplimit"  # Kirim log jika ada
+        fi
+    fi 
+    rm -rf /tmp/ipvless.txt
     sleep 5
 done
-sleep 30
+sleep 10
+
+# Cleanup
+rm -rf /tmp/ipvless.txt

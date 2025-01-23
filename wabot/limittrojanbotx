@@ -102,8 +102,12 @@ while true; do
                     sleep 5
                     continue
                 fi
-                echo "#! $user $exp $uuid" >> /usr/local/sbin/limitxray
-                sed -i "/^#! $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^#! $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $user/d" /etc/trojan/.trojan.db
+sed -i '/#trojanws$/a\#! '"$user $exp"'\
+},{"password": "'""$uuid"LOCKED"'","email" : "'""$user""'"' /etc/xray/config.json
+sed -i '/#trojangrpc$/a\#! '"$user $exp"'\
+},{"password": "'""$uuid"LOCKED"'","email" : "'""$user""'"' /etc/xray/config.json
                 echo "0" > "/etc/limit/trojan/${user}"
                 send-log
                 echo "User $user melebihi batas. Notifikasi berhasil dikirim!"

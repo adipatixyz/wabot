@@ -112,7 +112,7 @@ while true; do
         if [ ${jumlah[$i]} -gt $MAX ]; then
             echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
-            echo "unlocklimitipbot ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
+            echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             send_log "${username[$i]}" "${jumlah[$i]}" "$MAX"
             echo "Notifikasi terkirim ke telegram."
 

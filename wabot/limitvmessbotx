@@ -102,8 +102,12 @@ while true; do
                     sleep 5
                     continue
                 fi
-                echo "### $user $exp $uuid" >> /usr/local/sbin/limitxray
-                sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $user/d" /etc/vmess/.vmess.db
+sed -i '/#vmess$/a\### '"$user $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$user""'"' /etc/xray/config.json
+sed -i '/#vmessgrpc$/a\### '"$user $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$user""'"' /etc/xray/config.json
                 echo "0" > "/etc/limit/vmess/${user}"
                 send-log
                 echo "User $user melebihi batas. Notifikasi berhasil dikirim!"
