@@ -1,15 +1,15 @@
 #!/bin/bash
-# ──────────────────────────────────────────━━━━━━━━━━
-# System Request : Debian 9+/Ubuntu 18.04+/20+
-# Develovers » Gemilangkinasih࿐
-# Email      » gemilangpremium@gmail.com
-# telegram   » https://t.me/gemilangkinasih
-# whatsapp   » wa.me/+6287782718065
-# ──────────────────────────────────────────━━━━━━━━━━
-# Gemilangkinasih࿐
+# https://t.me/gemilangkinasih
 
 # Getting
-MYIP=$(wget -qO- ipinfo.io/ip);
+CHATID=$(cat /root/telebotvpn/idteleowner)
+KEY=$(cat /root/telebotvpn/tokentelebot)
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+IP=$(cat /etc/xray/ipvps)
+ISP=$(cat /etc/xray/isp)
+CITY=$(cat /etc/xray/city)
+domain=$(cat /etc/xray/domain)
 
 read -p "Input Username Account : " User
 read -p "Day Extend : " Days
@@ -33,6 +33,18 @@ passwd -u $User >/dev/null
 usermod -e  $Expiration $User >/dev/null
 egrep "^$User" /etc/passwd >/dev/null
 echo -e "$Pass\n$Pass\n"|passwd $User &> /dev/null
+
+TEXT="
+──────────────────────
+Extend Account SSHWS Success
+──────────────────────
+<code>✧ Host  :</code> <code>$domain</code>
+<code>✧ User  :</code> <code>$User</code>
+<code>✧ Plus  :</code> <code>$Days Days</code>
+<code>✧ Exp   :</code> <code>$Expirationx</code>
+────────────────────── "
+
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 
 echo "$User"
 echo "$Days Days"

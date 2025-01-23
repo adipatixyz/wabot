@@ -37,7 +37,7 @@ generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
     string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$1" | head -n 1)
     # Return string acak
-    echo "tokovpn$string"
+    echo "xraytrojan$string"
 }
 
 # Panggil fungsi generateRandomString dengan panjang 15 karakter
@@ -140,6 +140,7 @@ Status Create TROJAN Success
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 
 systemctl restart xray > /dev/null 2>&1
+echo "autobackupbot" | at now + 0 minutes &> /dev/null
 
 echo "$ISP"
 echo "$CITY"

@@ -29,7 +29,7 @@ generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
     string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$1" | head -n 1)
     # Return string acak
-    echo "trialvpn$string"
+    echo "xraytrial$string"
 }
 
 # Panggil fungsi generateRandomString dengan panjang 15 karakter
@@ -54,6 +54,8 @@ sed -i '/#trojangrpc$/a\#! '"$user $exp"'\
 trojanlink1="trojan://${uuid}@${domain}:443?path=/trojan-ws&security=tls&host=${domain}&type=ws&sni=${domain}#${user}"
 trojanlink2="trojan://${uuid}@${domain}:80?path=/trojan-ws&security=none&host=${domain}&type=ws#${user}"
 trojanlink3="trojan://${uuid}@${domain}:443?mode=gun&security=tls&authority=${domain}&type=grpc&serviceName=trojan-grpc&sni=${domain}#${user}"
+
+
 
 cat >/var/www/html/trojan-$user.txt <<-END
 ----------------------

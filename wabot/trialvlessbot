@@ -29,7 +29,7 @@ generateRandomString() {
     # Generate string acak menggunakan /dev/urandom
     string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "$1" | head -n 1)
     # Return string acak
-    echo "trialvpn$string"
+    echo "xraytrial$string"
 }
 
 # Panggil fungsi generateRandomString dengan panjang 15 karakter
