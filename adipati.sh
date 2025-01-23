@@ -76,6 +76,10 @@ wget -q -O /etc/xray/limit.trojan "https://raw.githubusercontent.com/adipatixyz/
 chmod +x /etc/xray/limit.trojan # limit quota trojan
 dos2unix /etc/xray/limit.trojan # limit quota trojan
 
+wget -q -O /usr/bin/keamanan "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/keamananbot"
+chmod +x /usr/bin/keamanan
+dos2unix /usr/bin/keamanan
+
 systemctl daemon-reload
 systemctl restart vsip
 systemctl restart vmip
@@ -84,6 +88,7 @@ systemctl restart vtrip
 systemctl restart limitvmess
 systemctl restart limitvless
 systemctl restart limittrojan
+systemctl restart keamanan
 
 # Instalasi Rclone
 # wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
