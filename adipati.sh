@@ -1,7 +1,12 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
+rm -rf "$0"
+rm -r adipati.sh
+
+clear
 cd /usr/local/sbin
+
 # Instalasi Create Account
 wget -q -O /usr/local/sbin/trialsshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/trialsshbot"
 chmod +x /usr/local/sbin/trialsshbot
@@ -40,34 +45,18 @@ wget -q -O /usr/local/sbin/renewtrojanbot "https://raw.githubusercontent.com/adi
 chmod +x /usr/local/sbin/renewtrojanbot
 dos2unix /usr/local/sbin/renewtrojanbot
 
-wget -q -O /usr/local/sbin/cekssh "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/cekssh"
-chmod +x /usr/local/sbin/cekssh
-dos2unix /usr/local/sbin/cekssh
-wget -q -O /usr/local/sbin/mulogssh "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/mulogssh"
-chmod +x /usr/local/sbin/mulogssh
-dos2unix /usr/local/sbin/mulogssh
-
 # Instalasi Backup & backup
-wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
-chmod +x /usr/local/sbin/autobackupbot
-dos2unix autobackupbot
-wget -q -O /usr/local/sbin/restorebot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/restorebot"
-chmod +x /usr/local/sbin/restorebot
-dos2unix restorebot
-
-wget -q -O /usr/local/sbin/recoveryxraybot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/recoveryxraybot"
-chmod +x /usr/local/sbin/recoveryxraybot
-dos2unix /usr/local/sbin/recoveryxraybot
-
-# Instlasi Unlock Limit Ip
-wget -q -O /usr/local/sbin/unlocklimitipbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/unlocklimitipbot"
-chmod +x /usr/local/sbin/unlocklimitipbot
-dos2unix /usr/local/sbin/unlocklimitipbot
+# wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
+# chmod +x /usr/local/sbin/autobackupbot
+# dos2unix autobackupbot
+# wget -q -O /usr/local/sbin/restorebot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/restorebot"
+# chmod +x /usr/local/sbin/restorebot
+# dos2unix restorebot
 
 # Instalasi Limit
-wget -q -O /usr/bin/tendang2 "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
-chmod +x /usr/bin/tendang2 # limit ip ssh
-dos2unix /usr/bin/tendang2 # limit ip ssh
+wget -q -O /usr/bin/tendang "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitsshbot"
+chmod +x /usr/bin/tendang # limit ip ssh
+dos2unix /usr/bin/tendang # limit ip ssh
 wget -q -O /usr/bin/vmess "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/limitvmessbot"
 chmod +x /usr/bin/vmess # limit ip vmess
 dos2unix /usr/bin/vmess # limit ip vmess
@@ -97,14 +86,14 @@ systemctl restart limitvless
 systemctl restart limittrojan
 
 # Instalasi Rclone
-wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
+# wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
 
 # cronjob autobackup 00:05
-cat > /etc/cron.d/telebotvpn <<-END
-SHELL=/bin/sh
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-5 0 * * * root autobackupbot
-END
+# cat > /etc/cron.d/telebotvpn <<-END
+# SHELL=/bin/sh
+# PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# 5 0 * * * root autobackupbot
+# END
 
 # cronjob jam 23:30
 cat > /etc/cron.d/allxp <<-END
@@ -148,7 +137,6 @@ echo "$idteleowner" > /root/telebotvpn/idteleowner
 echo "$idtelegrub" > /root/telebotvpn/idtelegrub
 
 cd
-rm -r adipati.sh
-echo "Fitur Wabot Success! Back In 10 Seconds.. [ Port Login 6401 ]"
+echo "Fitur Wabot Success! Back In 10 Seconds.."
 sleep 10
 menu
