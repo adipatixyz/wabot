@@ -46,8 +46,10 @@ uuid=$(generateRandomString 15)
 
 tgl=$(date -d "$masaaktif days" +"%d")
 bln=$(date -d "$masaaktif days" +"%b")
+bln1=$(date -d "$masaaktif days" +"%m")
 thn=$(date -d "$masaaktif days" +"%Y")
 expe="$tgl $bln, $thn"
+exp_formatted="$thn-$bln1-$tgl"
 tgl2=$(date +"%d")
 bln2=$(date +"%b")
 thn2=$(date +"%Y")
@@ -132,7 +134,7 @@ nTls  : $vmesslink2
 ----------------------
 Grpc  : $vmesslink3
 ----------------------
-Exp   : $expe
+Exp   : $exp_formatted
 ----------------------
 END
 
@@ -189,7 +191,7 @@ Status Create VMESS Success
 ──────────────────────
 <code>✧ Doc   :</code> https://${domain}:81/vmess-$user.txt
 ──────────────────────
-<code>✧ Exp   :</code> <code>$expe</code>
+<code>✧ Exp   :</code> <code>$exp_formatted</code>
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
@@ -205,4 +207,4 @@ echo "$uuid"
 echo "$vmesslink1"
 echo "$vmesslink2"
 echo "$vmesslink3"
-echo "$expe"
+echo "$exp_formatted"

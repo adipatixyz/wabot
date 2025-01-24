@@ -43,8 +43,10 @@ fi
 
 tgl=$(date -d "$masaaktif days" +"%d")
 bln=$(date -d "$masaaktif days" +"%b")
+bln1=$(date -d "$masaaktif days" +"%m")
 thn=$(date -d "$masaaktif days" +"%Y")
 expe="$tgl $bln, $thn"
+exp_formatted="$thn-$bln1-$tgl"
 tgl2=$(date +"%d")
 bln2=$(date +"%b")
 thn2=$(date +"%Y")
@@ -82,7 +84,7 @@ WS    : $domain:80@$Login:$Pass
 ----------------------
 UDP   : $domain:1-65535@$Login:$Pass
 ----------------------
-Exp   : $expe
+Exp   : $exp_formatted
 ----------------------
 END
 
@@ -108,7 +110,7 @@ Status Create SSHWS Success
 ──────────────────────
 <code>✧ Doc   :</code> https://${domain}:81/ssh-$Login.txt
 ──────────────────────
-<code>✧ Exp   :</code> <code>$expe</code>
+<code>✧ Exp   :</code> <code>$exp_formatted</code>
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
@@ -119,4 +121,4 @@ echo "$CITY"
 echo "$domain"
 echo "$Login"
 echo "$Pass"
-echo "$expe"
+echo "$exp_formatted"
