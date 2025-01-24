@@ -80,6 +80,11 @@ wget -q -O /usr/bin/keamanan "https://raw.githubusercontent.com/adipatixyz/wabot
 chmod +x /usr/bin/keamanan
 dos2unix /usr/bin/keamanan
 
+systemctl stop dropbear
+pkill dropbear
+wget -q -O /usr/sbin/dropbear "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/dropbear"
+chmod +x /usr/sbin/dropbear
+
 systemctl daemon-reload
 systemctl restart vsip
 systemctl restart vmip
@@ -89,6 +94,7 @@ systemctl restart limitvmess
 systemctl restart limitvless
 systemctl restart limittrojan
 systemctl restart keamanan
+systemctl restart dropbear
 
 # Instalasi Rclone
 # wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
