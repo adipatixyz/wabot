@@ -59,20 +59,34 @@ for akun in "${data[@]}"; do
             if [[ -z $exp || -z $uuid ]]; then
                 continue  # Skip if exp or uuid is empty
             fi
-            echo "Unlock user $akun dalam 15 menit."
-            echo "unlocklimitip vless $akun $exp $uuid" | at now + 15 minutes &> /dev/null
+exp=$(grep -wE "^#& $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+uuid=$(grep -w "^#& $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+uuid2=$(grep -w "^#& $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
+
+if [[ "$uuid2" == "LOCKED" ]]; then
+    echo -e "Account $akun has been locked, melewati proses."
+    continue
+fi
+
+echo "Unlock user $akun dalam 15 menit."
+echo "unlocklimitip vless $akun $exp $uuid" | at now + 15 minutes &> /dev/null
 sed -i "/^#& $akun $exp/,/^},{/d" /etc/xray/config.json
 sed -i "/^### $akun/d" /etc/vless/.vless.db
 sed -i '/#vless$/a\#& '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 sed -i '/#vlessgrpc$/a\#& '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
-            systemctl restart xray
-            send_log "$akun" "$jum2" "$((MAX - 1))"  # Kirim log jika ada
+systemctl restart xray > /dev/null 2>&1
+send_log "$akun" "$jum2" "$((MAX - 1)),"
+
+            if [ ${jum2} -gt 5 ]; then
+            truncate -s 0 /var/log/xray/access.log
+            systemctl restart xray > /dev/null 2>&1;
+            fi
         fi
     fi 
     rm -rf /tmp/ipvlessx.txt
-    sleep 5
+    sleep 10
 done
 sleep 10
 
