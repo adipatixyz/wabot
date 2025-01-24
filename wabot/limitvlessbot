@@ -76,13 +76,9 @@ sed -i '/#vless$/a\#& '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 sed -i '/#vlessgrpc$/a\#& '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
+truncate -s 0 /var/log/xray/access.log
 systemctl restart xray > /dev/null 2>&1
 send_log "$akun" "$jum2" "$((MAX - 1)),"
-
-            if [ ${jum2} -gt 5 ]; then
-            truncate -s 0 /var/log/xray/access.log
-            systemctl restart xray > /dev/null 2>&1;
-            fi
         fi
     fi 
     rm -rf /tmp/ipvlessx.txt
