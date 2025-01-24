@@ -93,7 +93,7 @@ while true; do
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
             LIMIT=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-            MAX=$((LIMIT + 1))
+            MAX=$((LIMIT + 2))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -110,12 +110,12 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 2))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
             echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
-            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -137,6 +137,6 @@ while true; do
         sleep 2
     done
 
-    echo "Siklus monitoring selesai. Menunggu 30 detik sebelum memulai ulang."
-    sleep 30
+    echo "Siklus monitoring selesai. Menunggu 120 detik sebelum memulai ulang."
+    sleep 120
 done

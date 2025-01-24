@@ -124,4 +124,5 @@ sed -i '/#trojangrpc$/a\#! '"$user $exp"'\
         echo "Lanjut."
         sleep 2
     done
+    sleep 120
 done

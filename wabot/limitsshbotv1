@@ -135,7 +135,6 @@ while true; do
         fi
         sleep 2
     done
-
-    echo "Siklus monitoring selesai. Menunggu 30 detik sebelum memulai ulang."
-    sleep 30
+    echo "Siklus monitoring selesai. Menunggu 120 detik sebelum memulai ulang."
+    sleep 120
 done
