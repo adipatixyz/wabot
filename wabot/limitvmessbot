@@ -13,10 +13,31 @@ TEXT="
 ──────────────────────
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2</code>
-<code>Limit :</code> <code>$((MAX - 1))</code>
+<code>Limit :</code> <code>$((MAX - 2))</code>
 <code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
+────────────────────── "
+
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+}
+
+function send_logx() {
+CHATID=$(cat /root/telebotvpn/idtelegrub)
+KEY=$(cat /root/telebotvpn/tokentelebot)
+domain=$(cat /etc/xray/domain)
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+TEXT="
+──────────────────────
+🚫 Notifikasi Multilogin VMESS
+──────────────────────
+<code>User  :</code> <code>$akun</code>
+<code>Login :</code> <code>$jum2</code>
+<code>Limit :</code> <code>$((MAX - 2))</code>
+<code>Host  :</code> <code>$domain</code>
+────────────────────── 
+Locked User 3X Multilogin
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
@@ -59,6 +80,31 @@ for akun in "${data[@]}"; do
             if [[ -z $exp || -z $uuid ]]; then
                 continue  # Skip if exp or uuid is empty
             fi
+
+            if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 3 ]]; then
+exp=$(grep -wE "^### $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+uuid=$(grep -w "^### $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+uuid2=$(grep -w "^### $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
+
+if [[ "$uuid2" == "LOCKED" ]]; then
+    echo -e "Account $akun has been locked, melewati proses."
+    continue
+fi
+
+echo "Locked user $akun 3X Multilogin"
+sed -i "/^### $akun $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $akun/d" /etc/vmess/.vmess.db
+sed -i '/#vmess$/a\### '"$akun $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
+sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
+truncate -s 0 /var/log/xray/access.log
+systemctl restart xray > /dev/null 2>&1
+sed -i "/$akun/d" /tmp/lockipxray.txt
+send_logx "$akun" "$jum2" "$((MAX - 2)),"
+                continue
+            fi
+
 exp=$(grep -wE "^### $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
 uuid=$(grep -w "^### $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
 uuid2=$(grep -w "^### $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
@@ -78,6 +124,7 @@ sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
 systemctl restart xray > /dev/null 2>&1
+echo "$akun" >> /tmp/lockipxray.txt
 send_log "$akun" "$jum2" "$((MAX - 2)),"
         fi
     fi 
