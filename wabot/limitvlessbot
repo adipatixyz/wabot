@@ -13,7 +13,7 @@ TEXT="
 ──────────────────────
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2</code>
-<code>Limit :</code> <code>$((MAX - 2))</code>
+<code>Limit :</code> <code>$((MAX - 1))</code>
 <code>Host  :</code> <code>$domain</code>
 ──────────────────────  
 Unlock User Otomatis 15 Menit
@@ -34,7 +34,7 @@ TEXT="
 ──────────────────────
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2</code>
-<code>Limit :</code> <code>$((MAX - 2))</code>
+<code>Limit :</code> <code>$((MAX - 1))</code>
 <code>Host  :</code> <code>$domain</code>
 ──────────────────────  
 Locked User 3X Multilogin
@@ -45,14 +45,18 @@ curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TE
 
 data=(`cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
 # Loop through each user
+echo "Memulai proses monitoring VLESS."
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvlessx.txt
     data2=(`cat /var/log/xray/access.log | tail -n 500 | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq`)
     
-    # Loop through each IP address and check for usage
     for ip in "${data2[@]}"; do
-        jum=$(cat /var/log/xray/access.log | grep -w "$akun" | grep -w "$ip" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | sort | uniq)
-        if [[ "$jum" == "$ip" ]]; then
+        # Extract the first two segments of the IP
+        ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
+
+        # Check if this IP belongs to the current user
+        jum=$(cat /var/log/xray/access.log | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
+        if [[ "$jum" == "$ip_prefiks" ]]; then
             echo "$jum" >> /tmp/ipvlessx.txt
         fi
     done
@@ -61,7 +65,7 @@ for akun in "${data[@]}"; do
     if [[ -n "$jum" ]]; then
         if [ -e "/etc/kyt/limit/vless/ip/${akun}" ]; then
             iplimit=$(cat /etc/kyt/limit/vless/ip/${akun})
-            MAX=$((iplimit + 2))
+            MAX=$((iplimit + 1))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/vless/ip/${akun}
@@ -72,7 +76,7 @@ for akun in "${data[@]}"; do
             echo "2" > /etc/kyt/limit/vless/ip/${akun}
         fi
         jum2=$(sort /tmp/ipvlessx.txt | uniq | wc -l)
-        echo "Memproses User : [Login: $jum2, Limit: $((MAX - 2))] $akun"
+        echo "Memproses User : [Login: $jum2, Limit: $((MAX - 1))] $akun"
         # Check if the number of logged-in IPs exceeds the limit
         if [ "$jum2" -gt "$MAX" ]; then
             exp=$(grep -w "^#& $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
@@ -101,7 +105,7 @@ sed -i '/#vlessgrpc$/a\#& '"$akun $exp"'\
 truncate -s 0 /var/log/xray/access.log
 systemctl restart xray > /dev/null 2>&1
 sed -i "/$akun/d" /tmp/lockipxray.txt
-send_logx "$akun" "$jum2" "$((MAX - 2)),"
+send_logx "$akun" "$jum2" "$((MAX - 1)),"
                 continue
             fi
             
@@ -125,11 +129,12 @@ sed -i '/#vlessgrpc$/a\#& '"$akun $exp"'\
 truncate -s 0 /var/log/xray/access.log
 systemctl restart xray > /dev/null 2>&1
 echo "$akun" >> /tmp/lockipxray.txt
-send_log "$akun" "$jum2" "$((MAX - 2)),"
+send_log "$akun" "$jum2" "$((MAX - 1)),"
         fi
     fi 
     rm -rf /tmp/ipvlessx.txt
-    sleep 10
+    sleep 3
 done
-sleep 120
 rm -rf /tmp/ipvlessx.txt
+echo "Siklus monitoring selesai. sleep 120 detik!"
+sleep 120
