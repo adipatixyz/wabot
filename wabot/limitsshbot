@@ -114,7 +114,7 @@ while true; do
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
             LIMIT=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-            MAX=$((LIMIT + 1))
+            MAX=$((LIMIT + 5))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -131,14 +131,14 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 5))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             if [[ $(grep -c "${username[$i]}" /root/lockipssh.txt) -gt 3 ]]; then
             echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
             sed -i "/${username[$i]}/d" /root/lockipxray.txt
-            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 5))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -161,7 +161,7 @@ while true; do
             passwd -l ${username[$i]};
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             echo "${username[$i]}" >> /tmp/lockipssh.txt
-            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 5))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
