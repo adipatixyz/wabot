@@ -12,39 +12,34 @@ CITY=$(cat /etc/xray/city)
 domain=$(cat /etc/xray/domain)
   
 read -p "Username Info : " user
-read -p "Expired Day   : " masaaktif
 
 if ! grep -qiw "$user" /etc/xray/config.json; then
     echo -e "Username tidak ada."
     exit 0
 fi
 
-exp=$(grep -wE "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-echo "0" > "/etc/limit/vless/${user}"
-now=$(date +%Y-%m-%d)
-d1=$(date -d "$exp" +%s)
-d2=$(date -d "$now" +%s)
-exp2=$(( (d1 - d2) / 86400 ))
-exp3=$(($exp2 + $masaaktif))
-exp4=`date -d "$exp3 days" +"%Y-%m-%d"`
-sed -i "/#& $user/c\#& $user $exp4" /etc/xray/config.json
-sed -i "/#& $user/c\#& $user $exp4" /etc/vless/.vless.db
+exp=$(grep -wE "^#! $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+uuid=$(grep -w "^#! $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+
+sed -i "/^#! $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^#! $user/d" /etc/trojan/.trojan.db
+rm -rf /etc/trojan/$user
+rm -rf /etc/kyt/limit/trojan/ip/$user
+rm -r /var/www/html/trojan-Trial-"$user".txt > /dev/null 2>&1
+rm -r /var/www/html/trojan-"$user".txt > /dev/null 2>&1
 systemctl restart xray > /dev/null 2>&1
 
 TEXT="
 ──────────────────────
-Extend Account VLESS Success
+Extend Account TROJAN Success
 ──────────────────────
 <code>✧ Host  :</code> <code>$domain</code>
 <code>✧ User  :</code> <code>$user</code>
-<code>✧ Plus  :</code> <code>$masaaktif Days</code>
-<code>✧ Exp   :</code> <code>$exp4</code>
+<code>✧ Exp   :</code> <code>$exp</code>
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 # echo "autobackupbot" | at now + 0 minutes &> /dev/null
 
 echo -e "$user"
-echo -e "$masaaktif Days"
 echo -e "$exp"
-echo -e "$exp4"
