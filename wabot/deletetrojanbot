@@ -31,7 +31,7 @@ systemctl restart xray > /dev/null 2>&1
 
 TEXT="
 ──────────────────────
-Extend Account TROJAN Success
+Delete Account TROJAN Success
 ──────────────────────
 <code>✧ Host  :</code> <code>$domain</code>
 <code>✧ User  :</code> <code>$user</code>
