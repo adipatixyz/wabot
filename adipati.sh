@@ -44,6 +44,18 @@ dos2unix /usr/local/sbin/renewvlessbot
 wget -q -O /usr/local/sbin/renewtrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/renewtrojanbot"
 chmod +x /usr/local/sbin/renewtrojanbot
 dos2unix /usr/local/sbin/renewtrojanbot
+wget -q -O /usr/local/sbin/deletesshbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/deletesshbot"
+chmod +x /usr/local/sbin/deletesshbot
+dos2unix /usr/local/sbin/deletesshbot
+wget -q -O /usr/local/sbin/deletevmessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/deletevmessbot"
+chmod +x /usr/local/sbin/deletevmessbot
+dos2unix /usr/local/sbin/deletevmessbot
+wget -q -O /usr/local/sbin/deletevlessbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/deletevlessbot"
+chmod +x /usr/local/sbin/deletevlessbot
+dos2unix /usr/local/sbin/deletevlessbot
+wget -q -O /usr/local/sbin/deletetrojanbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/deletetrojanbot"
+chmod +x /usr/local/sbin/deletetrojanbot
+dos2unix /usr/local/sbin/deletetrojanbot
 
 # Instalasi Backup & backup
 wget -q -O /usr/local/sbin/autobackupbot "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/autobackupbot"
@@ -100,11 +112,12 @@ systemctl restart keamanan
 # wget -q -O /root/.config/rclone/rclone.conf "https://raw.githubusercontent.com/adipatixyz/wabot/main/wabot/rclone.conf"
 
 # cronjob autobackup 00:05
-# cat > /etc/cron.d/telebotvpn <<-END
-# SHELL=/bin/sh
-# PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-# 5 0 * * * root autobackupbot
-# END
+rm -rf /etc/cron.d/telebotvpn
+cat > /etc/cron.d/telebotvpn <<-END
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+5 0 * * * root autobackupbot
+END
 
 # cronjob jam 23:30
 cat > /etc/cron.d/allxp <<-END
