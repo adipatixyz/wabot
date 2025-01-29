@@ -1,7 +1,6 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-
 function send_log(){
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)

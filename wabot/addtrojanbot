@@ -1,7 +1,6 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-
 BICyan='\033[1;96m'       # Cyan
 BIWhite='\033[1;97m'      # White
 UWhite='\033[4;37m'       # White
@@ -78,9 +77,7 @@ Quota : $Quota GB
 Port  : 443, 80
 Path  : /trojan-ws
 ----------------------
-Tls   : $trojanlink1
-----------------------
-nTls  : $trojanlink2
+WS    : $trojanlink1
 ----------------------
 Grpc  : $trojanlink3
 ----------------------
@@ -116,7 +113,6 @@ fi
 echo "### ${user} ${exp} ${uuid} ${Quota} ${iplimit}" >> /etc/trojan/.trojan.db
 clear
 
-
 TEXT="
 ──────────────────────
 Status Create TROJAN Success
@@ -133,7 +129,7 @@ Status Create TROJAN Success
 <code>✧ Port  :</code> <code>443, 80</code>
 <code>✧ Path  :</code> <code>/trojan-ws</code>
 ──────────────────────
-<code>TLS, nTLS, GRPC Check Link ↴</code>
+<code>WS, GRPC Check Link ↴</code>
 ──────────────────────
 <code>✧ Doc   :</code> https://${domain}:81/trojan-$user.txt
 ──────────────────────

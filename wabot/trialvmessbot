@@ -1,7 +1,6 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-
 BICyan='\033[1;96m'       # Cyan
 BIWhite='\033[1;97m'      # White
 UWhite='\033[4;37m'       # White

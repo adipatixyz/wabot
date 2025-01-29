@@ -1,7 +1,6 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-
 echo -e "\e[33m──────────────────────────────────────────\033[0m"
 echo -e "\E[40;1;37m         PILIH JENIS PROTOKOL XRAY        \E[0m"
 echo -e "\e[33m──────────────────────────────────────────\033[0m" 
@@ -40,7 +39,7 @@ if [[ -z "$username" || -z "$expired" || -z "$uuid" ]]; then
 fi
 
 # Eksekusi perintah
-command="unlocklimitipbot $protocol $username $expired $uuid"
+command="recoveryxrayx $protocol $username $expired $uuid"
 echo "$command" | at now + 0 minutes &> /dev/null
 
 # Konfirmasi eksekusi

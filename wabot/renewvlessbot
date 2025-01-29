@@ -1,7 +1,6 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-
 CHATID=$(cat /root/telebotvpn/idteleowner)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIME="10"
