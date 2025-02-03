@@ -43,19 +43,22 @@ Locked User 3X Multilogin
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
-data=(`cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
+data=( `cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
+
+# Read log data once and process it
+log_data=$(cat /var/log/xray/access.log | tail -n 500)
+ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq))
+
 # Loop through each user
 echo "Memulai proses monitoring VLESS."
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvlessx.txt
-    data2=(`cat /var/log/xray/access.log | tail -n 500 | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq`)
-    
-    for ip in "${data2[@]}"; do
+    for ip in "${ip_data[@]}"; do
         # Extract the first two segments of the IP
         ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
 
-        # Check if this IP belongs to the current user
-        jum=$(cat /var/log/xray/access.log | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
+        # Check if this IP belongs to the current user (only need to search through the preloaded log data)
+        jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
         if [[ "$jum" == "$ip_prefiks" ]]; then
             echo "$jum" >> /tmp/ipvlessx.txt
         fi
