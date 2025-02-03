@@ -41,7 +41,7 @@ elif (( disk_usage >= setmax )); then
     sleep 10
     reboot
 else
-    echo "SYSTEM OK: RAM=${ram_usage}%, Disk=${disk_usage}%"
+    echo "SYSTEM OK: RAM=${ram_usage}%, DISK=${disk_usage}%"
 fi
 # Tambahkan jeda untuk mengurangi beban sistem
 sleep 120
