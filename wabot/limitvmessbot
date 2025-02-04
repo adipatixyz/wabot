@@ -150,5 +150,5 @@ send_log "$akun" "$jum2" "$MAX" "$jumx"
     sleep 3
 done
 rm -rf /tmp/ipvmessx.txt
-echo "Siklus monitoring selesai. sleep 120 detik!"
-sleep 120
+echo "Siklus monitoring selesai. sleep 300 detik!"
+sleep 300

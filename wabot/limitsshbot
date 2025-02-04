@@ -160,7 +160,7 @@ while true; do
         echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $MAX] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
-            if [[ $(grep -c "${username[$i]}" /root/lockipssh.txt) -gt 3 ]]; then
+            if [[ $(grep -c "${username[$i]}" /tmp/lockipssh.txt) -gt 3 ]]; then
             
             echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
             passwd -l ${username[$i]};
@@ -186,7 +186,7 @@ while true; do
             fi
 
             echo "${username[$i]}" >> /tmp/lockipssh.txt
-            jumx=$(grep -c "${username[$i]}" /root/lockipssh.txt)
+            jumx=$(grep -c "${username[$i]}" /tmp/lockipssh.txt)
             send_log "${username[$i]}" "${jumlah[$i]}" "$MAX" "$jumx"
             echo "Notifikasi terkirim ke telegram."
 
@@ -209,6 +209,6 @@ while true; do
         sleep 2
     done
 
-    echo "Siklus monitoring selesai. sleep 120 detik!"
-    sleep 120
+    echo "Siklus monitoring selesai. sleep 300 detik!"
+    sleep 300
 done
