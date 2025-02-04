@@ -29,7 +29,7 @@ TEXT="
 <code>Login :</code> <code>$2 IP</code>
 <code>Limit :</code> <code>$3 IP</code>
 ────────────────────── 
-Unlock User Otomatis 15 Menit
+Notif "$4"X Multilogin: 3X Autolock
 ────────────────────── "
 
 # Kirim pesan ke Telegram
@@ -64,7 +64,7 @@ TEXT="
 <code>Login :</code> <code>$2 IP</code>
 <code>Limit :</code> <code>$3 IP</code>
 ────────────────────── 
-Locked User 3X Multilogin
+Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
 
 # Kirim pesan ke Telegram
@@ -140,8 +140,7 @@ while true; do
     for i in ${!username[*]}
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
-            LIMIT=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-            MAX=$((LIMIT + 1))
+            MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -158,14 +157,16 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $MAX] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             if [[ $(grep -c "${username[$i]}" /root/lockipssh.txt) -gt 3 ]]; then
-            echo "User ${username[$i]} melebihi batas login, mengunci akun."
+            
+            echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
             passwd -l ${username[$i]};
+            echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             sed -i "/${username[$i]}/d" /root/lockipxray.txt
-            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            send_logx "${username[$i]}" "${jumlah[$i]}" "$MAX"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -184,11 +185,9 @@ while true; do
             continue
             fi
 
-            echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
-            passwd -l ${username[$i]};
-            echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             echo "${username[$i]}" >> /tmp/lockipssh.txt
-            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            jumx=$(grep -c "${username[$i]}" /root/lockipssh.txt)
+            send_log "${username[$i]}" "${jumlah[$i]}" "$MAX" "$jumx"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
