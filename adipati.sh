@@ -113,11 +113,11 @@ systemctl restart keamanan
 
 # cronjob autobackup 00:05
 rm -rf /etc/cron.d/telebotvpn
-cat > /etc/cron.d/telebotvpn <<-END
-SHELL=/bin/sh
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-5 0 * * * root autobackupbot
-END
+# cat > /etc/cron.d/telebotvpn <<-END
+# SHELL=/bin/sh
+# PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# 5 0 * * * root autobackupbot
+# END
 
 # cronjob jam 23:30
 cat > /etc/cron.d/allxp <<-END
