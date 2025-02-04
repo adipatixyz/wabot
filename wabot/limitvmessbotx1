@@ -2,38 +2,24 @@
 # https://t.me/gemilangkinasih
 
 function send-log() {
-DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
-FULL_DOMAIN=$(cat /etc/xray/domain)
-
-# Cek apakah DOMAIN mengandung "SG"
-if [[ "$DOMAIN_PART" == *"SG"* ]]; then
-    FLAG="🇸🇬"
-else
-    FLAG="🇮🇩"
-fi
-
-# Tampilkan hasil di terminal
-echo "$DOMAIN_PART $FLAG"
-
-# Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
-TIMEOUT="10"
+domain=$(cat /etc/xray/domain)
+TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VLESS</b>
+🚫 Notifikasi Limit Quota VMESS
 ──────────────────────
-<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$user</code>
-<code>Login :</code> <code>$total</code>
+<code>Usage :</code> <code>$total</code>
 <code>Limit :</code> <code>$total2</code>
+<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Buy Add Quota / Extend To Unlock
 ────────────────────── "
 
-# Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function con() {
@@ -50,12 +36,12 @@ function con() {
 }
 
 while true; do
-    echo "Memulai proses monitoring VLESS."
+    echo "Memulai proses monitoring VMESS."
     sleep 30
 
-    data=($(cat /etc/xray/config.json | grep '^#&' | cut -d ' ' -f 2 | sort | uniq))
-    if [[ ! -e /etc/limit/vless ]]; then
-        mkdir -p /etc/limit/vless
+    data=($(cat /etc/xray/config.json | grep '^###' | cut -d ' ' -f 2 | sort | uniq))
+    if [[ ! -e /etc/limit/vmess ]]; then
+        mkdir -p /etc/limit/vmess
     fi
 
     for user in "${data[@]}"; do
@@ -65,13 +51,13 @@ while true; do
 
         if [[ ${getThis} != "failed" ]]; then
             downlink=$(xray api stats --server=127.0.0.1:10000 -name "user>>>${user}>>>traffic>>>downlink" | grep -w "value" | awk '{print $2}' | cut -d '"' -f2)
-            if [ -e /etc/limit/vless/${user} ]; then
-                plus2=$(cat /etc/limit/vless/${user})
+            if [ -e /etc/limit/vmess/${user} ]; then
+                plus2=$(cat /etc/limit/vmess/${user})
                 plus3=$(( ${downlink} + ${plus2} ))
-                echo "${plus3}" > /etc/limit/vless/"${user}"
+                echo "${plus3}" > /etc/limit/vmess/"${user}"
                 xray api stats --server=127.0.0.1:10000 -name "user>>>${user}>>>traffic>>>downlink" -reset >/dev/null 2>&1
             else
-                echo "${downlink}" > /etc/limit/vless/"${user}"
+                echo "${downlink}" > /etc/limit/vmess/"${user}"
                 xray api stats --server=127.0.0.1:10000 -name "user>>>${user}>>>traffic>>>downlink" -reset >/dev/null 2>&1
             fi
         else
@@ -83,48 +69,48 @@ while true; do
     done
 
     for user in "${data[@]}"; do
-        if [[ -e /etc/vless/${user} ]]; then
-            checkLimit=$(cat /etc/vless/${user})
+        if [[ -e /etc/vmess/${user} ]]; then
+            checkLimit=$(cat /etc/vmess/${user})
         else
             checkLimit=536870912000
-            echo "536870912000" > /etc/vless/${user}
+            echo "536870912000" > /etc/vmess/${user}
         fi
 
         if [[ "$checkLimit" -eq 0 ]]; then
             checkLimit=536870912000
-            echo "536870912000" > /etc/vless/${user}
+            echo "536870912000" > /etc/vmess/${user}
         fi
 
-        if [ -e /etc/limit/vless/${user} ]; then
-            Usage=$(cat /etc/limit/vless/${user})
+        if [ -e /etc/limit/vmess/${user} ]; then
+            Usage=$(cat /etc/limit/vmess/${user})
             total=$(con ${Usage})
             total2=$(con ${checkLimit})
 
             echo "Memproses User : [Usage: $total, Limit: $total2] $user"
             if [[ ${Usage} -gt ${checkLimit} ]]; then
-                exp=$(grep -w "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-                uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+                exp=$(grep -w "^### $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+                uuid=$(grep -w "^### $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
                 if [[ -z $exp || -z $uuid ]]; then
                     echo "User $user memiliki exp atau UUID kosong. Melewati."
                     sleep 5
                     continue
                 fi
-exp=$(grep -wE "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
-uuid2=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
+exp=$(grep -wE "^### $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+uuid=$(grep -w "^### $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+uuid2=$(grep -w "^### $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
 
 if [[ "$uuid2" == "LOCKED" ]]; then
     echo -e "Account $user has been locked, melewati proses."
     continue
 fi
 
-sed -i "/^#& $user $exp/,/^},{/d" /etc/xray/config.json
-sed -i "/^### $user/d" /etc/vless/.vless.db
-sed -i '/#vless$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid"LOCKED"'","email" : "'""$user""'"' /etc/xray/config.json
-sed -i '/#vlessgrpc$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid"LOCKED"'","email" : "'""$user""'"' /etc/xray/config.json
-                echo "0" > "/etc/limit/vless/${user}"
+sed -i "/^### $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $user/d" /etc/vmess/.vmess.db
+sed -i '/#vmess$/a\### '"$user $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$user""'"' /etc/xray/config.json
+sed -i '/#vmessgrpc$/a\### '"$user $exp"'\
+},{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$user""'"' /etc/xray/config.json
+                echo "0" > "/etc/limit/vmess/${user}"
                 send-log
                 echo "User $user melebihi batas. Notifikasi berhasil dikirim!"
                 systemctl restart xray

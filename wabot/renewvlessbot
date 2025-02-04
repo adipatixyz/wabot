@@ -26,9 +26,26 @@ d2=$(date -d "$now" +%s)
 exp2=$(( (d1 - d2) / 86400 ))
 exp3=$(($exp2 + $masaaktif))
 exp4=`date -d "$exp3 days" +"%Y-%m-%d"`
+
+exp=$(grep -wE "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+uuid1=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/LOCKED//g' | sort | uniq)
+uuid2=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
+
+if [[ "$uuid2" == "LOCKED" ]]; then
+sed -i "/^#& $user $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $user/d" /etc/vless/.vless.db
+
+sed -i '/#vless$/a\#& '"$user $exp4"'\
+},{"id": "'""$uuid1""'","email" : "'""$user""'"' /etc/xray/config.json
+sed -i '/#vlessgrpc$/a\#& '"$user $exp4"'\
+},{"id": "'""$uuid1""'","email" : "'""$user""'"' /etc/xray/config.json
+systemctl restart xray > /dev/null 2>&1 
+else
 sed -i "/#& $user/c\#& $user $exp4" /etc/xray/config.json
 sed -i "/#& $user/c\#& $user $exp4" /etc/vless/.vless.db
 systemctl restart xray > /dev/null 2>&1
+fi
 
 TEXT="
 ──────────────────────
@@ -41,7 +58,7 @@ Extend Account VLESS Success
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-# echo "autobackupbot" | at now + 0 minutes &> /dev/null
+echo "autobackupbot" | at now + 0 minutes &> /dev/null
 
 echo -e "$user"
 echo -e "$masaaktif Days"

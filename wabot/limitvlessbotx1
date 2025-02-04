@@ -2,38 +2,24 @@
 # https://t.me/gemilangkinasih
 
 function send-log() {
-DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
-FULL_DOMAIN=$(cat /etc/xray/domain)
-
-# Cek apakah DOMAIN mengandung "SG"
-if [[ "$DOMAIN_PART" == *"SG"* ]]; then
-    FLAG="🇸🇬"
-else
-    FLAG="🇮🇩"
-fi
-
-# Tampilkan hasil di terminal
-echo "$DOMAIN_PART $FLAG"
-
-# Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
-TIMEOUT="10"
+domain=$(cat /etc/xray/domain)
+TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VLESS</b>
+🚫 Notifikasi Limit Quota VLESS
 ──────────────────────
-<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$user</code>
-<code>Login :</code> <code>$total</code>
+<code>Usage :</code> <code>$total</code>
 <code>Limit :</code> <code>$total2</code>
+<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Buy Add Quota / Extend To Unlock
 ────────────────────── "
 
-# Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function con() {

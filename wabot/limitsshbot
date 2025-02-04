@@ -1,46 +1,74 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-function send_log(){
-CHATID=$(cat /root/telebotvpn/idtelegrub)
+function send_log() {
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
+FULL_DOMAIN=$(cat /etc/xray/domain)
+
+# Cek apakah DOMAIN mengandung "SG"
+if [[ "$DOMAIN_PART" == *"SG"* ]]; then
+    FLAG="🇸🇬"
+else
+    FLAG="🇮🇩"
+fi
+
+# Tampilkan hasil di terminal
+echo "$DOMAIN_PART $FLAG"
+
+# Konfigurasi informasi Telegram
+CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
-domain=$(cat /etc/xray/domain)
-TIME="10"
+TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Multilogin SSH
+🚫 <b>Notifikasi Multilogin SSHWS</b>
 ──────────────────────
+<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$1</code>
 <code>Login :</code> <code>$2 IP</code>
 <code>Limit :</code> <code>$3 IP</code>
-<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
 ────────────────────── "
 
-curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# Kirim pesan ke Telegram
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 }
 
-function send_logx(){
-CHATID=$(cat /root/telebotvpn/idtelegrub)
+function send_logx() {
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
+FULL_DOMAIN=$(cat /etc/xray/domain)
+
+# Cek apakah DOMAIN mengandung "SG"
+if [[ "$DOMAIN_PART" == *"SG"* ]]; then
+    FLAG="🇸🇬"
+else
+    FLAG="🇮🇩"
+fi
+
+# Tampilkan hasil di terminal
+echo "$DOMAIN_PART $FLAG"
+
+# Konfigurasi informasi Telegram
+CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
-domain=$(cat /etc/xray/domain)
-TIME="10"
+TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Multilogin SSH
+🚫 <b>Notifikasi Multilogin SSHWS</b>
 ──────────────────────
+<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$1</code>
 <code>Login :</code> <code>$2 IP</code>
 <code>Limit :</code> <code>$3 IP</code>
-<code>Host  :</code> <code>$domain</code>
 ────────────────────── 
 Locked User 3X Multilogin
 ────────────────────── "
 
-curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# Kirim pesan ke Telegram
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 }
 
 # Menentukan file log berdasarkan OS yang digunakan
@@ -113,7 +141,7 @@ while true; do
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
             LIMIT=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-            MAX=$((LIMIT + 5))
+            MAX=$((LIMIT + 1))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -130,14 +158,14 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 5))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             if [[ $(grep -c "${username[$i]}" /root/lockipssh.txt) -gt 3 ]]; then
             echo "User ${username[$i]} melebihi batas login, mengunci akun."
             passwd -l ${username[$i]};
             sed -i "/${username[$i]}/d" /root/lockipxray.txt
-            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 5))"
+            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -160,7 +188,7 @@ while true; do
             passwd -l ${username[$i]};
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             echo "${username[$i]}" >> /tmp/lockipssh.txt
-            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 5))"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then

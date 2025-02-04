@@ -2,45 +2,73 @@
 # https://t.me/gemilangkinasih
 
 function send_log() {
-CHATID=$(cat /root/telebotvpn/idtelegrub)
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
+FULL_DOMAIN=$(cat /etc/xray/domain)
+
+# Cek apakah DOMAIN mengandung "SG"
+if [[ "$DOMAIN_PART" == *"SG"* ]]; then
+    FLAG="🇸🇬"
+else
+    FLAG="🇮🇩"
+fi
+
+# Tampilkan hasil di terminal
+echo "$DOMAIN_PART $FLAG"
+
+# Konfigurasi informasi Telegram
+CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
-domain=$(cat /etc/xray/domain)
-TIME="10"
+TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Multilogin VMESS
+🚫 <b>Notifikasi Multilogin VMESS</b>
 ──────────────────────
+<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
-<code>Login :</code> <code>$jum2</code>
-<code>Limit :</code> <code>$((MAX - 5))</code>
-<code>Host  :</code> <code>$domain</code>
+<code>Login :</code> <code>$jum2 IP</code>
+<code>Limit :</code> <code>$((MAX - 1)) IP</code>
 ────────────────────── 
 Unlock User Otomatis 15 Menit
 ────────────────────── "
 
-curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# Kirim pesan ke Telegram
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 }
 
 function send_logx() {
-CHATID=$(cat /root/telebotvpn/idtelegrub)
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
+FULL_DOMAIN=$(cat /etc/xray/domain)
+
+# Cek apakah DOMAIN mengandung "SG"
+if [[ "$DOMAIN_PART" == *"SG"* ]]; then
+    FLAG="🇸🇬"
+else
+    FLAG="🇮🇩"
+fi
+
+# Tampilkan hasil di terminal
+echo "$DOMAIN_PART $FLAG"
+
+# Konfigurasi informasi Telegram
+CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
-domain=$(cat /etc/xray/domain)
-TIME="10"
+TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Multilogin VMESS
+🚫 <b>Notifikasi Multilogin VMESS</b>
 ──────────────────────
+<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
-<code>Login :</code> <code>$jum2</code>
-<code>Limit :</code> <code>$((MAX - 5))</code>
-<code>Host  :</code> <code>$domain</code>
+<code>Login :</code> <code>$jum2 IP</code>
+<code>Limit :</code> <code>$((MAX - 1)) IP</code>
 ────────────────────── 
 Locked User 3X Multilogin
 ────────────────────── "
 
-curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# Kirim pesan ke Telegram
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 }
 
 data=( `cat /etc/xray/config.json | grep '###' | cut -d ' ' -f 2 | sort | uniq`)
@@ -68,7 +96,7 @@ for akun in "${data[@]}"; do
     if [[ -n "$jum" ]]; then
          if [ -e "/etc/kyt/limit/vmess/ip/${akun}" ]; then
             iplimit=$(cat /etc/kyt/limit/vmess/ip/${akun})
-            MAX=$((iplimit + 5))
+            MAX=$((iplimit + 1))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/vmess/ip/${akun}
@@ -79,7 +107,7 @@ for akun in "${data[@]}"; do
             echo "2" > /etc/kyt/limit/vmess/ip/${akun}
         fi
         jum2=$(sort /tmp/ipvmessx.txt | uniq | wc -l)
-        echo "Memproses User : [Login: $jum2, Limit: $((MAX - 5))] $akun"
+        echo "Memproses User : [Login: $jum2, Limit: $((MAX - 1))] $akun"
         # Check if the number of logged-in IPs exceeds the limit
         if [ "$jum2" -gt "$MAX" ]; then
             exp=$(grep -w "^### $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
@@ -108,7 +136,7 @@ sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
 truncate -s 0 /var/log/xray/access.log
 systemctl restart xray > /dev/null 2>&1
 sed -i "/$akun/d" /tmp/lockipxray.txt
-send_logx "$akun" "$jum2" "$((MAX - 5)),"
+send_logx "$akun" "$jum2" "$((MAX - 1)),"
                 continue
             fi
 
@@ -132,7 +160,7 @@ sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
 truncate -s 0 /var/log/xray/access.log
 systemctl restart xray > /dev/null 2>&1
 echo "$akun" >> /tmp/lockipxray.txt
-send_log "$akun" "$jum2" "$((MAX - 5)),"
+send_log "$akun" "$jum2" "$((MAX - 1)),"
         fi
     fi 
     rm -rf /tmp/ipvmessx.txt
