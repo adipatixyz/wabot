@@ -76,6 +76,7 @@ data=( `cat /etc/xray/config.json | grep '###' | cut -d ' ' -f 2 | sort | uniq`)
 # Read log data once and process it
 log_data=$(cat /var/log/xray/access.log | tail -n 500)
 ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq))
+status=0
 
 # Loop through each user
 echo "Memulai proses monitoring VMESS."
@@ -115,7 +116,10 @@ for akun in "${data[@]}"; do
                 continue  # Skip if exp or uuid is empty
             fi
 
-            if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 3 ]]; then
+            status=1
+            echo "$akun" >> /tmp/lockipxray.txt
+
+            if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 2 ]]; then
 exp=$(grep -wE "^### $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
 uuid=$(grep -w "^### $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
 uuid2=$(grep -w "^### $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
@@ -134,14 +138,11 @@ sed -i '/#vmess$/a\### '"$akun $exp"'\
 sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
-systemctl restart xray > /dev/null 2>&1
 sed -i "/$akun/d" /tmp/lockipxray.txt
 send_logx "$akun" "$jum2" "$MAX"
                 continue
             fi
 truncate -s 0 /var/log/xray/access.log
-systemctl restart xray > /dev/null 2>&1
-echo "$akun" >> /tmp/lockipxray.txt
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
 send_log "$akun" "$jum2" "$MAX" "$jumx"
         fi
@@ -149,6 +150,11 @@ send_log "$akun" "$jum2" "$MAX" "$jumx"
     rm -rf /tmp/ipvmessx.txt
     sleep 3
 done
+
+if [[ "$status" -eq 1 ]]; then
+    echo "Terjadi pelanggaran multilogin, restart layanan xray."
+    systemctl restart xray > /dev/null 2>&1
+fi
 rm -rf /tmp/ipvmessx.txt
 echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300

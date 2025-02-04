@@ -160,7 +160,9 @@ while true; do
         echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $MAX] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
-            if [[ $(grep -c "${username[$i]}" /tmp/lockipssh.txt) -gt 3 ]]; then
+            echo "${username[$i]}" >> /tmp/lockipssh.txt
+
+            if [[ $(grep -c "${username[$i]}" /tmp/lockipssh.txt) -gt 2 ]]; then
             
             echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
             passwd -l ${username[$i]};
@@ -185,7 +187,6 @@ while true; do
             continue
             fi
 
-            echo "${username[$i]}" >> /tmp/lockipssh.txt
             jumx=$(grep -c "${username[$i]}" /tmp/lockipssh.txt)
             send_log "${username[$i]}" "${jumlah[$i]}" "$MAX" "$jumx"
             echo "Notifikasi terkirim ke telegram."
