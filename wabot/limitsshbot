@@ -166,7 +166,8 @@ while true; do
     for i in ${!username[*]}
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
-            MAX=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
+            limit=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
+            MAX=$((limit + 2))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -183,7 +184,7 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $MAX] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 2))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             echo "${username[$i]}" >> /tmp/lockipssh.txt
@@ -194,7 +195,7 @@ while true; do
             passwd -l ${username[$i]};
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             sed -i "/${username[$i]}/d" /tmp/lockipssh.txt
-            send_logxx "${username[$i]}" "${jumlah[$i]}" "$MAX"
+            send_logxx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -218,7 +219,7 @@ while true; do
             echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             passwd -l ${username[$i]};
-            send_logx "${username[$i]}" "${jumlah[$i]}" "$MAX"
+            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -238,7 +239,7 @@ while true; do
             fi
 
             jumx=$(grep -c "${username[$i]}" /tmp/lockipssh.txt)
-            send_log "${username[$i]}" "${jumlah[$i]}" "$MAX" "$jumx"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))" "$jumx"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
