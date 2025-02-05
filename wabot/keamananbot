@@ -44,4 +44,4 @@ else
     echo "SYSTEM OK: RAM=${ram_usage}%, DISK=${disk_usage}%"
 fi
 # Tambahkan jeda untuk mengurangi beban sistem
-sleep 120
+sleep 300
