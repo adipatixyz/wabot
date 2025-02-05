@@ -12,9 +12,6 @@ else
     FLAG="🇮🇩"
 fi
 
-# Tampilkan hasil di terminal
-echo "$DOMAIN_PART $FLAG"
-
 # Konfigurasi informasi Telegram
 CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
@@ -47,9 +44,6 @@ else
     FLAG="🇮🇩"
 fi
 
-# Tampilkan hasil di terminal
-echo "$DOMAIN_PART $FLAG"
-
 # Konfigurasi informasi Telegram
 CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
@@ -65,6 +59,38 @@ TEXT="
 <code>Limit :</code> <code>$3 IP</code>
 ────────────────────── 
 Notif 3X Multilogin: Lock 15 Menit
+────────────────────── "
+
+# Kirim pesan ke Telegram
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+}
+
+function send_logx() {
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
+FULL_DOMAIN=$(cat /etc/xray/domain)
+
+# Cek apakah DOMAIN mengandung "SG"
+if [[ "$DOMAIN_PART" == *"SG"* ]]; then
+    FLAG="🇸🇬"
+else
+    FLAG="🇮🇩"
+fi
+
+# Konfigurasi informasi Telegram
+CHATID="@tokovpngrub"
+KEY=$(cat /root/telebotvpn/tokentelebot)
+TIMEOUT="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+TEXT="
+──────────────────────
+🚫 <b>Notifikasi Multilogin SSHWS</b>
+──────────────────────
+<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
+<code>User  :</code> <code>$1</code>
+<code>Login :</code> <code>$2 IP</code>
+<code>Limit :</code> <code>$3 IP</code>
+────────────────────── 
+Notif 4X Multilogin: Chat Admin
 ────────────────────── "
 
 # Kirim pesan ke Telegram
@@ -162,12 +188,36 @@ while true; do
 
             echo "${username[$i]}" >> /tmp/lockipssh.txt
 
+            if [[ $(grep -c "${username[$i]}" /tmp/lockipssh.txt) -gt 3 ]]; then
+            
+            echo "Lock ${username[$i]} 4X Multilogin."
+            passwd -l ${username[$i]};
+            echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
+            sed -i "/${username[$i]}/d" /tmp/lockipssh.txt
+            send_logxx "${username[$i]}" "${jumlah[$i]}" "$MAX"
+            echo "Notifikasi terkirim ke telegram."
+
+            if [ ${jumlah[$i]} -gt 5 ]; then
+            truncate -s 0 /var/log/auth.log
+            systemctl restart ssh > /dev/null 2>&1;
+            systemctl restart sshd > /dev/null 2>&1;
+            # systemctl restart ws > /dev/null 2>&1;
+            fi
+
+            if [ $OS -eq 1 ]; then
+                systemctl restart ssh > /dev/null 2>&1;
+            elif [ $OS -eq 2 ]; then
+                systemctl restart sshd > /dev/null 2>&1;
+            fi
+
+            continue
+            fi
+
             if [[ $(grep -c "${username[$i]}" /tmp/lockipssh.txt) -gt 2 ]]; then
             
             echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
-            passwd -l ${username[$i]};
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
-            sed -i "/${username[$i]}/d" /root/lockipxray.txt
+            passwd -l ${username[$i]};
             send_logx "${username[$i]}" "${jumlah[$i]}" "$MAX"
             echo "Notifikasi terkirim ke telegram."
 

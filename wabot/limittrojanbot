@@ -12,9 +12,6 @@ else
     FLAG="🇮🇩"
 fi
 
-# Tampilkan hasil di terminal
-echo "$DOMAIN_PART $FLAG"
-
 # Konfigurasi informasi Telegram
 CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
@@ -47,9 +44,6 @@ else
     FLAG="🇮🇩"
 fi
 
-# Tampilkan hasil di terminal
-echo "$DOMAIN_PART $FLAG"
-
 # Konfigurasi informasi Telegram
 CHATID="@tokovpngrub"
 KEY=$(cat /root/telebotvpn/tokentelebot)
@@ -64,7 +58,39 @@ TEXT="
 <code>Login :</code> <code>$jum2 IP</code>
 <code>Limit :</code> <code>$MAX IP</code>
 ────────────────────── 
-Notif 3X Multilogin: Lock 15 Menit
+Notif 3X Multilogin: Chat Admin
+────────────────────── "
+
+# Kirim pesan ke Telegram
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+}
+
+function send_logxx() {
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
+FULL_DOMAIN=$(cat /etc/xray/domain)
+
+# Cek apakah DOMAIN mengandung "SG"
+if [[ "$DOMAIN_PART" == *"SG"* ]]; then
+    FLAG="🇸🇬"
+else
+    FLAG="🇮🇩"
+fi
+
+# Konfigurasi informasi Telegram
+CHATID="@tokovpngrub"
+KEY=$(cat /root/telebotvpn/tokentelebot)
+TIMEOUT="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+TEXT="
+──────────────────────
+🚫 <b>Notifikasi Multilogin VLESS</b>
+──────────────────────
+<blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
+<code>User  :</code> <code>$akun</code>
+<code>Login :</code> <code>$jum2 IP</code>
+<code>Limit :</code> <code>$MAX IP</code>
+────────────────────── 
+Notif 4X Multilogin: Chat Admin
 ────────────────────── "
 
 # Kirim pesan ke Telegram
@@ -119,7 +145,30 @@ for akun in "${data[@]}"; do
             status=1
             echo "$akun" >> /tmp/lockipxray.txt
 
-        if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 2 ]]; then
+            if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 3 ]]; then
+exp=$(grep -wE "^#! $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
+uuid=$(grep -w "^#! $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sort | uniq)
+uuid2=$(grep -w "^#! $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
+
+if [[ "$uuid2" == "LOCKED" ]]; then
+    echo -e "Account $akun has been locked, melewati proses."
+    continue
+fi
+
+echo "Locked user $akun 4X Multilogin"
+sed -i "/^#! $akun $exp/,/^},{/d" /etc/xray/config.json
+sed -i "/^### $akun/d" /etc/trojan/.trojan.db
+sed -i '/#trojanws$/a\#! '"$akun $exp"'\
+},{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
+sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
+},{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
+truncate -s 0 /var/log/xray/access.log
+sed -i "/$akun/d" /tmp/lockipxray.txt
+send_logx "$akun" "$jum2" "$MAX"
+                continue
+            fi
+
+            if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 2 ]]; then
 exp=$(grep -wE "^#! $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
 uuid=$(grep -w "^#! $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sort | uniq)
 uuid2=$(grep -w "^#! $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
@@ -138,7 +187,6 @@ sed -i '/#trojanws$/a\#! '"$akun $exp"'\
 sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
 },{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
-sed -i "/$akun/d" /tmp/lockipxray.txt
 send_logx "$akun" "$jum2" "$MAX"
                 continue
             fi
