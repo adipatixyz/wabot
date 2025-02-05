@@ -237,9 +237,9 @@ while true; do
             continue
             fi
 
+            echo "User ${username[$i]} melebihi batas login, send notif!"
             jumx=$(grep -c "${username[$i]}" /tmp/lockipssh.txt)
             send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 0))" "$jumx"
-            echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
             truncate -s 0 /var/log/auth.log

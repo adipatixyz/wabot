@@ -58,7 +58,7 @@ TEXT="
 <code>Login :</code> <code>$jum2 IP</code>
 <code>Limit :</code> <code>$((MAX - 0)) IP</code>
 ────────────────────── 
-Notif 3X Multilogin: Chat Admin
+Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
 
 # Kirim pesan ke Telegram
@@ -198,6 +198,7 @@ send_logx "$akun" "$jum2" "$((MAX - 0))"
                 continue
             fi
 
+echo "User $akun melebihi batas login, send notif!"
 truncate -s 0 /var/log/xray/access.log
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
 send_log "$akun" "$jum2" "$((MAX - 0))" "$jumx"
