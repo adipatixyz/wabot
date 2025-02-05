@@ -166,8 +166,8 @@ while true; do
     for i in ${!username[*]}
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
-            limit=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-            MAX=$((limit + 2))
+            iplimit=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
+            MAX=$((iplimit + 0))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -184,7 +184,7 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 2))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 0))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             echo "${username[$i]}" >> /tmp/lockipssh.txt
@@ -193,9 +193,8 @@ while true; do
             
             echo "Lock ${username[$i]} 4X Multilogin."
             passwd -l ${username[$i]};
-            echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             sed -i "/${username[$i]}/d" /tmp/lockipssh.txt
-            send_logxx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))"
+            send_logxx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 0))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -219,7 +218,7 @@ while true; do
             echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             passwd -l ${username[$i]};
-            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))"
+            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 0))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -239,7 +238,7 @@ while true; do
             fi
 
             jumx=$(grep -c "${username[$i]}" /tmp/lockipssh.txt)
-            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 2))" "$jumx"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 0))" "$jumx"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
