@@ -110,17 +110,10 @@ CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
 ExecStart=/usr/local/bin/xray run -config /etc/xray/config.json
-Restart=always
-RestartSec=1
-StartLimitIntervalSec=0
-StartLimitBurst=0
-CPUQuota=100%
-MemoryLimit=infinity
-TasksMax=infinity
-LimitCORE=infinity
-LimitMEMLOCK=infinity
-LimitNOFILE=1048576
-LimitNPROC=65535
+Restart=on-failure
+RestartPreventExitStatus=23
+LimitNPROC=10000
+LimitNOFILE=1000000
 
 [Install]
 WantedBy=multi-user.target
@@ -142,11 +135,13 @@ systemctl restart keamanan
 
 # cronjob autobackup 00:05
 rm -rf /etc/cron.d/telebotvpn
-# cat > /etc/cron.d/telebotvpn <<-END
-# SHELL=/bin/sh
-# PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-# 5 0 * * * root autobackupbot
-# END
+cat > /etc/cron.d/telebotvpn <<-END
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+5 0 * * * root autobackupbot
+5 0 * * * root truncate -s 0 /tmp/lockipssh.txt
+5 0 * * * root truncate -s 0 /tmp/lockipxray.txt
+END
 
 # cronjob jam 23:30
 cat > /etc/cron.d/allxp <<-END
@@ -159,7 +154,7 @@ END
 cat > /etc/cron.d/dailyreboot <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-0 3 * * * root /sbin/reboot
+0 5 * * * root /sbin/reboot
 END
 
 systemctl restart cron
