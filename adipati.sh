@@ -98,7 +98,36 @@ dos2unix /usr/bin/keamanan
 # systemctl restart dropbear
 # chmod +x /usr/sbin/dropbear
 
+cat > /etc/systemd/system/xray.service <<-END
+[Unit]
+Description=Xray Service
+Documentation=https://t.me/gemilangkinasih
+After=network.target nss-lookup.target
+
+[Service]
+User=www-data
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/local/bin/xray run -config /etc/xray/config.json
+Restart=always
+RestartSec=1
+StartLimitIntervalSec=0
+StartLimitBurst=0
+CPUQuota=100%
+MemoryLimit=infinity
+TasksMax=infinity
+LimitCORE=infinity
+LimitMEMLOCK=infinity
+LimitNOFILE=1048576
+LimitNPROC=65535
+
+[Install]
+WantedBy=multi-user.target
+END
+
 systemctl daemon-reload
+systemctl restart xray
 systemctl restart vsip
 systemctl restart vmip
 systemctl restart vlip
