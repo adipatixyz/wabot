@@ -24,7 +24,7 @@ TEXT="
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2 IP</code>
-<code>Limit :</code> <code>$((MAX - 0)) IP</code>
+<code>Limit :</code> <code>$((MAX - 1)) IP</code>
 ────────────────────── 
 Notif "$jumx"X Multilogin: 3X Autolock
 ────────────────────── "
@@ -56,7 +56,7 @@ TEXT="
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2 IP</code>
-<code>Limit :</code> <code>$((MAX - 0)) IP</code>
+<code>Limit :</code> <code>$((MAX - 1)) IP</code>
 ────────────────────── 
 Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
@@ -88,7 +88,7 @@ TEXT="
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
 <code>Login :</code> <code>$jum2 IP</code>
-<code>Limit :</code> <code>$((MAX - 0)) IP</code>
+<code>Limit :</code> <code>$((MAX - 1)) IP</code>
 ────────────────────── 
 Notif 4X Multilogin: Chat Admin
 ────────────────────── "
@@ -126,7 +126,7 @@ for akun in "${data[@]}"; do
     if [[ -n "$jum" ]]; then
         if [ -e "/etc/kyt/limit/trojan/ip/${akun}" ]; then
             iplimit=$(cat /etc/kyt/limit/trojan/ip/${akun})
-            MAX=$((iplimit + 0))
+            MAX=$((iplimit + 1))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/trojan/ip/${akun}
@@ -137,7 +137,7 @@ for akun in "${data[@]}"; do
             echo "2" > /etc/kyt/limit/trojan/ip/${akun}
         fi
         jum2=$(sort /tmp/iptrojanx.txt | uniq | wc -l)
-        echo "Memproses User : [Login: $jum2 Limit: $((MAX - 0))] $akun"
+        echo "Memproses User : [Login: $jum2 Limit: $((MAX - 1))] $akun"
         # Check if the number of logged-in IPs exceeds the limit
         if [ "$jum2" -gt "$MAX" ]; then
             exp=$(grep -w "^#! $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
@@ -170,7 +170,7 @@ sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
 },{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
 sed -i "/$akun/d" /tmp/lockipxray.txt
-send_logx "$akun" "$jum2" "$((MAX - 0))"
+send_logx "$akun" "$jum2" "$((MAX - 1))"
                 continue
             fi
 
@@ -195,14 +195,14 @@ sed -i '/#trojanws$/a\#! '"$akun $exp"'\
 sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
 },{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
-send_logx "$akun" "$jum2" "$((MAX - 0))"
+send_logx "$akun" "$jum2" "$((MAX - 1))"
                 continue
             fi
 
 echo "User $akun melebihi batas login, send notif!"
 truncate -s 0 /var/log/xray/access.log
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
-send_log "$akun" "$jum2" "$((MAX - 0))" "$jumx"
+send_log "$akun" "$jum2" "$((MAX - 1))" "$jumx"
         fi
     fi 
     rm -rf /tmp/iptrojanx.txt

@@ -184,7 +184,7 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 0))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             echo "${username[$i]}" >> /tmp/lockipssh.txt
