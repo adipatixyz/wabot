@@ -1,6 +1,28 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
+SERVICES=("vlip" "vmip")
+EXPECTED_STATUS="Siklus monitoring selesai. sleep 300 detik!"
+
+function check_service_status() {
+    echo "Memeriksa status log layanan ${SERVICES[*]}..."
+
+    while true; do
+        all_services_ready=true
+
+        for service in "${SERVICES[@]}"; do
+            # Ambil log terbaru dari layanan dengan filter pesan tertentu
+            last_log=$(journalctl -u "$service" -n 5 --no-pager | grep "$EXPECTED_STATUS")
+
+            if [[ -z "$last_log" ]]; then
+                all_services_ready=false
+                break
+            fi
+        done
+
+        if $all_services_ready; then
+            echo "Semua layanan siap. Eksekusi vtrip dimulai..."
+
 function send_log() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
@@ -111,6 +133,10 @@ ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{pr
 status=0
 
 # Loop through each user
+echo "Memulai proses monitoring TROJAN."
+truncate -s 0 /var/log/xray/access.log
+echo "Persiapan, sleep 30 detik!"
+sleep 30
 for akun in "${data[@]}"; do
     echo -n > /tmp/iptrojanx.txt
     for ip in "${ip_data[@]}"; do
@@ -220,3 +246,10 @@ fi
 rm -rf /tmp/iptrojanx.txt
 echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300
+
+            break
+        fi
+    done
+}
+
+check_service_status
