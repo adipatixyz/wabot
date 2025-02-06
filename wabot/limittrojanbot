@@ -248,6 +248,8 @@ if [[ "$status" -eq 1 ]]; then
     systemctl restart xray > /dev/null 2>&1
 fi
 rm -rf /tmp/iptrojanx.txt
+echo "Start vmip"
+sleep 5
 clear
 echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300
