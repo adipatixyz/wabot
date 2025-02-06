@@ -1,15 +1,15 @@
 #!/bin/bash
 
 function send_log() {
-    CHATID=$(cat /root/telebotvpn/idteleowner)
-    KEY=$(cat /root/telebotvpn/tokentelebot)
-    domain=$(cat /etc/xray/domain)
-    TIME="10"
-    URL="https://api.telegram.org/bot$KEY/sendMessage"
+CHATID=$(cat /root/telebotvpn/idteleowner)
+KEY=$(cat /root/telebotvpn/tokentelebot)
+domain=$(cat /etc/xray/domain)
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
 
-    TEXT="
+TEXT="
 ───────────────────────
-🚫  Notifikasi Warning Server
+🚫 Notifikasi Warning Server
 ───────────────────────
 <code>RAM  :</code> <code>$1%</code>
 <code>Disk :</code> <code>$2%</code>
@@ -17,7 +17,7 @@ function send_log() {
 ───────────────────────
 $3
 ───────────────────────"
-    curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 # Mengambil informasi penggunaan CPU, RAM, dan Disk
