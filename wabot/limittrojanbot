@@ -1,8 +1,11 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-SERVICES=("vlip" "vmip")
-EXPECTED_STATUS="Siklus monitoring selesai. sleep 300 detik!"
+echo "Start vmip"
+sleep 60
+
+SERVICES=("vmip")
+EXPECTED_STATUS="Start vtrip"
 
 function check_service_status() {
     echo "Memeriksa status log layanan ${SERVICES[*]}..."

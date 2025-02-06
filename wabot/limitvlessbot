@@ -1,8 +1,8 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-SERVICES=("vmip" "vtrip")
-EXPECTED_STATUS="Siklus monitoring selesai. sleep 300 detik!"
+SERVICES=("vlip")
+EXPECTED_STATUS="Start vlip"
 
 function check_service_status() {
     echo "Memeriksa status log layanan ${SERVICES[*]}..."
@@ -244,6 +244,7 @@ if [[ "$status" -eq 1 ]]; then
 fi
 rm -rf /tmp/ipvlessx.txt
 echo "Siklus monitoring selesai. sleep 300 detik!"
+echo "Start vtrip"
 sleep 300
 
             break
