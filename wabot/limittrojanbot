@@ -3,6 +3,7 @@
 
 echo "Start vmip"
 sleep 30
+clear
 
 SERVICES=("vlip")
 EXPECTED_STATUS="Start vtrip"
@@ -247,6 +248,7 @@ if [[ "$status" -eq 1 ]]; then
     systemctl restart xray > /dev/null 2>&1
 fi
 rm -rf /tmp/iptrojanx.txt
+clear
 echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300
 
