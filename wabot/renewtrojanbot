@@ -19,33 +19,20 @@ if ! grep -qiw "$user" /etc/xray/config.json; then
 fi
 
 exp=$(grep -wE "^#! $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-echo "0" > "/etc/limit/trojan/${user}"
+
+if (( masaaktif >= 10 )); then
+    echo "0" > "/etc/limit/trojan/${user}"
+fi
+
 now=$(date +%Y-%m-%d)
 d1=$(date -d "$exp" +%s)
 d2=$(date -d "$now" +%s)
 exp2=$(( (d1 - d2) / 86400 ))
 exp3=$(($exp2 + $masaaktif))
 exp4=`date -d "$exp3 days" +"%Y-%m-%d"`
-
-exp=$(grep -wE "^#! $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
-uuid=$(grep -w "^#! $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sort | uniq)
-uuid1=$(grep -w "^#! $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sed 's/LOCKED//g' | sort | uniq)
-uuid2=$(grep -w "^#! $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
-
-if [[ "$uuid2" == "LOCKED" ]]; then
-sed -i "/^#! $user $exp/,/^},{/d" /etc/xray/config.json
-sed -i "/^### $user/d" /etc/trojan/.trojan.db
-
-sed -i '/#trojanws$/a\#! '"$user $exp4"'\
-},{"password": "'""$uuid1""'","email" : "'""$user""'"' /etc/xray/config.json
-sed -i '/#trojangrpc$/a\#! '"$user $exp4"'\
-},{"password": "'""$uuid1""'","email" : "'""$user""'"' /etc/xray/config.json
-systemctl restart xray > /dev/null 2>&1   
-else
 sed -i "/#! $user/c\#! $user $exp4" /etc/xray/config.json
 sed -i "/#! $user/c\#! $user $exp4" /etc/trojan/.trojan.db
 systemctl restart xray > /dev/null 2>&1
-fi
 
 TEXT="
 ──────────────────────
