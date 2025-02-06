@@ -4,7 +4,7 @@
 echo "Start vmip"
 sleep 60
 
-SERVICES=("vmip")
+SERVICES=("vlip")
 EXPECTED_STATUS="Start vtrip"
 
 function check_service_status() {

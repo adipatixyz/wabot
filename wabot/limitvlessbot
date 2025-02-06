@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://t.me/gemilangkinasih
 
-SERVICES=("vlip")
+SERVICES=("vmip")
 EXPECTED_STATUS="Start vlip"
 
 function check_service_status() {
