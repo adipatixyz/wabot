@@ -135,7 +135,7 @@ status=0
 # Loop through each user
 echo "Memulai proses monitoring VMESS."
 truncate -s 0 /var/log/xray/access.log
-echo "Persiapan, sleep 30 detik!"
+echo "Persiapan, sleep 60 detik!"
 sleep 60
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvmessx.txt
