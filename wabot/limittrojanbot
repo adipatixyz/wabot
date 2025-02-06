@@ -13,7 +13,8 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
+# CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
@@ -30,7 +31,8 @@ Notif "$jumx"X Multilogin: 3X Autolock
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function send_logx() {
@@ -45,7 +47,8 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
+# CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
@@ -62,7 +65,8 @@ Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function send_logxx() {
@@ -77,13 +81,14 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
+# CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VLESS</b>
+🚫 <b>Notifikasi Multilogin TROJAN</b>
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
@@ -94,7 +99,8 @@ Notif 4X Multilogin: Chat Admin
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 data=( `cat /etc/xray/config.json | grep '#!' | cut -d ' ' -f 2 | sort | uniq`)
@@ -105,7 +111,7 @@ ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{pr
 status=0
 
 # Loop through each user
-echo "Memulai proses monitoring TROJAN."
+echo "Memulai proses monitoring VMESS."
 truncate -s 0 /var/log/xray/access.log
 echo "Persiapan, sleep 30 detik!"
 sleep 30
@@ -113,10 +119,12 @@ for akun in "${data[@]}"; do
     echo -n > /tmp/iptrojanx.txt
     for ip in "${ip_data[@]}"; do
         # Extract the first two segments of the IP
-        ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
+        # ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
+        ip_prefiks="$ip"
 
         # Check if this IP belongs to the current user (only need to search through the preloaded log data)
-        jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
+        # jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
+        jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | sort | uniq)
         if [[ "$jum" == "$ip_prefiks" ]]; then
             echo "$jum" >> /tmp/iptrojanx.txt
         fi
