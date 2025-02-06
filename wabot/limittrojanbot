@@ -111,7 +111,7 @@ ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{pr
 status=0
 
 # Loop through each user
-echo "Memulai proses monitoring VMESS."
+echo "Memulai proses monitoring TROJAN."
 truncate -s 0 /var/log/xray/access.log
 echo "Persiapan, sleep 30 detik!"
 sleep 30
