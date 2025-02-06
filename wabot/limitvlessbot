@@ -136,7 +136,7 @@ status=0
 echo "Memulai proses monitoring VLESS."
 truncate -s 0 /var/log/xray/access.log
 echo "Persiapan, sleep 30 detik!"
-sleep 30
+sleep 60
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvlessx.txt
     for ip in "${ip_data[@]}"; do
