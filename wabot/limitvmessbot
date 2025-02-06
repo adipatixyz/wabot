@@ -245,6 +245,7 @@ fi
 rm -rf /tmp/ipvmessx.txt
 echo "Start vlip"
 sleep 5
+clear
 echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300
 
