@@ -243,8 +243,9 @@ if [[ "$status" -eq 1 ]]; then
     systemctl restart xray > /dev/null 2>&1
 fi
 rm -rf /tmp/ipvlessx.txt
-echo "Siklus monitoring selesai. sleep 300 detik!"
 echo "Start vtrip"
+sleep 5
+echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300
 
             break

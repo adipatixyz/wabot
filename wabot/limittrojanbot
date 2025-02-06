@@ -2,7 +2,7 @@
 # https://t.me/gemilangkinasih
 
 echo "Start vmip"
-sleep 60
+sleep 30
 
 SERVICES=("vlip")
 EXPECTED_STATUS="Start vtrip"
