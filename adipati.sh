@@ -98,29 +98,29 @@ dos2unix /usr/bin/keamanan
 # systemctl restart dropbear
 # chmod +x /usr/sbin/dropbear
 
-cat > /etc/systemd/system/xray.service <<-END
-[Unit]
-Description=Xray Service
-Documentation=https://t.me/gemilangkinasih
-After=network.target nss-lookup.target
+# cat > /etc/systemd/system/xray.service <<-END
+# [Unit]
+# Description=Xray Service
+# Documentation=https://t.me/gemilangkinasih
+# After=network.target nss-lookup.target
 
-[Service]
-User=www-data
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-NoNewPrivileges=true
-ExecStart=/usr/local/bin/xray run -config /etc/xray/config.json
-Restart=on-failure
-RestartPreventExitStatus=23
-LimitNPROC=10000
-LimitNOFILE=1000000
+# [Service]
+# User=www-data
+# CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+# AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+# NoNewPrivileges=true
+# ExecStart=/usr/local/bin/xray run -config /etc/xray/config.json
+# Restart=on-failure
+# RestartPreventExitStatus=23
+# LimitNPROC=10000
+# LimitNOFILE=1000000
 
-[Install]
-WantedBy=multi-user.target
-END
+# [Install]
+# WantedBy=multi-user.target
+# END
 
 systemctl daemon-reload
-systemctl restart xray
+# systemctl restart xray
 systemctl restart vsip
 systemctl restart vmip
 systemctl restart vlip
