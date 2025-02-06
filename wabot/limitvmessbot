@@ -111,29 +111,6 @@ ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{pr
 status=0
 
 # Loop through each user
-echo "Memulai proses monitoring VMESS."
-truncate -s 0 /var/log/xray/access.log
-echo "Persiapan, sleep 30 detik!"
-sleep 30
-for akun in "${data[@]}"; do
-    echo -n > /tmp/ipvmessx.txt
-    for ip in "${ip_data[@]}"; do
-        # Extract the first two segments of the IP
-        # ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
-        ip_prefiks="$ip"
-
-        # Check if this IP belongs to the current user (only need to search through the preloaded log data)
-        # jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
-        jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | sort | uniq)
-        if [[ "$jum" == "$ip_prefiks" ]]; then
-            echo "$jum" >> /tmp/ipvmessx.txt
-        fi
-    done
-# Loop through each user
-echo "Memulai proses monitoring VMESS."
-truncate -s 0 /var/log/xray/access.log
-echo "Persiapan, sleep 30 detik!"
-sleep 30
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvmessx.txt
     for ip in "${ip_data[@]}"; do
