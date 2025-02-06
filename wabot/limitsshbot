@@ -173,7 +173,7 @@ while true; do
     do
         if [ -e "/etc/kyt/limit/ssh/ip/${username[$i]}" ]; then
             iplimit=$(cat /etc/kyt/limit/ssh/ip/${username[$i]})
-            MAX=$((iplimit + 1))
+            MAX=$((iplimit * 2))
         else
             MAX=2
             echo "2" > /etc/kyt/limit/ssh/ip/${username[$i]}
@@ -190,7 +190,7 @@ while true; do
         continue
         fi
 
-        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX - 1))] ${username[$i]}"
+        echo "Memproses User : [Login: ${jumlah[$i]}, Limit: $((MAX / 2))] ${username[$i]}"
         if [ ${jumlah[$i]} -gt $MAX ]; then
 
             echo "${username[$i]}" >> /tmp/lockipssh.txt
@@ -200,7 +200,7 @@ while true; do
             echo "Lock ${username[$i]} 4X Multilogin."
             passwd -l ${username[$i]};
             sed -i "/${username[$i]}/d" /tmp/lockipssh.txt
-            send_logxx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            send_logxx "${username[$i]}" "${jumlah[$i]}" "$((MAX / 2))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -224,7 +224,7 @@ while true; do
             echo "User ${username[$i]} melebihi batas login, unlock 15 menit."
             echo "unlocklimitip ssh ${username[$i]}" | at now + 15 minutes &> /dev/null
             passwd -l ${username[$i]};
-            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))"
+            send_logx "${username[$i]}" "${jumlah[$i]}" "$((MAX / 2))"
             echo "Notifikasi terkirim ke telegram."
 
             if [ ${jumlah[$i]} -gt 5 ]; then
@@ -245,7 +245,7 @@ while true; do
 
             echo "User ${username[$i]} melebihi batas login, send notif!"
             jumx=$(grep -c "${username[$i]}" /tmp/lockipssh.txt)
-            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX - 1))" "$jumx"
+            send_log "${username[$i]}" "${jumlah[$i]}" "$((MAX / 2))" "$jumx"
 
             if [ ${jumlah[$i]} -gt 5 ]; then
             truncate -s 0 /var/log/auth.log

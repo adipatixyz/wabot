@@ -17,6 +17,13 @@ if ! grep -qiw "$User" /etc/passwd; then
     echo -e "Username tidak ada."
     exit 0
 fi
+
+STATUS=$(passwd -S "$User" | awk '{print $2}')
+if [ "$STATUS" == "L" ]; then
+echo -e "Username locked."
+exit 0 
+fi
+
 current_exp=$(chage -l $User | grep "Account expires" | awk -F": " '{print $2}')
 formatted_date=$(date -d "$current_exp" +"%Y-%m-%d")
 userdel $User > /dev/null 2>&1

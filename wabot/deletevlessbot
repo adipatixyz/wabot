@@ -19,7 +19,13 @@ fi
 
 exp=$(grep -wE "^#& $user" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
 uuid=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sort | uniq)
+uuid1=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/LOCKED//g' | sort | uniq)
+uuid2=$(grep -w "^#& $user $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"id":/ {print $4}' | sed 's/.*\(LOCKED\)/\1/' | sort | uniq)
 
+if [[ "$uuid2" == "LOCKED" ]]; then
+echo -e "Username locked."
+exit 0
+else
 sed -i "/^#& $user $exp/,/^},{/d" /etc/xray/config.json
 sed -i "/^#& $user/d" /etc/vless/.vless.db
 rm -rf /etc/vless/$user
@@ -27,6 +33,7 @@ rm -rf /etc/kyt/limit/vless/ip/$user
 rm -r /var/www/html/vless-Trial-"$user".txt > /dev/null 2>&1
 rm -r /var/www/html/vless-"$user".txt > /dev/null 2>&1
 systemctl restart xray > /dev/null 2>&1
+fi
 
 TEXT="
 ──────────────────────

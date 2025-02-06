@@ -23,14 +23,14 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VMESS</b>
+🚫 <b>Notifikasi Limit Quota VMESS</b>
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$user</code>
 <code>Login :</code> <code>$total</code>
 <code>Limit :</code> <code>$total2</code>
 ────────────────────── 
-Buy Add Quota / Extend To Unlock
+Limit Quota Tercapai: Chat Admin
 ────────────────────── "
 
 # Kirim pesan ke Telegram
