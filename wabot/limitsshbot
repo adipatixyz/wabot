@@ -20,7 +20,7 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin SSHWS</b>
+🚫 Notifikasi Multilogin SSHWS
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$1</code>
@@ -54,7 +54,7 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin SSHWS</b>
+🚫 Notifikasi Multilogin SSHWS
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$1</code>
@@ -88,7 +88,7 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin SSHWS</b>
+🚫 Notifikasi Multilogin SSHWS
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$1</code>
