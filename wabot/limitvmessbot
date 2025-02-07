@@ -3,27 +3,13 @@
 
 SERVICES=("vtrip")
 EXPECTED_STATUS="Start vmip"
-TIMEOUT=1800  # 30 menit dalam detik
+
+# Dapatkan waktu saat script dijalankan
 START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
 
 echo "Cek status ${SERVICES[*]} sejak $START_TIME"
-end_time=$((SECONDS + TIMEOUT))
-
-while true; do
-    # Periksa apakah waktu timeout telah tercapai
-    if (( SECONDS >= end_time )); then
-        # Reset timer dan waktu pemantauan
-        START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
-        end_time=$((SECONDS + TIMEOUT))
-        echo "Cek ulang status ${SERVICES[*]} sejak $START_TIME"
-        echo "Status timeout tanpa log ${EXPECTED_STATUS}. Restart service"
-        systemctl restart "${SERVICES[0]}"
-    fi
-
-    # Baca log baru setelah waktu pemantauan
-    last_log=$(journalctl -u "${SERVICES[0]}" --since "$START_TIME" -n 1 --no-pager)
-
-    if [[ "$last_log" == *"$EXPECTED_STATUS"* ]]; then
+journalctl -u "${SERVICES[0]}" -f --since "$START_TIME" --no-pager | while read -r line; do
+    if [[ "$line" == *"$EXPECTED_STATUS"* ]]; then
         echo "Log ${EXPECTED_STATUS} terdeteksi. Eksekusi vmip dimulai"
 
 function send_log() {
@@ -253,5 +239,4 @@ sleep 300
 
         break
     fi
-    sleep 5
 done
