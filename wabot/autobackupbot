@@ -11,7 +11,7 @@ CYAN='\033[0;36m'
 LIGHT='\033[0;37m'
 
 CHATID=$(cat /root/telebotvpn/idteleowner)
-KEY=$(cat /root/telebotvpn/tokentelebot)
+KEY="8003246654:AAHVXaI4RigiZdI2un5PT20h2_YnkZFWjmk"
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 
