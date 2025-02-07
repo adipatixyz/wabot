@@ -31,7 +31,7 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VMESS</b>
+🚫 Notifikasi Multilogin VMESS
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
@@ -65,7 +65,7 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VMESS</b>
+🚫 Notifikasi Multilogin VMESS
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
@@ -99,7 +99,7 @@ TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 <b>Notifikasi Multilogin VMESS</b>
+🚫 Notifikasi Multilogin VMESS
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
