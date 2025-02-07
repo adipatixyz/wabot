@@ -4,24 +4,13 @@
 SERVICES=("vtrip")
 EXPECTED_STATUS="Start vmip"
 
-function check_service_status() {
-    echo "Memeriksa status log layanan ${SERVICES[*]}..."
+# Dapatkan waktu saat script dijalankan
+START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
 
-    while true; do
-        all_services_ready=true
-
-        for service in "${SERVICES[@]}"; do
-            # Ambil log terbaru dari layanan dengan filter pesan tertentu
-            last_log=$(journalctl -u "$service" -n 5 --no-pager | grep "$EXPECTED_STATUS")
-
-            if [[ -z "$last_log" ]]; then
-                all_services_ready=false
-                break
-            fi
-        done
-
-        if $all_services_ready; then
-            echo "Semua layanan siap. Eksekusi vmip dimulai..."
+echo "Memeriksa status log layanan ${SERVICES[*]} sejak $START_TIME"
+journalctl -u "${SERVICES[0]}" -f --since "$START_TIME" --no-pager | while read -r line; do
+    if [[ "$line" == *"$EXPECTED_STATUS"* ]]; then
+        echo "Log ${EXPECTED_STATUS} terdeteksi. Eksekusi vmip dimulai"
 
 function send_log() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
@@ -244,14 +233,10 @@ if [[ "$status" -eq 1 ]]; then
 fi
 rm -rf /tmp/ipvmessx.txt
 echo "Start vlip"
-sleep 5
-clear
+sleep 10
 echo "Siklus monitoring selesai. sleep 300 detik!"
 sleep 300
 
-            break
-        fi
-    done
-}
-
-check_service_status
+        break
+    fi
+done
