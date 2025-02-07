@@ -24,8 +24,8 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
-# CHATID=$(cat /root/telebotvpn/idtelegrub)
+# CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
@@ -58,8 +58,8 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
-# CHATID=$(cat /root/telebotvpn/idtelegrub)
+# CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
@@ -92,8 +92,8 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-CHATID="@tokovpngrub"
-# CHATID=$(cat /root/telebotvpn/idtelegrub)
+# CHATID="@tokovpngrub"
+CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
