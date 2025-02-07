@@ -12,13 +12,12 @@ end_time=$((SECONDS + TIMEOUT))
 while true; do
     # Periksa apakah waktu timeout telah tercapai
     if (( SECONDS >= end_time )); then
-        echo "Timeout tanpa log ${EXPECTED_STATUS}. Restart service"
-        systemctl restart "${SERVICES[0]}"
-        sleep 2
         # Reset timer dan waktu pemantauan
         START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
         end_time=$((SECONDS + TIMEOUT))
         echo "Cek ulang status ${SERVICES[*]} sejak $START_TIME"
+        echo "Status timeout tanpa log ${EXPECTED_STATUS}. Restart service"
+        systemctl restart "${SERVICES[0]}"
     fi
 
     # Baca log baru setelah waktu pemantauan
@@ -254,5 +253,5 @@ sleep 300
 
         break
     fi
-    sleep 3  # Interval pengecekan log
+    sleep 5
 done
