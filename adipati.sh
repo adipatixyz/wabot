@@ -161,7 +161,7 @@ systemctl restart cron
 
 tokentelebot="7614690880:AAGHBTSbwczDfhQmn8fb6dlqvyWoXU_uH6M"
 idteleowner="6348824977"
-idtelegrub="-1002262419514"
+idtelegrub="@tokovpnserver"
 
 # echo -e ""
 # echo -e "▀▀█▀▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▒█▀▀▀█ ▀▀█▀▀\033[0m" 
