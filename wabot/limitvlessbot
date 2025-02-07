@@ -42,8 +42,8 @@ Notif "$jumx"X Multilogin: 3X Autolock
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
-# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function send_logx() {
@@ -76,8 +76,8 @@ Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
-# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function send_logxx() {
@@ -110,8 +110,8 @@ Notif 4X Multilogin: Chat Admin
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
-# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
+curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 data=( `cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
