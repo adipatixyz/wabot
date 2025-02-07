@@ -159,9 +159,9 @@ END
 
 systemctl restart cron
 
-tokentelebot="7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU"
+tokentelebot="7614690880:AAGHBTSbwczDfhQmn8fb6dlqvyWoXU_uH6M"
 idteleowner="6348824977"
-idtelegrub="6348824977"
+idtelegrub="-1002262419514"
 
 # echo -e ""
 # echo -e "▀▀█▀▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▒█▀▀▀█ ▀▀█▀▀\033[0m" 
