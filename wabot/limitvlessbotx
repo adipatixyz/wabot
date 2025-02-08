@@ -16,14 +16,13 @@ fi
 echo "$DOMAIN_PART $FLAG"
 
 # Konfigurasi informasi Telegram
-# CHATID="@tokovpngrub"
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 TEXT="
 ──────────────────────
-🚫 Notifikasi Limit Quota VLESS
+🚫 <b>Notifikasi Limit Quota VLESS</b>
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$user</code>
