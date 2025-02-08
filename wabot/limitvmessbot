@@ -165,7 +165,7 @@ for akun in "${data[@]}"; do
             sleep 60
             jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq | wc -l)
             if [ "$jum3" -gt "$MAX" ]; then
-            echo "Mulog $akun valid, Login [$jum3]"
+            echo "Mulog $akun valid, Login [$jum3 IP]"
             if [[ -z $exp || -z $uuid ]]; then
                 continue  # Skip if exp or uuid is empty
             fi
@@ -228,7 +228,7 @@ jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
 send_log "$akun" "$jum2" "$((MAX / 2))" "$jumx"
         fi
       fi
-      echo "Mulog $akun tidak valid, Login [$jum3]"
+      echo "Mulog $akun tidak valid, Login [$jum3 IP]"
     fi 
     rm -rf /tmp/ipvmessx.txt
     sleep 3
