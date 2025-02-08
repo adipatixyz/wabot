@@ -27,7 +27,6 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-# CHATID="@tokovpngrub"
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
@@ -61,7 +60,6 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-# CHATID="@tokovpngrub"
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
@@ -95,7 +93,6 @@ else
 fi
 
 # Konfigurasi informasi Telegram
-# CHATID="@tokovpngrub"
 CHATID=$(cat /root/telebotvpn/idtelegrub)
 KEY=$(cat /root/telebotvpn/tokentelebot)
 TIMEOUT="10"
@@ -164,11 +161,18 @@ for akun in "${data[@]}"; do
         if [ "$jum2" -gt "$MAX" ]; then
             exp=$(grep -w "^#! $akun" "/etc/xray/config.json" | cut -d ' ' -f 3 | sort | uniq)
             uuid=$(grep -w "^#! $akun $exp" -A 1 "/etc/xray/config.json" | awk -F'"' '/"password":/ {print $4}' | sort | uniq)
+
+            echo "Mulog terdeteksi, memulai proses monitoring ke-2 TROJAN."
+            truncate -s 0 /var/log/xray/access.log
+            echo "Persiapan, sleep 60 detik!"
+            sleep 60
+            jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq | wc -l)
+            if [ "$jum3" -gt "$MAX" ]; then
+            echo "Mulog $akun valid, Login [$jum3]"
             if [[ -z $exp || -z $uuid ]]; then
                 continue  # Skip if exp or uuid is empty
             fi
 
-            status=1
             echo "$akun" >> /tmp/lockipxray.txt
 
             if [[ $(grep -c "$akun" /tmp/lockipxray.txt) -gt 3 ]]; then
@@ -226,6 +230,8 @@ truncate -s 0 /var/log/xray/access.log
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
 send_log "$akun" "$jum2" "$((MAX / 2))" "$jumx"
         fi
+      fi
+      echo "Mulog $akun tidak valid, Login [$jum3]"
     fi 
     rm -rf /tmp/iptrojanx.txt
     sleep 3
