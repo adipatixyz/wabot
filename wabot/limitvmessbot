@@ -227,8 +227,9 @@ truncate -s 0 /var/log/xray/access.log
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
 send_log "$akun" "$jum2" "$((MAX / 2))" "$jumx"
         fi
-      fi
+      else
       echo "Mulog $akun tidak valid, Login [$jum3 IP]"
+      fi
     fi 
     rm -rf /tmp/ipvmessx.txt
     sleep 3
