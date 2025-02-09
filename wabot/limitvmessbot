@@ -200,9 +200,9 @@ sed -i '/#vmess$/a\### '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
 sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
-truncate -s 0 /var/log/xray/access.log
-sed -i "/$akun/d" /tmp/lockipxray.txt
 send_logxx
+sed -i "/$akun/d" /tmp/lockipxray.txt
+truncate -s 0 /var/log/xray/access.log
                 continue
             fi
 
@@ -226,15 +226,15 @@ sed -i '/#vmess$/a\### '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
 sed -i '/#vmessgrpc$/a\### '"$akun $exp"'\
 },{"id": "'""$uuid"LOCKED"'","alterId": '"0"',"email": "'""$akun""'"' /etc/xray/config.json
-truncate -s 0 /var/log/xray/access.log
 send_logx
+truncate -s 0 /var/log/xray/access.log
                 continue
             fi
 
 echo "User $akun melebihi batas login, send notif!"
-truncate -s 0 /var/log/xray/access.log
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
 send_log
+truncate -s 0 /var/log/xray/access.log
         else
         echo "Mulog $akun tidak valid, Login [$jum3 IP]"
         fi
