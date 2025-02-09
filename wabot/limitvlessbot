@@ -15,7 +15,7 @@ journalctl -u "${SERVICES[0]}" -f --since "$START_TIME" --no-pager | while read 
 function send_log() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
-IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq |  awk '{print NR". "$0}')
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -44,14 +44,13 @@ Notif "$jumx"X Multilogin: 3X Autolock
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function send_logx() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
-IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq |  awk '{print NR". "$0}')
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -80,14 +79,13 @@ Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
 function send_logxx() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
-IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq |  awk '{print NR". "$0}')
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -116,11 +114,10 @@ Notif 4X Multilogin: Chat Admin
 ────────────────────── "
 
 # Kirim pesan ke Telegram
-# curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=HTML&reply_to_message_id=2485" "$URL" >/dev/null
 curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 }
 
-data=( `cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
+data=(`cat /etc/xray/config.json | grep '#&' | cut -d ' ' -f 2 | sort | uniq`)
 
 # Read log data once and process it
 log_data=$(cat /var/log/xray/access.log | tail -n 500)
@@ -136,12 +133,10 @@ for akun in "${data[@]}"; do
     echo -n > /tmp/ipvlessx.txt
     for ip in "${ip_data[@]}"; do
         # Extract the first two segments of the IP
-        # ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
-        ip_prefiks="$ip"
+        ip_prefiks=$(echo "$ip" | cut -d "." -f1,2)
 
         # Check if this IP belongs to the current user (only need to search through the preloaded log data)
-        # jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
-        jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | sort | uniq)
+        jum=$(echo "$log_data" | grep -w "$akun" | grep -w "$ip_prefiks" | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ":" -f1 | cut -d "." -f1,2 | sort | uniq)
         if [[ "$jum" == "$ip_prefiks" ]]; then
             echo "$jum" >> /tmp/ipvlessx.txt
         fi
@@ -170,9 +165,9 @@ for akun in "${data[@]}"; do
 
             echo "Mulog terdeteksi, memulai proses monitoring ke-2 VLESS."
             truncate -s 0 /var/log/xray/access.log
-            echo "Persiapan, sleep 60 detik!"
-            sleep 60
-            jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq | wc -l)
+            echo "Persiapan, sleep 30 detik!"
+            sleep 30
+            jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++' | wc -l)
             if [ "$jum3" -gt "$MAX" ]; then
             echo "Mulog $akun valid, Login [$jum3 IP]"
             if [[ -z $exp || -z $uuid ]]; then
