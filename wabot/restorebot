@@ -1,0 +1,79 @@
+#!/bin/bash
+# https://t.me/gemilangkinasih
+
+CHATID=$(cat /root/telebotvpn/idteleowner)
+KEY=$(cat /root/telebotvpn/tokentelebot)
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+IP=$(cat /etc/xray/ipvps)
+domain=$(cat /etc/xray/domain)
+date=$(date +"%Y-%m-%d")
+
+function notif_restore() {
+sleep 2
+TEXT="
+──────────────────────
+Restore Vps Server Success
+──────────────────────
+<code>Subdomain vps :</code> <code>$domain</code>
+<code>IP Server vps :</code> <code>$IP</code>
+<code>Date Restoree :</code> <code>$date</code>
+────────────────────── "
+
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+}
+
+clear
+echo -e "▒█▀▀█ ▒█▀▀▀ ▒█▀▀▀█ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▀\033[0m" 
+echo -e "▒█▄▄▀ ▒█▀▀▀ ░▀▀▀▄▄ ░▒█░░ ▒█░░▒█ ▒█▄▄▀ ▒█▀▀▀\033[0m" 
+echo -e "▒█░▒█ ▒█▄▄▄ ▒█▄▄▄█ ░▒█░░ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▄\033[0m"
+echo -e "\e[33m───────────────────────────────────────────\033[0m"
+echo -e "Please Enter A Name Backup.zip"
+read -rp "Name File : " -e filezip
+echo -e "\e[33m───────────────────────────────────────────\033[0m"
+cd /root
+unzip $filezip
+rm -f backup.zip
+echo -e "Start Restore In Process"
+sleep 3
+mkdir -p /etc/xray/ > /dev/null 2>&1
+cd /root/backup/ > /dev/null 2>&1
+cp /root/backup/passwd /etc/
+cp /root/backup/group /etc/
+cp /root/backup/shadow /etc/
+cp /root/backup/gshadow /etc/
+cp -r /root/backup/limit/ssh/ip/* /etc/kyt/limit/ssh/ip > /dev/null 2>&1
+cp -r /root/backup/limit/vmess/ip/* /etc/kyt/limit/vmess/ip > /dev/null 2>&1
+cp -r /root/backup/limit/vless/ip/* /etc/kyt/limit/vless/ip > /dev/null 2>&1
+cp -r /root/backup/limit/trojan/ip/* /etc/kyt/limit/trojan/ip > /dev/null 2>&1
+cp -r /root/backup/quota/vmess/* /etc/vmess/ > /dev/null 2>&1
+cp -r /root/backup/quota/vless/* /etc/vless/ > /dev/null 2>&1
+cp -r /root/backup/quota/trojan/* /etc/trojan/ > /dev/null 2>&1
+cp -r /root/backup/quotax/vmess/* /etc/limit/vmess/ > /dev/null 2>&1
+cp -r /root/backup/quotax/vless/* /etc/limit/vless/ > /dev/null 2>&1
+cp -r /root/backup/quotax/trojan/* /etc/limit/trojan/ > /dev/null 2>&1
+cp /root/backup/xray/* /etc/xray/
+cp /root/backup/html/* /var/www/html/ > /dev/null 2>&1
+cp /root/backup/.ssh.db /etc/ssh/ > /dev/null 2>&1
+cp /root/backup/.vmess.db /etc/vmess/ > /dev/null 2>&1
+cp /root/backup/.vless.db /etc/vless/ > /dev/null 2>&1
+cp /root/backup/.trojan.db /etc/trojan/ > /dev/null 2>&1
+systemctl restart xray
+systemctl restart ssh
+
+notif_restore
+rm -r /root/backup
+rm -r /root/$filezip
+rm -r /root/backup.zip
+
+clear
+echo -e "\e[33m──────────────────────────────────────────\033[0m"
+echo -e "\E[40;1;37m        RESTORE VPS SERVER SUCCESS        \E[0m"
+echo -e "\e[33m──────────────────────────────────────────\033[0m"
+echo -e "Subdomain vps : $domain"
+echo -e "IP Server vps : $IP"
+echo -e "Date Restoree : $date"
+echo -e "\e[33m──────────────────────────────────────────\033[0m"
+echo -e ""
+read -n 1 -s -r -p "Press any key to back"
+menu

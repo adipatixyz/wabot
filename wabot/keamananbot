@@ -1,0 +1,73 @@
+#!/bin/bash
+
+function send_log() {
+CHATID=$(cat /root/telebotvpn/idteleowner)
+KEY=$(cat /root/telebotvpn/tokentelebot)
+domain=$(cat /etc/xray/domain)
+TIME="10"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+
+TEXT="
+───────────────────────
+🚫 Notifikasi Warning Server
+───────────────────────
+<code>RAM  :</code> <code>$1%</code>
+<code>Disk :</code> <code>$2%</code>
+<code>Host :</code> <code>$domain</code>
+───────────────────────
+$3
+───────────────────────"
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+}
+
+# Mengambil informasi penggunaan CPU, RAM, dan Disk
+ram_usage=$(free | awk '/Mem:/ {printf "%.0f", $3/$2 * 100}')
+disk_usage=$(df -h / | awk 'NR==2 {gsub("%", "", $5); print $5}')
+
+# Threshold untuk peringatan
+threshold=90
+
+# Mengecek status layanan Xray
+check_xray_status() {
+    systemctl is-active --quiet xray
+    echo $?
+}
+
+attempts=0
+
+while (( attempts < 3 )); do
+    if (( ram_usage >= threshold )); then
+        send_log "$ram_usage" "$disk_usage" "Warning : Penggunaan RAM Tinggi!"
+        echo "Warning : RAM usage is high ($ram_usage%)"
+        sleep 10
+        reboot
+    elif (( disk_usage >= threshold )); then
+        send_log "$ram_usage" "$disk_usage" "Warning : Penggunaan Disk Tinggi!"
+        echo "Warning : Disk usage is high ($disk_usage%)"
+        sleep 10
+        reboot
+    fi
+
+    if [[ $(check_xray_status) -ne 0 ]]; then
+        case $attempts in
+            0)
+                send_log "$ram_usage" "$disk_usage" "Xray Offline. Notif 1X : Warning"
+                ;;
+            1)
+                send_log "$ram_usage" "$disk_usage" "Xray Offline. Notif 2X : Restart"
+                systemctl restart xray
+                ;;
+            2)
+                send_log "$ram_usage" "$disk_usage" "Xray Offline. Notif 3X : Reboot"
+                reboot
+                ;;
+        esac
+        sleep $((attempts == 1 ? 30 : 10))
+        ((attempts++))
+    else
+        echo "SYSTEM OK: RAM=${ram_usage}%, DISK=${disk_usage}%, XRAY: ONLINE"
+        break
+    fi
+done
+
+sleep 30
