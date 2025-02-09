@@ -18,6 +18,7 @@ journalctl -u "${SERVICES[0]}" -f --since "$START_TIME" --no-pager | while read 
 function send_log() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq |  awk '{print NR". "$0}')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -37,8 +38,10 @@ TEXT="
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
-<code>Login :</code> <code>$jum2 IP</code>
+<code>Login :</code> <code>$jum3 IP</code>
 <code>Limit :</code> <code>$((MAX / 2)) IP</code>
+──────────────────────
+$IP_LIST
 ────────────────────── 
 Notif "$jumx"X Multilogin: 3X Autolock
 ────────────────────── "
@@ -51,6 +54,7 @@ curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&tex
 function send_logx() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq |  awk '{print NR". "$0}')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -70,9 +74,11 @@ TEXT="
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
-<code>Login :</code> <code>$jum2 IP</code>
+<code>Login :</code> <code>$jum3 IP</code>
 <code>Limit :</code> <code>$((MAX / 2)) IP</code>
-────────────────────── 
+──────────────────────
+$IP_LIST
+──────────────────────
 Notif 3X Multilogin: Lock 15 Menit
 ────────────────────── "
 
@@ -84,6 +90,7 @@ curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&tex
 function send_logxx() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq |  awk '{print NR". "$0}')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -103,8 +110,10 @@ TEXT="
 ──────────────────────
 <blockquote><code>SERVER $DOMAIN_PART $FLAG</code></blockquote>
 <code>User  :</code> <code>$akun</code>
-<code>Login :</code> <code>$jum2 IP</code>
+<code>Login :</code> <code>$jum3 IP</code>
 <code>Limit :</code> <code>$((MAX / 2)) IP</code>
+──────────────────────
+$IP_LIST
 ────────────────────── 
 Notif 4X Multilogin: Chat Admin
 ────────────────────── "
@@ -124,8 +133,8 @@ status=0
 # Loop through each user
 echo "Memulai proses monitoring TROJAN."
 truncate -s 0 /var/log/xray/access.log
-echo "Persiapan, sleep 60 detik!"
-sleep 60
+echo "Persiapan, sleep 30 detik!"
+sleep 30
 for akun in "${data[@]}"; do
     echo -n > /tmp/iptrojanx.txt
     for ip in "${ip_data[@]}"; do
@@ -164,8 +173,8 @@ for akun in "${data[@]}"; do
 
             echo "Mulog terdeteksi, memulai proses monitoring ke-2 TROJAN."
             truncate -s 0 /var/log/xray/access.log
-            echo "Persiapan, sleep 60 detik!"
-            sleep 60
+            echo "Persiapan, sleep 30 detik!"
+            sleep 30
             jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | uniq | wc -l)
             if [ "$jum3" -gt "$MAX" ]; then
             echo "Mulog $akun valid, Login [$jum3 IP]"
@@ -196,7 +205,7 @@ sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
 },{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
 sed -i "/$akun/d" /tmp/lockipxray.txt
-send_logx "$akun" "$jum2" "$((MAX / 2))"
+send_logxx
                 continue
             fi
 
@@ -221,14 +230,14 @@ sed -i '/#trojanws$/a\#! '"$akun $exp"'\
 sed -i '/#trojangrpc$/a\#! '"$akun $exp"'\
 },{"password": "'""$uuid"LOCKED"'","email" : "'""$akun""'"' /etc/xray/config.json
 truncate -s 0 /var/log/xray/access.log
-send_logx "$akun" "$jum2" "$((MAX / 2))"
+send_logx
                 continue
             fi
 
 echo "User $akun melebihi batas login, send notif!"
 truncate -s 0 /var/log/xray/access.log
 jumx=$(grep -c "$akun" /tmp/lockipxray.txt)
-send_log "$akun" "$jum2" "$((MAX / 2))" "$jumx"
+send_log
         else
         echo "Mulog $akun tidak valid, Login [$jum3 IP]"
         fi
