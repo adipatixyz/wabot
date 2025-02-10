@@ -119,16 +119,17 @@ curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&tex
 
 data=(`cat /etc/xray/config.json | grep '###' | cut -d ' ' -f 2 | sort | uniq`)
 
-# Read log data once and process it
-log_data=$(cat /var/log/xray/access.log | tail -n 500)
-ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq))
-status=0
-
 # Loop through each user
 echo "Memulai proses monitoring VMESS."
 truncate -s 0 /var/log/xray/access.log
 echo "Persiapan, sleep 60 detik!"
 sleep 60
+
+# Read log data once and process it
+log_data=$(cat /var/log/xray/access.log | tail -n 500)
+ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq))
+status=0
+
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvmessx.txt
     for ip in "${ip_data[@]}"; do
