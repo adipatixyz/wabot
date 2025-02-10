@@ -127,8 +127,8 @@ status=0
 # Loop through each user
 echo "Memulai proses monitoring VMESS."
 truncate -s 0 /var/log/xray/access.log
-echo "Persiapan, sleep 30 detik!"
-sleep 30
+echo "Persiapan, sleep 60 detik!"
+sleep 60
 for akun in "${data[@]}"; do
     echo -n > /tmp/ipvmessx.txt
     for ip in "${ip_data[@]}"; do
@@ -165,8 +165,8 @@ for akun in "${data[@]}"; do
 
             echo "Mulog terdeteksi, memulai proses monitoring ke-2 VMESS."
             truncate -s 0 /var/log/xray/access.log
-            echo "Persiapan, sleep 30 detik!"
-            sleep 30
+            echo "Persiapan, sleep 60 detik!"
+            sleep 60
             jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++' | wc -l)
             if [ "$jum3" -gt "$MAX" ]; then
             echo "Mulog $akun valid, Login [$jum3 IP]"
