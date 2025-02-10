@@ -18,7 +18,7 @@ journalctl -u "${SERVICES[0]}" -f --since "$START_TIME" --no-pager | while read 
 function send_log() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
-IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++')
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++' |  awk '{print NR". "$0}')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -53,7 +53,7 @@ curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&tex
 function send_logx() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
-IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++')
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++' |  awk '{print NR". "$0}')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -88,7 +88,7 @@ curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&tex
 function send_logxx() {
 DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain | tr '[:lower:]' '[:upper:]')
 FULL_DOMAIN=$(cat /etc/xray/domain)
-IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++')
+IP_LIST=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++' |  awk '{print NR". "$0}')
 
 # Cek apakah DOMAIN mengandung "SG"
 if [[ "$DOMAIN_PART" == *"SG"* ]]; then
@@ -113,7 +113,7 @@ TEXT="
 ──────────────────────
 $IP_LIST
 ────────────────────── 
-Notif 4X Multilogin: Chat Admin
+Notif 4X Multilogin: Locked!
 ────────────────────── "
 
 # Kirim pesan ke Telegram
@@ -122,16 +122,17 @@ curl -s --max-time "$TIMEOUT" -d "chat_id=$CHATID&disable_web_page_preview=1&tex
 
 data=(`cat /etc/xray/config.json | grep '#!' | cut -d ' ' -f 2 | sort | uniq`)
 
+# Loop through each user
+echo "Memulai proses monitoring TROJAN."
+truncate -s 0 /var/log/xray/access.log
+echo "Persiapan, sleep 60 detik!"
+sleep 60
+
 # Read log data once and process it
 log_data=$(cat /var/log/xray/access.log | tail -n 500)
 ip_data=($(echo "$log_data" | grep email | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | sed 's/\[.*//g' | cut -d: -f1 | sort | uniq))
 status=0
 
-# Loop through each user
-echo "Memulai proses monitoring TROJAN."
-truncate -s 0 /var/log/xray/access.log
-echo "Persiapan, sleep 30 detik!"
-sleep 30
 for akun in "${data[@]}"; do
     echo -n > /tmp/iptrojanx.txt
     for ip in "${ip_data[@]}"; do
@@ -168,8 +169,8 @@ for akun in "${data[@]}"; do
 
             echo "Mulog terdeteksi, memulai proses monitoring ke-2 TROJAN."
             truncate -s 0 /var/log/xray/access.log
-            echo "Persiapan, sleep 30 detik!"
-            sleep 30
+            echo "Persiapan, sleep 60 detik!"
+            sleep 60
             jum3=$(grep "$akun" /var/log/xray/access.log | grep "accepted" | awk -F "from " '{print $2}' | sed 's/tcp://g' | cut -d ':' -f1 | sort -u | awk -F '.' '!seen[$1"."$2]++' | wc -l)
             if [ "$jum3" -gt "$MAX" ]; then
             echo "Mulog $akun valid, Login [$jum3 IP]"

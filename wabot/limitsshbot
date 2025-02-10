@@ -92,7 +92,7 @@ TEXT="
 <code>Login :</code> <code>$2 IP</code>
 <code>Limit :</code> <code>$3 IP</code>
 ────────────────────── 
-Notif 4X Multilogin: Chat Admin
+Notif 4X Multilogin: Locked!
 ────────────────────── "
 
 # Kirim pesan ke Telegram
