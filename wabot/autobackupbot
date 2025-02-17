@@ -67,6 +67,9 @@ zip -r $IP-$date.zip backup > /dev/null 2>&1
 response=$(curl -s -X POST -F "files[]=@/root/$IP-$date.zip" -F "expiry=permanent" https://qu.ax/upload.php)
 url=$(echo "$response" | jq -r '.files[0].url')
 
+# response=$(curl -s -X POST -F "file=@/root/$IP-$date.zip" https://gmvpn.my.id/backup/upload.php)
+# url=$(echo "$response" | jq -r '.url')
+
 CHATID="$CHATID"
 KEY="$KEY"
 TIME="$TIME"
