@@ -141,6 +141,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 5 0 * * * root autobackupbot
 5 0 * * * root truncate -s 0 /tmp/lockipssh.txt
 5 0 * * * root truncate -s 0 /tmp/lockipxray.txt
+5 0 * * * root rm /var/log/*.gz
+5 0 * * * root rm /var/log/*.1
+5 0 * * * root apt clean
 END
 
 # cronjob jam 23:30
