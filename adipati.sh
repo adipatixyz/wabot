@@ -98,29 +98,7 @@ dos2unix /usr/bin/keamanan
 # systemctl restart dropbear
 # chmod +x /usr/sbin/dropbear
 
-# cat > /etc/systemd/system/xray.service <<-END
-# [Unit]
-# Description=Xray Service
-# Documentation=https://t.me/gemilangkinasih
-# After=network.target nss-lookup.target
-
-# [Service]
-# User=www-data
-# CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-# AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-# NoNewPrivileges=true
-# ExecStart=/usr/local/bin/xray run -config /etc/xray/config.json
-# Restart=on-failure
-# RestartPreventExitStatus=23
-# LimitNPROC=10000
-# LimitNOFILE=1000000
-
-# [Install]
-# WantedBy=multi-user.target
-# END
-
 systemctl daemon-reload
-# systemctl restart xray
 systemctl restart vsip
 systemctl restart vmip
 systemctl restart vlip
@@ -141,19 +119,16 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 5 0 * * * root autobackupbot
 5 0 * * * root truncate -s 0 /tmp/lockipssh.txt
 5 0 * * * root truncate -s 0 /tmp/lockipxray.txt
-5 0 * * * root rm /var/log/*.gz
-5 0 * * * root rm /var/log/*.1
-5 0 * * * root apt clean
 END
 
 # cronjob jam 23:30
-cat > /etc/cron.d/allxp <<-END
+cat > /etc/cron.d/xp <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 30 23 * * * root /usr/local/sbin/xp
 END
 	
-# cronjob jam 03:00
+# cronjob jam 05:00
 cat > /etc/cron.d/dailyreboot <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
@@ -162,9 +137,9 @@ END
 
 systemctl restart cron
 
-tokentelebot="7614690880:AAGHBTSbwczDfhQmn8fb6dlqvyWoXU_uH6M"
+tokentelebot="7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU"
 idteleowner="6348824977"
-idtelegrub="@tokovpnserver"
+idtelegrub="6348824977"
 
 # echo -e ""
 # echo -e "▀▀█▀▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▒█▀▀▀█ ▀▀█▀▀\033[0m" 
