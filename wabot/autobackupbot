@@ -15,10 +15,11 @@ KEY="8003246654:AAHVXaI4RigiZdI2un5PT20h2_YnkZFWjmk"
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 
-IP=$(curl -sS ipv4.icanhazip.com)
+IP=$(cat /etc/xray/ipvps)
 domain=$(cat /etc/xray/domain)
 date=$(date +"%d-%B-%Y")
 time=$(date +"%H:%M WIB")
+DOMAIN_PART=$(cut -d '.' -f1 /etc/xray/domain)
 
 clear
 echo "Mohon Menunggu, Proses Backup Sedang Berlangsung!"
@@ -62,9 +63,9 @@ sed -i '/^#&/d' /root/backup/.vmess.db > /dev/null 2>&1
 sed -i '/^#&/d' /root/backup/.vless.db > /dev/null 2>&1
 sed -i '/^#&/d' /root/backup/.trojan.db > /dev/null 2>&1
 cd /root
-zip -r $IP-$date.zip backup > /dev/null 2>&1
+zip -r $DOMAIN_PART.zip backup > /dev/null 2>&1
 
-response=$(curl -s -X POST -F "file=@/root/$IP-$date.zip" https://gmvpn.my.id/backup/upload.php)
+response=$(curl -s -X POST -F "file=@/root/$DOMAIN_PART.zip" https://gmvpn.my.id/backup/upload.php)
 url=$(echo "$response" | jq -r '.url')
 
 CHATID="$CHATID"
@@ -85,7 +86,7 @@ $url
 ────────────────────── "
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
 rm -r /root/backup
-rm -rf /root/$IP-$date.zip
+rm -rf /root/$DOMAIN_PART.zip
 
 clear
 echo -e "
