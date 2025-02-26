@@ -137,7 +137,7 @@ END
 
 systemctl restart cron
 
-tokentelebot="7688366921:AAEf0sLe3nwBLAC98Jks3hjnFaM1hfsAfuU"
+tokentelebot="7614690880:AAFXICde_ClEPMkuRZhoDJBVAoc0g43lkH4"
 idteleowner="6348824977"
 idtelegrub="@tokovpnserver"
 
