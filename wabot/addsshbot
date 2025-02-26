@@ -114,7 +114,8 @@ Status Create SSHWS Success
 ────────────────────── "
 
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-# echo "autobackupbot" | at now + 0 minutes &> /dev/null
+atq | awk '{print $1}' | while read job; do at -c "$job" | grep -q "autobackupbot" && atrm "$job"; done &> /dev/null
+echo "autobackupbot" | at now + 5 minutes &> /dev/null
 
 echo "$ISP"
 echo "$CITY"
