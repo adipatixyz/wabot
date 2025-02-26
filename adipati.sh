@@ -116,6 +116,7 @@ rm -rf /etc/cron.d/telebotvpn
 cat > /etc/cron.d/telebotvpn <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# 5 0 * * * root autobackupbot
 5 0 * * * root truncate -s 0 /tmp/lockipssh.txt
 5 0 * * * root truncate -s 0 /tmp/lockipxray.txt
 END
